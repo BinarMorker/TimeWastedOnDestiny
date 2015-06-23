@@ -1,0 +1,73 @@
+body {
+    background: url('../background.jpg') no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    -o-background-size: cover;
+    height: 100vh;
+    -webkit-transform-style: preserve-3d;
+    -moz-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+    text-align: center;
+    padding-top: 21px;
+}
+
+body:before {
+  content: '';
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+  margin-right: -0.25em;
+}
+
+.panel-fixed {
+    height: 160px;
+}
+
+#username {
+    width: 100%;
+}
+
+.switch {
+    padding: 0 4px !important;
+}
+
+.icon {
+    float: left;
+    display: block;
+    width: 90px;
+    height: 90px;
+}
+
+.vert-middle{
+	/*position: relative;
+	top: 50%;
+	transform: translateY(-50%);*/
+    display: inline-block;
+    vertical-align: middle;
+}
+
+blockquote {
+    margin: 0;
+}
+
+.panel-warning blockquote {
+    border-color: #ff4309;
+}
+
+.panel-danger blockquote {
+    border-color: #f0005e;
+}
+
+.bootstrap-switch {
+    border-radius: 0;
+    margin-bottom: 21px;
+}
+
+.bootstrap-switch * {
+    border-radius: 0 !important;
+}
+
+.bootstrap-switch-large * {
+    line-height: 1.75 !important;
+}
