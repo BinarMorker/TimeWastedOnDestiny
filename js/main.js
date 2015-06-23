@@ -88,7 +88,7 @@ function showError(json) {
         $("#error").html("<div class='panel panel-"+weight+"'><div class='panel-body'><blockquote>"+json.Warning+"</blockquote></div></div>");
     } else {
         var weight = "success";
-        $("#error").text();
+        $("#error").html("");
     }
 }
 
