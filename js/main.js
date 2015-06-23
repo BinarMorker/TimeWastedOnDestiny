@@ -77,6 +77,7 @@ function resetFields() {
     $("#xbl_name").text("");
     $("#xbl_icon").attr("src", "");
     $("#xbl_time").text("");
+    $("#error").html("");
 }
 
 function showError(json) {
