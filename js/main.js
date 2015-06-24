@@ -41,6 +41,7 @@ $("document").ready(function () {
                 showError(json.Error);
             }
             if (success) {
+                showError(json.Error);
                 $("#display_name").text(json.Response.displayName);
                 $("#total_time").text(getTime(json.Response.totalTime));
                 if ('playstation' in json.Response) {
@@ -77,7 +78,6 @@ function resetFields() {
     $("#xbl_name").text("");
     $("#xbl_icon").attr("src", "");
     $("#xbl_time").text("");
-    $("#error").html("");
 }
 
 function showError(json) {
