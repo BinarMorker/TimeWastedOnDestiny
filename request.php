@@ -88,6 +88,10 @@ class DestinyAccount {
         if (isset($response->Response->bungieNetUser)) {
             $this->display_name = $response->Response->bungieNetUser->displayName;
         }
+        if (count($response->Response->destinyAccounts) != $response->Response->destinyAccountResult) {
+            $this->error = Error::show(Error::ERROR, "Destiny is in maintenance");
+            return;
+        }
         foreach ($response->Response->destinyAccounts as $account) {
             if ($account->userInfo->membershipType != $this->console && count($response->Response->destinyAccounts) == 1) {
                 $this->error = Error::show(Error::WARNING, "Account found but played an earlier version of the game");
