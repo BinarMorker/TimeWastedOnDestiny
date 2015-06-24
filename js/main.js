@@ -105,6 +105,8 @@ function getHours(seconds) {
     var hours = Math.floor(seconds / (60 * 60));
     if (hours > 0) {
         hours = hours + " hours";
+    } else if (hours > 0) {
+        hours = hours + " hour";
     } else {
         hours = "";
     }
@@ -113,32 +115,42 @@ function getHours(seconds) {
 
 function getTime(seconds) {
     var weeks = Math.floor(seconds / (7 * 24 * 60 * 60));
-    if (weeks > 0) {
+    if (weeks > 1) {
         weeks = weeks + " weeks ";
+    } else if (weeks > 0) {
+        weeks = weeks + " week ";
     } else {
         weeks = "";
     }
     var days = Math.floor(seconds / (24 * 60 * 60)) % 7;
-    if (days > 0) {
+    if (days > 1) {
         days = days + " days ";
+    } else if (days > 1) {
+        days = days + " day ";
     } else {
         days = "";
     }
     var hours = Math.floor(seconds / (60 * 60)) % 24;
-    if (hours > 0) {
+    if (hours > 1) {
         hours = hours + " hours ";
+    } else if (hours > 1) {
+        hours = hours + " hour ";
     } else {
         hours = "";
     }
     var minutes = Math.floor(seconds / 60) % 60;
-    if (minutes > 0) {
+    if (minutes > 1) {
         minutes = minutes + " minutes ";
+    } else if (minutes > 1) {
+        minutes = minutes + " minute ";
     } else {
         minutes = "";
     }
     var seconds = seconds % 60;
-    if (seconds > 0) {
+    if (seconds > 1) {
         seconds = seconds + " seconds";
+    } else if (seconds > 1) {
+        seconds = seconds + " second";
     } else {
         seconds = "";
     }
