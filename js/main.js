@@ -95,8 +95,29 @@ function showError(json) {
 
 function getTime(seconds) {
     var days = Math.floor(seconds / (24 * 60 * 60));
-    var hours = Math.floor(seconds / (60 * 60)) % 24;
+    if (days > 0) {
+        days = days + " days ";
+    } else {
+        days = "";
+    }
+    var totalHours = Math.floor(seconds / (60 * 60));
+    var hours = totalHours % 24;
+    if (hours > 0) {
+        hours = hours + " hours ";
+    } else {
+        hours = "";
+    }
     var minutes = Math.floor(seconds / 60) % 60;
+    if (minutes > 0) {
+        minutes = minutes + " minutes ";
+    } else {
+        minutes = "";
+    }
     var seconds = seconds % 60;
-    return days + " days " + hours + " hours " + minutes + " minutes " + seconds + " seconds ";
+    if (seconds > 0) {
+        seconds = seconds + " seconds ";
+    } else {
+        seconds = "";
+    }
+    return days + hours + minutes + seconds + "or " + totalHours + " hours";
 }
