@@ -92,7 +92,7 @@ class DestinyAccount {
         if (isset($response->Response->bungieNetUser)) {
             $this->display_name = $response->Response->bungieNetUser->displayName;
         }
-        if (count($response->Response->destinyAccounts) != $response->Response->destinyAccountResult) {
+        if (count($response->Response->destinyAccounts) == 0) {
             $this->error = Error::show(Error::ERROR, "Destiny is in maintenance");
             return;
         }
