@@ -44,23 +44,28 @@ $("document").ready(function () {
                 showError(json.Error);
                 $("#display_name").text(json.Response.displayName);
                 $("#total_time").text(getTime(json.Response.totalTime));
+                $("#total_time").attr("title", getHours(json.Response.totalTime));
                 if ('playstation' in json.Response) {
                     $("#psn_name").text(json.Response.playstation.displayName);
                     $("#psn_icon").attr("src", "https://www.bungie.net" + json.Response.playstation.iconPath);
                     $("#psn_time").text(getTime(json.Response.playstation.timePlayed));
+                    $("#psn_time").attr("title", getHours(json.Response.totalTime));
                 } else {
                     $("#psn_name").text("Never played");
                     $("#psn_icon").attr("src", "");
                     $("#psn_time").text("");
+                    $("#psn_time").attr("title", "");
                 }
                 if ('xbox' in json.Response) {
                     $("#xbl_name").text(json.Response.xbox.displayName);
                     $("#xbl_icon").attr("src", "https://www.bungie.net" + json.Response.playstation.iconPath);
                     $("#xbl_time").text(getTime(json.Response.xbox.timePlayed));
+                    $("#xbl_time").attr("title", getHours(json.Response.totalTime));
                 } else {
                     $("#xbl_name").text("Never played");
                     $("#xbl_icon").attr("src", "");
                     $("#xbl_time").text("");
+                    $("#xbl_time").attr("title", "");
                 }
             } else {
                 resetFields();
@@ -72,12 +77,15 @@ $("document").ready(function () {
 function resetFields() {
     $("#display_name").text("");
     $("#total_time").text("");
+    $("#total_time").attr("title", "");
     $("#psn_name").text("");
     $("#psn_icon").attr("src", "");
     $("#psn_time").text("");
+    $("#psn_time").attr("title", "");
     $("#xbl_name").text("");
     $("#xbl_icon").attr("src", "");
     $("#xbl_time").text("");
+    $("#xbl_time").attr("title", "");
 }
 
 function showError(json) {
@@ -93,8 +101,24 @@ function showError(json) {
     }
 }
 
+function getHours(seconds) {
+    var hours = Math.floor(seconds / (60 * 60));
+    if (hours > 0) {
+        hours = hours + " hours";
+    } else {
+        hours = "";
+    }
+    return hours;
+}
+
 function getTime(seconds) {
-    var days = Math.floor(seconds / (24 * 60 * 60));
+    var weeks = Math.floor(seconds / (7 * 24 * 60 * 60));
+    if (weeks > 0) {
+        weeks = weeks + " weeks ";
+    } else {
+        weeks = "";
+    }
+    var days = Math.floor(seconds / (24 * 60 * 60)) % 7;
     if (days > 0) {
         days = days + " days ";
     } else {
@@ -114,9 +138,9 @@ function getTime(seconds) {
     }
     var seconds = seconds % 60;
     if (seconds > 0) {
-        seconds = seconds + " seconds ";
+        seconds = seconds + " seconds";
     } else {
         seconds = "";
     }
-    return days + hours + minutes + seconds;
+    return weeks + days + hours + minutes + seconds;
 }
