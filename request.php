@@ -47,6 +47,10 @@ class DestinyAccount {
         $url = "https://www.bungie.net/platform/destiny/SearchDestinyPlayer/" . $this->console . "/" . $this->name;
         $lookup = file_get_contents($url);
         $response = json_decode($lookup);
+        if ($response->ErrorCode == 5) {
+            $this->error = Error::show(Error::ERROR, "Destiny is in maintenance");
+            return;
+        }
         if (!empty($response->Response)) {
             if (!$retry) {
                 $this->error = Error::show(Error::SUCCESS, "Player found");
