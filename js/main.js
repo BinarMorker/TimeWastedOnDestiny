@@ -44,23 +44,28 @@ $("document").ready(function () {
                 showError(json.Error);
                 $("#display_name").text(json.Response.displayName);
                 $("#total_time").text(getTime(json.Response.totalTime));
+                $("#total_time").attr("title", Math.floor(seconds / (60 * 60)));
                 if ('playstation' in json.Response) {
                     $("#psn_name").text(json.Response.playstation.displayName);
                     $("#psn_icon").attr("src", "https://www.bungie.net" + json.Response.playstation.iconPath);
                     $("#psn_time").text(getTime(json.Response.playstation.timePlayed));
+                    $("#psn_time").attr("title", Math.floor(seconds / (60 * 60)));
                 } else {
                     $("#psn_name").text("Never played");
                     $("#psn_icon").attr("src", "");
                     $("#psn_time").text("");
+                    $("#psn_time").attr("title", "");
                 }
                 if ('xbox' in json.Response) {
                     $("#xbl_name").text(json.Response.xbox.displayName);
                     $("#xbl_icon").attr("src", "https://www.bungie.net" + json.Response.playstation.iconPath);
                     $("#xbl_time").text(getTime(json.Response.xbox.timePlayed));
+                    $("#xbl_time").attr("title", Math.floor(seconds / (60 * 60)));
                 } else {
                     $("#xbl_name").text("Never played");
                     $("#xbl_icon").attr("src", "");
                     $("#xbl_time").text("");
+                    $("#xbl_time").attr("title", "");
                 }
             } else {
                 resetFields();
@@ -72,12 +77,15 @@ $("document").ready(function () {
 function resetFields() {
     $("#display_name").text("");
     $("#total_time").text("");
+    $("#total_time").attr("title", "");
     $("#psn_name").text("");
     $("#psn_icon").attr("src", "");
     $("#psn_time").text("");
+    $("#psn_time").attr("title", "");
     $("#xbl_name").text("");
     $("#xbl_icon").attr("src", "");
     $("#xbl_time").text("");
+    $("#xbl_time").attr("title", "");
 }
 
 function showError(json) {
@@ -100,8 +108,7 @@ function getTime(seconds) {
     } else {
         days = "";
     }
-    var totalHours = Math.floor(seconds / (60 * 60));
-    var hours = totalHours % 24;
+    var hours = Math.floor(seconds / (60 * 60)) % 24;
     if (hours > 0) {
         hours = hours + " hours ";
     } else {
@@ -119,5 +126,5 @@ function getTime(seconds) {
     } else {
         seconds = "";
     }
-    return days + hours + minutes + seconds + "or " + totalHours + " hours";
+    return days + hours + minutes + seconds;
 }
