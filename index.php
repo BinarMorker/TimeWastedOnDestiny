@@ -116,6 +116,9 @@
                 </div>
             </div>
         </div>
+        <div class="well text-center">
+            <span>Made with <span class="glyphicon glyphicon-heart"></span> by François Allard (BinarMorker)</span>
+        </div>
     </div>
     <!-- JavaScript -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>

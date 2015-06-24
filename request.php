@@ -87,12 +87,12 @@ class DestinyAccount {
         $response = json_decode($lookup);
         if (isset($response->Response->bungieNetUser)) {
             $this->display_name = $response->Response->bungieNetUser->displayName;
-            foreach ($response->Response->destinyAccounts as $account) {
-                if ($account->userInfo->membershipType != $this->console && count($response->Response->destinyAccounts) == 1) {
-                    $this->error = Error::show(Error::WARNING, "Account found but played an earlier version of the game");
-                }
-                $this->add_account($account->userInfo->membershipType, json_decode(json_encode($account->userInfo), true));
+        }
+        foreach ($response->Response->destinyAccounts as $account) {
+            if ($account->userInfo->membershipType != $this->console && count($response->Response->destinyAccounts) == 1) {
+                $this->error = Error::show(Error::WARNING, "Account found but played an earlier version of the game");
             }
+            $this->add_account($account->userInfo->membershipType, json_decode(json_encode($account->userInfo), true));
         }
     }
     
