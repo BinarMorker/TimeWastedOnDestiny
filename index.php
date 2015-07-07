@@ -5,8 +5,13 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="description" content="How much time have you wasted on Destiny?">
+    <meta property="og:title" content="Time Wasted on Destiny" />
+    <meta property="og:description" content="How much time have you wasted on Destiny?" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="http://wastedondestiny.com" />
+    <meta property="og:image" content="http://wastedondestiny.com/background.jpg" />
+
     <link rel="icon" href="favicon.ico">
     <title>Time wasted on Destiny</title>
 
@@ -29,6 +34,7 @@
         <div class="panel panel-default text-center">
             <div class="panel-body">
                 <h1>Time Wasted on Destiny</h1>
+                <h2><small>Find out just how much time have you wasted on this game by choosing your console and entering your username below.</small></h2>
                 <form role="form" id="search">
                     <div class="row">
                         <div class="col-md-4">
@@ -47,15 +53,15 @@
             </div>
         </div>
         <div id="error"></div>
-        <div class="row">
+        <div class="row hide" id="fields">
             <div class="col-md-4">
                 <div class="panel panel-fixed panel-primary text-center">
                     <div class="panel-heading">
-                        <h3 class="panel-title">Playstation</h3>
+                        <h3 class="panel-title"><img src="playstation-icon.png" /> Playstation</h3>
                     </div>
                     <div class="panel-body">
                         <img class="icon" id="psn_icon" />
-                        <h4 class="loading" id="psn_name"></h4>
+                        <h4 id="psn_name"></h4>
                         <span id="psn_time"></span>
                     </div>
                 </div>
@@ -63,10 +69,10 @@
             <div class="col-md-4">
                 <div class="panel panel-fixed panel-info text-center">
                     <div class="panel-heading">
-                        <h3 class="panel-title">Total time spent</h3>
+                        <h3 class="panel-title"><img src="destiny-icon.png" /> Total time spent</h3>
                     </div>
                     <div class="panel-body">
-                        <h4 class="loading" id="display_name"></h4>
+                        <h4 id="display_name"></h4>
                         <span id="total_time"></span>
                     </div>
                 </div>
@@ -74,17 +80,17 @@
             <div class="col-md-4">
                 <div class="panel panel-fixed panel-success text-center">
                     <div class="panel-heading">
-                        <h3 class="panel-title">Xbox</h3>
+                        <h3 class="panel-title"><img src="xbox-icon.png" /> Xbox</h3>
                     </div>
                     <div class="panel-body">
                         <img class="icon" id="xbl_icon" />
-                        <h4 class="loading" id="xbl_name"></h4>
+                        <h4 id="xbl_name"></h4>
                         <span id="xbl_time"></span>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="row">
+        <div class="row" id="ads">
             <div class="col-sm-6">
                 <div class="panel panel-default">
                     <div class="panel-body">

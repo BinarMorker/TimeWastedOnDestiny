@@ -59,6 +59,10 @@ blockquote {
     border-color: #f0005e;
 }
 
+.panel-info blockquote {
+    border-color: #7643a8;
+}
+
 .bootstrap-switch {
     border-radius: 0;
     margin-bottom: 21px;

@@ -7,7 +7,9 @@ $("document").ready(function () {
     $("#search").submit(function(event) {
         event.preventDefault();
         resetFields();
-        
+
+        $("#fields").addClass("hide");
+        $("#error").html("<div id='load' class='panel panel-info'><div class='panel-body'><blockquote class='loading'></blockquote></div></div>");
         $(".loading").attr("load", 0);
         $(".loading").text("Loading");
         var loading = window.setInterval(function () {
@@ -21,7 +23,7 @@ $("document").ready(function () {
             $(".loading").attr("load", dotNum);
             $(".loading").text("Loading" + dots);
         }, 1000);
-        
+
         var user = $("#username").val();
         if (platform) {
             var plat = 1;
@@ -32,6 +34,7 @@ $("document").ready(function () {
         var jsonUrl = "request.php?console="+plat+"&user="+user;
         $.getJSON(jsonUrl, function (json) {
             clearInterval(loading);
+            $("#load").detach();
             console.log(json);
             var success = true;
             if ('Error' in json.Error) {
@@ -67,6 +70,7 @@ $("document").ready(function () {
                     $("#xbl_time").text("");
                     $("#xbl_time").attr("title", "");
                 }
+                $("#fields").removeClass("hide");
             } else {
                 resetFields();
             }
