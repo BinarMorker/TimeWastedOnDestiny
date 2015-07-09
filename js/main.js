@@ -61,7 +61,7 @@ $("document").ready(function () {
                 }
                 if ('xbox' in json.Response) {
                     $("#xbl_name").text(json.Response.xbox.displayName);
-                    $("#xbl_icon").attr("src", "https://www.bungie.net" + json.Response.playstation.iconPath);
+                    $("#xbl_icon").attr("src", "https://www.bungie.net" + json.Response.xbox.iconPath);
                     $("#xbl_time").text(getTime(json.Response.xbox.timePlayed));
                     $("#xbl_time").attr("title", getHours(json.Response.totalTime));
                 } else {
