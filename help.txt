@@ -1,0 +1,20 @@
+Time Wasted on Destiny API
+==========================
+
+HELP:
+-----
+To see this page again, remove everything after ".php"
+
+SYNTAX:
+-------
+request.php?console=CONSOLE&user=USERNAME
+
+PARAMETERS:
+-----------
+CONSOLE: 1 for xbox, 2 for playstation
+USERNAME: your xbox or playstation username
+
+CREDITS:
+--------
+Created by François Allard
+Please give credit if you use this!
