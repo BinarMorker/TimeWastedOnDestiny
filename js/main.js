@@ -36,15 +36,10 @@ $("document").ready(function () {
             clearInterval(loading);
             $("#load").detach();
             console.log(json);
-            var success = true;
-            if ('Error' in json.Error) {
-                showError(json.Error);
-                success = false;
-            } else if ('Warning' in json.Error) {
-                showError(json.Error);
-            }
-            if (success) {
-                showError(json.Error);
+            showError(json.Info);
+            if (json.Info.Status == "Error") {
+                resetFields();
+            } else {
                 $("#display_name").text(json.Response.displayName);
                 $("#total_time").text(getTime(json.Response.totalTime));
                 $("#total_time").attr("title", getHours(json.Response.totalTime));
@@ -71,8 +66,6 @@ $("document").ready(function () {
                     $("#xbl_time").attr("title", "");
                 }
                 $("#fields").removeClass("hide");
-            } else {
-                resetFields();
             }
         });
     });
@@ -93,15 +86,14 @@ function resetFields() {
 }
 
 function showError(json) {
-    if ('Error' in json) {
-        var weight = "danger";
-        $("#error").html("<div class='panel panel-"+weight+"'><div class='panel-body'><blockquote>"+json.Error+"</blockquote></div></div>");
-    } else if ('Warning' in json) {
-        var weight = "warning";
-        $("#error").html("<div class='panel panel-"+weight+"'><div class='panel-body'><blockquote>"+json.Warning+"</blockquote></div></div>");
-    } else {
-        var weight = "success";
+    if (json.Status == "Success") {
         $("#error").html("");
+    } else {
+        var weight = "warning";
+        if (json.Status == "Error") {
+            weight = "danger";
+        }
+        $("#error").html("<div class='panel panel-"+weight+"'><div class='panel-body'><blockquote>"+json.Message+"</blockquote></div></div>");
     }
 }
 
