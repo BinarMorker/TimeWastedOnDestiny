@@ -1,5 +1,5 @@
 body {
-    background: url('../background.jpg') no-repeat center center fixed;
+    background: url('../img/background.jpg') no-repeat center center fixed;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     background-size: cover;
@@ -40,9 +40,6 @@ body:before {
 }
 
 .vert-middle{
-	/*position: relative;
-	top: 50%;
-	transform: translateY(-50%);*/
     display: inline-block;
     vertical-align: middle;
 }

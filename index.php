@@ -57,7 +57,7 @@
             <div class="col-md-4">
                 <div class="panel panel-fixed panel-primary text-center">
                     <div class="panel-heading">
-                        <h3 class="panel-title"><img src="playstation-icon.png" /> Playstation</h3>
+                        <h3 class="panel-title"><img src="img/playstation-icon.png" /> Playstation</h3>
                     </div>
                     <div class="panel-body">
                         <img class="icon" id="psn_icon" />
@@ -69,7 +69,7 @@
             <div class="col-md-4">
                 <div class="panel panel-fixed panel-info text-center">
                     <div class="panel-heading">
-                        <h3 class="panel-title"><img src="destiny-icon.png" /> Total time spent</h3>
+                        <h3 class="panel-title"><img src="img/destiny-icon.png" /> Total time spent</h3>
                     </div>
                     <div class="panel-body">
                         <h4 id="display_name"></h4>
@@ -80,7 +80,7 @@
             <div class="col-md-4">
                 <div class="panel panel-fixed panel-success text-center">
                     <div class="panel-heading">
-                        <h3 class="panel-title"><img src="xbox-icon.png" /> Xbox</h3>
+                        <h3 class="panel-title"><img src="img/xbox-icon.png" /> Xbox</h3>
                     </div>
                     <div class="panel-body">
                         <img class="icon" id="xbl_icon" />
