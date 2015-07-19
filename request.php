@@ -1,33 +1,47 @@
 <?php
+/**
+* Time Wasted on Destiny API
+* This script returns a json array for the total time a player spent on the game Destiny.
+*
+* @author François Allard <binarmorker@gmail.com>
+* @license http://opensource.org/licenses/GPL-3.0 GNU General Public License, version 3 (GPL-3.0)
+* @copyright 2015 François Allard
+*/
 
-launch();
+define("VERSION", 1.2); // The API version
 
-function launch() {
-	if (isset($_GET['help']) || !isset($_GET['user']) || !isset($_GET['console']) || empty($_GET['user']) || empty($_GET['console'])) {
-		// If help is called or the syntax is incorrect
-		header("Content-Type: text/plain");
-		echo file_get_contents("help.txt"); // Show the help file
-	} else {
-		$hash = md5($_GET['console'] . "-" . $_GET['user']); // Create a unique hash for the entry
-	    $cacheFile = "cache/" . $hash;
-	    if (file_exists($cacheFile) && abs(filemtime($cacheFile) - time()) < (60 * 60)) { // 60 seconds x 60 minutes = 1 hour
-	    	// If the file exists and hasn't expired, just show the file
-	        $data = file_get_contents($cacheFile);
-	    } else {
-	    	// If the file doesn't exist or has expired, create it and show the data
-	        $data = get_time_wasted($_GET['console'], $_GET['user']);
-	        file_put_contents($cacheFile, $data);
-	    }
-	    if (isset($_GET['fmt'])) {
-	    	header("Content-Type: text/plain");
-	    	echo json_encode(json_decode($data), JSON_PRETTY_PRINT);
-	    } else {
-	    	header("Content-Type: application/json");
-			echo $data;
-	    }
-	}
+if (isset($_GET['help']) || !isset($_GET['user']) || !isset($_GET['console']) || empty($_GET['user']) || empty($_GET['console'])) {
+	// If help is called or the syntax is incorrect
+	header("Content-Type: text/plain");
+	echo file_get_contents("help.txt"); // Show the help file
+} else {
+	$hash = md5($_GET['console'] . "-" . $_GET['user']); // Create a unique hash for the entry
+    $cacheFile = "cache/" . $hash;
+    if (file_exists($cacheFile) && abs(filemtime($cacheFile) - time()) < (60 * 60)) { // 60 seconds x 60 minutes = 1 hour
+    	// If the file exists and hasn't expired, just show the file
+        $data = file_get_contents($cacheFile);
+    } else {
+    	// If the file doesn't exist or has expired, create it and show the data
+        $data = get_time_wasted($_GET['console'], $_GET['user']);
+        file_put_contents($cacheFile, $data);
+    }
+    if (isset($_GET['fmt'])) {
+    	header("Content-Type: text/plain");
+    	echo json_encode(json_decode($data), JSON_PRETTY_PRINT);
+    } else {
+    	header("Content-Type: application/json");
+		echo $data;
+    }
 }
 
+/**
+* Get total time wasted by the player.
+* This is the main method used to return the json. Caching is done in in the main script.
+* 
+* @param int $console The console number (1 for xbox, 2 for playstation)
+* @param string $name The player's username
+* @return string The json array for the complete response
+*/
 function get_time_wasted($console, $name) {
 	try {
 		$timer = new Timer();
@@ -57,20 +71,52 @@ function get_time_wasted($console, $name) {
 	}
 }
 
+/**
+* A Destiny account with total time calculations.
+* An account contains the icon, time spent and the display name for each console, including a global total time spent and display name.
+*/
 class DestinyAccount {
+
+	/** @var string The player's username */
 	public $name = "";
+
+	/** @var string The player's display name */
 	public $display_name = "";
+
+	/** @var int The console identifier */
 	public $console = 0;
+
+	/** @var mixed[] The account information for each console */
 	public $accounts = array();
+
+	/** @var string The temporary account identifier used before fetching the accounts */
 	public $temp_account_id = "";
+
+	/** @var int The total play time */
 	public $total_time = 0;
+
+	/** @var mixed[] The error definition at the end of the returned data */
 	public $error = array();
 	
+	/**
+	* Construct the account.
+	* Stores the username and the console number selected for further use.
+	* 
+	* @param string $name The player's username
+	* @param int $console The console number (1 for xbox, 2 for playstation)
+	*/
 	function __construct($name, $console) {
 		$this->name = $name;
 		$this->console = $console;
 	}
 
+	/**
+	* Lookup the Destiny account.
+	* Lookup the selected Destiny account if it exists, or else try with another console.
+	* 
+	* @param boolean $retry True if the account has to be looked up again with another console
+	* @throws Exception if the servers are unreachable or the account is not found
+	*/
 	function lookup($retry = false) {
 		// This endpoint returns the membershipId of a player
 		$url = "https://www.bungie.net/platform/destiny/SearchDestinyPlayer/" . $this->console . "/" . $this->name;
@@ -103,6 +149,10 @@ class DestinyAccount {
 		}
 	}
 	
+	/**
+	* Swap the selected console.
+	* Switches between 1 and 2, simply.
+	*/
 	function swap_console() {
 		// If you fail to understand this, I swear to God...
 		if ($this->console == 1) {
@@ -112,14 +162,33 @@ class DestinyAccount {
 		}
 	}
 
+	/**
+	* Add the account for a given console.
+	* Add the console contents and associate it to a console number.
+	* 
+	* @param int $console The console number (1 for xbox, 2 for playstation)
+	* @param mixed[] $contents The data contents for the account
+	*/
 	function add_account($console, $contents) {
 		$this->accounts[$console] = $contents;
 	}
 	
+	/**
+	* Add time to the total time.
+	* Add each fetched cosole time to a global total time counter.
+	* 
+	* @param int $time Time played on a console
+	*/
 	function add_time($time) {
 		$this->total_time += $time;
 	}
 	
+	/**
+	* Get the Bungie account.
+	* Get membership information for each console fro the fetched Bungie account.
+	* 
+	* @throws Exception if the servers are unreachable
+	*/
 	function get_accounts() {
 		// This endpoint returns relevant data on each console account linked to a Bungie account
 		$url = "https://www.bungie.net/platform/user/GetBungieAccount/" . $this->temp_account_id . "/" . $this->console;
@@ -132,7 +201,7 @@ class DestinyAccount {
 			// No destiny account mean something went wrong (because we looked 
 			// up the bungie account using a destiny account, so it must exist. DUH)
 			$this->error = Error::show(Error::ERROR, "Destiny is in maintenance");
-			return;
+			throw(new Exception());
 		}
 		foreach ($response->Response->destinyAccounts as $account) {
 			if ($account->userInfo->membershipType != $this->console && count($response->Response->destinyAccounts) == 1) {
@@ -144,6 +213,12 @@ class DestinyAccount {
 		}
 	}
 	
+	/**
+	* Get and store information on the account.
+	* Fetch information from bungie given a console and an already set membership identifier.
+	* 
+	* @param int $console The console number (1 for xbox, 2 for playstation)
+	*/
 	function fetch($console) {
 		// This endpoint returns stats for every character created on the account
 		$url = "https://www.bungie.net/Platform/Destiny/Stats/Account/" . $this->accounts[$console]['membershipType'] . "/" . $this->accounts[$console]['membershipId'];
@@ -155,34 +230,79 @@ class DestinyAccount {
 	}
 }
 
+/**
+* Generate an error.
+* Creates an easy to read error array to be converted into an output format like json.
+*/
 class Error {
 	const SUCCESS = "Success";
 	const WARNING = "Warning";
 	const ERROR = "Error";
 	
+	/**
+	* Show the error.
+	* Show an error array with the specified status and message.
+	*
+	* @param mixed $error_type The error type, either Success, Warning or Error
+	* @param string $message The message to show with the error type
+	* @return The error array
+	*/
 	static function show($error_type, $message) {
 		return array("Status" => $error_type,
 					 "Message" => $message,
 					 "LoadTime" => 0,
-					 "CacheTime" => 0);
+					 "CacheTime" => 0,
+					 "ApiVersion" => VERSION);
 	}
 }
 
+/**
+* Create and manage a system timer.
+* The Timer can be used to calculate the script execution time.
+*/
 class Timer {
+
+	/** @var boolean True if the timer is still counting */
 	private $time_running;
+
+	/** @var int Total time the script has been running */
 	private $exec_time;
 
+	/**
+	* Create the timer and start it.
+	* The timer object, once being created, starts its counter and sets itself to 0.
+	*/
 	function __construct() {
-		// Creating the timer starts it
 		$this->reset_timer();
+		// Creating the timer starts it
+		$this->start_timer();
 	}
 
+	/**
+	* Reset the timer.
+	* The timer stops itself and sets itself to 0.
+	*/
 	function reset_timer() {
+		$this->time_running = false;
+		$this->exec_time = 0;
+	}
+
+	/**
+	* Start the timer.
+	* The timer starts with the current computer time as value.
+	*/
+	function start_timer() {
 		// Starts the timer
 		$this->exec_time = microtime(true);
 		$this->time_running = true;
 	}
 
+	/**
+	* Stop and get time timer value.
+	* The timer is stopped and its value is calculated returned.
+	*
+	* @return int The time counted from the start, in seconds with a precision to 4 digits
+	*/
 	function get_timer() {
 		// Stops and saves the timer if it's started
 		if ($this->time_running) {
