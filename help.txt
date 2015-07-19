@@ -1,4 +1,4 @@
-﻿Time Wasted on Destiny API v1.2
+Time Wasted on Destiny API v1.2
 ===============================
 
 HELP:

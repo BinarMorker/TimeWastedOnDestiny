@@ -125,6 +125,8 @@
         <div class="well text-center">
             <span>Made with <span class="glyphicon glyphicon-heart"></span> by <a href="https://www.facebook.com/BinarMorker">François Allard (BinarMorker)</a></span>
             <br/>
+            <span><a href="https://github.com/BinarMorker/TimeWastedOnDestiny/issues">Submit a bug</a> | <a href="https://github.com/BinarMorker/TimeWastedOnDestiny">Get the source code</a></span>
+            <br/>
             <span class="text-muted">You can also use my simple API located <a href="request.php?help">here</a>.</span>
         </div>
     </div>
