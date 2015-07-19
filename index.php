@@ -10,7 +10,7 @@
     <meta property="og:description" content="How much time have you wasted on Destiny?" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="http://wastedondestiny.com" />
-    <meta property="og:image" content="http://wastedondestiny.com/background.jpg" />
+    <meta property="og:image" content="http://wastedondestiny.com/img/background.jpg" />
 
     <link rel="icon" href="favicon.ico">
     <title>Time wasted on Destiny</title>
