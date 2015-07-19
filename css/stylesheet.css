@@ -28,6 +28,22 @@ body:before {
     width: 100%;
 }
 
+.display-name {
+    display: block;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.played-time {
+    display: block;
+    font-size: 16px;
+}
+
+.wasted-time {
+    display: block;
+    font-size: 12px;
+}
+
 .switch {
     padding: 0 4px !important;
 }
@@ -37,6 +53,9 @@ body:before {
     display: block;
     width: 90px;
     height: 90px;
+    padding: 20px;
+    margin-left: -15px;
+    margin-right: -15px;
 }
 
 .vert-middle{

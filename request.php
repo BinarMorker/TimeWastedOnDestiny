@@ -8,7 +8,7 @@
 * @copyright 2015 François Allard
 */
 
-define("VERSION", 1.2); // The API version
+define("VERSION", 1.3); // The API version
 
 if (isset($_GET['help']) || !isset($_GET['user']) || !isset($_GET['console']) || empty($_GET['user']) || empty($_GET['console'])) {
 	// If help is called or the syntax is incorrect
@@ -62,7 +62,8 @@ function get_time_wasted($console, $name) {
 			$psn_time = $account->accounts[2];
 			$response["playstation"] = $psn_time;
 		}
-		$response["totalTime"] = $account->total_time;
+		$response["totalTimePlayed"] = $account->total_time;
+		$response["totalTimeWasted"] = $account->wasted_time;
 		$account->error['LoadTime'] = $timer->get_timer();
 		$account->error['CacheTime'] = date("r");
 		return json_encode(array("Response" => $response, "Info" => $account->error));
@@ -94,6 +95,9 @@ class DestinyAccount {
 
 	/** @var int The total play time */
 	public $total_time = 0;
+
+	/** @var int The play time for deleted characters */
+	public $wasted_time = 0;
 
 	/** @var mixed[] The error definition at the end of the returned data */
 	public $error = array();
@@ -174,16 +178,6 @@ class DestinyAccount {
 	}
 	
 	/**
-	* Add time to the total time.
-	* Add each fetched cosole time to a global total time counter.
-	* 
-	* @param int $time Time played on a console
-	*/
-	function add_time($time) {
-		$this->total_time += $time;
-	}
-	
-	/**
 	* Get the Bungie account.
 	* Get membership information for each console fro the fetched Bungie account.
 	* 
@@ -224,9 +218,20 @@ class DestinyAccount {
 		$url = "https://www.bungie.net/Platform/Destiny/Stats/Account/" . $this->accounts[$console]['membershipType'] . "/" . $this->accounts[$console]['membershipId'];
 		$lookup = file_get_contents($url);
 		$response = json_decode($lookup);
-		$time_played = $response->Response->mergedAllCharacters->merged->allTime->secondsPlayed->basic->value;
+        if (isset($response->Response->mergedAllCharacters->merged->allTime->secondsPlayed->basic->value)) {
+            $time_played = $response->Response->mergedAllCharacters->merged->allTime->secondsPlayed->basic->value;
+        } else {
+            $time_played = 0;
+        }
+        if (isset($response->Response->mergedDeletedCharacters->merged->allTime->secondsPlayed->basic->value)) {
+            $time_wasted = $response->Response->mergedDeletedCharacters->merged->allTime->secondsPlayed->basic->value;
+        } else {
+            $time_wasted = 0;
+        }
 		$this->accounts[$console]['timePlayed'] = $time_played;
-		$this->add_time($time_played);
+		$this->accounts[$console]['timeWasted'] = $time_wasted;
+		$this->total_time += $time_played;
+		$this->wasted_time += $time_wasted;
 	}
 }
 

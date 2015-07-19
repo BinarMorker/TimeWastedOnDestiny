@@ -34,7 +34,7 @@
         <div class="panel panel-default text-center">
             <div class="panel-body">
                 <h1>Time Wasted on Destiny</h1>
-                <h2><small>Find out just how much time have you wasted on this game by choosing your console and entering your username below.</small></h2>
+                <h2><small>Find out just how much time you have wasted on this game by choosing your console and entering your username below.</small></h2>
                 <form role="form" id="search">
                     <div class="row">
                         <div class="col-md-4">
@@ -61,8 +61,9 @@
                     </div>
                     <div class="panel-body">
                         <img class="icon" id="psn_icon" />
-                        <h4 id="psn_name"></h4>
-                        <span id="psn_time"></span>
+                        <h4 class="display-name" id="psn_name"></h4>
+                        <span class="played-time" id="psn_time"></span>
+                        <span class="wasted-time" id="psn_wasted"></span>
                     </div>
                 </div>
             </div>
@@ -72,8 +73,9 @@
                         <h3 class="panel-title"><img src="img/destiny-icon.png" /> Total time spent</h3>
                     </div>
                     <div class="panel-body">
-                        <h4 id="display_name"></h4>
-                        <span id="total_time"></span>
+                        <h4 class="display-name" id="display_name"></h4>
+                        <span class="played-time" id="total_time"></span>
+                        <span class="wasted-time" id="total_wasted"></span>
                     </div>
                 </div>
             </div>
@@ -84,8 +86,9 @@
                     </div>
                     <div class="panel-body">
                         <img class="icon" id="xbl_icon" />
-                        <h4 id="xbl_name"></h4>
-                        <span id="xbl_time"></span>
+                        <h4 class="display-name" id="xbl_name"></h4>
+                        <span class="played-time" id="xbl_time"></span>
+                        <span class="wasted-time" id="xbl_wasted"></span>
                     </div>
                 </div>
             </div>
