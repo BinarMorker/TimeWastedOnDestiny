@@ -4,17 +4,27 @@
 HELP:
 -----
 To see this page again, remove everything after ".php"
+or add the "help" parameter
 
 SYNTAX:
 -------
-request.php?console=CONSOLE&user=USERNAME
+request.php?help
+request.php?console=2&user=binarmorker
+request.php?console=2&user=binarmorker&fmt
 
 PARAMETERS:
 -----------
-CONSOLE: 1 for xbox, 2 for playstation
-USERNAME: your xbox or playstation username
+console=[_] : 1 for xbox, 2 for playstation
+user=[_]    : Your xbox or playstation username
+fmt         : Shows a structured JSON array
+help        : Show this page regardless of the other parameters
 
-CREDITS:
---------
+CACHE:
+------
+Each request is saved on the server for a period of 1 hour
+Every subsequent call within the hour will return the same data
+
+CREDIT:
+-------
 Created by François Allard
 Please give credit if you use this!
