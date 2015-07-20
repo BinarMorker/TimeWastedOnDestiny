@@ -8,7 +8,7 @@
 * @copyright 2015 François Allard
 */
 
-define("VERSION", 1.3); // The API version
+define("VERSION", 1.4); // The API version
 
 if (isset($_GET['help']) || !isset($_GET['user']) || !isset($_GET['console']) || empty($_GET['user']) || empty($_GET['console'])) {
 	// If help is called or the syntax is incorrect
@@ -218,16 +218,26 @@ class DestinyAccount {
 		$url = "https://www.bungie.net/Platform/Destiny/Stats/Account/" . $this->accounts[$console]['membershipType'] . "/" . $this->accounts[$console]['membershipId'];
 		$lookup = file_get_contents($url);
 		$response = json_decode($lookup);
+        $count = 0;
+        $deleted_count = 0;
+        $time_played = 0;
+        $time_wasted = 0;
+        if (isset($response->Response->characters)) {
+            $count = count($response->Response->characters);
+            foreach ($response->Response->characters as $character) {
+                if ($character->deleted) {
+                    $deleted_count++;
+                }
+            }
+        }
         if (isset($response->Response->mergedAllCharacters->merged->allTime->secondsPlayed->basic->value)) {
             $time_played = $response->Response->mergedAllCharacters->merged->allTime->secondsPlayed->basic->value;
-        } else {
-            $time_played = 0;
         }
         if (isset($response->Response->mergedDeletedCharacters->merged->allTime->secondsPlayed->basic->value)) {
             $time_wasted = $response->Response->mergedDeletedCharacters->merged->allTime->secondsPlayed->basic->value;
-        } else {
-            $time_wasted = 0;
         }
+		$this->accounts[$console]['characters']['total'] = $count;
+		$this->accounts[$console]['characters']['deleted'] = $deleted_count;
 		$this->accounts[$console]['timePlayed'] = $time_played;
 		$this->accounts[$console]['timeWasted'] = $time_wasted;
 		$this->total_time += $time_played;

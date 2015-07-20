@@ -34,20 +34,17 @@
         <div class="panel panel-default text-center">
             <div class="panel-body">
                 <h1>Time Wasted on Destiny</h1>
-                <h2><small>Find out just how much time you have wasted on this game by choosing your console and entering your username below.</small></h2>
+                <h2 style="visibility: hidden; height: 0;"><small>Find out just how much time you have wasted on this game by choosing your console and entering your username below.</small></h2>
                 <form role="form" id="search">
-                    <div class="row">
-                        <div class="col-md-4">
-                            <input id="console" type="checkbox" name="console" data-on-text="Xbox" data-on-color="success" data-off-text="Playstation" data-off-color="primary" data-size="large">
-                        </div>
-                        <div class="col-md-8">
-                            <div class="input-group">
-                                <input id="username" type="text" class="form-control" name="username" placeholder="Username">
-                                <span class="input-group-btn">
-                                    <button class="btn btn-default" type="submit">Go!</button>
-                                </span>
-                            </div>
-                        </div>
+                    
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                            <input id="console" type="checkbox" name="console" data-on-text='<img width="20" height="20" src="img/xbox-icon.svg" />' data-on-color="success" data-off-text='<img width="20" height="20" src="img/playstation-icon.svg" />' data-off-color="primary" data-size="large">
+                        </span>
+                        <input id="username" type="text" class="form-control" name="username" placeholder="Username">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="submit">Go!</button>
+                        </span>
                     </div>
                 </form>
             </div>
@@ -57,40 +54,47 @@
             <div class="col-md-4">
                 <div class="panel panel-fixed panel-primary text-center">
                     <div class="panel-heading">
-                        <h3 class="panel-title"><img src="img/playstation-icon.png" /> Playstation</h3>
+                        <h3 class="panel-title"><img width="20" height="20" src="img/playstation-icon.svg" />&nbsp;Playstation</h3>
                     </div>
                     <div class="panel-body">
                         <img class="icon" id="psn_icon" />
                         <h4 class="display-name" id="psn_name"></h4>
-                        <span class="played-time" id="psn_time"></span>
-                        <span class="wasted-time" id="psn_wasted"></span>
+                        <span class="played-time" rel="tooltip" id="psn_time"></span>
+                        <span class="wasted-time" rel="tooltip" id="psn_wasted"></span>
                     </div>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="panel panel-fixed panel-info text-center">
                     <div class="panel-heading">
-                        <h3 class="panel-title"><img src="img/destiny-icon.png" /> Total time spent</h3>
+                        <h3 class="panel-title"><img width="20" height="20" src="img/destiny-icon.svg" />&nbsp;Total time spent</h3>
                     </div>
                     <div class="panel-body">
                         <h4 class="display-name" id="display_name"></h4>
-                        <span class="played-time" id="total_time"></span>
-                        <span class="wasted-time" id="total_wasted"></span>
+                        <span class="played-time" rel="tooltip" id="total_time"></span>
+                        <span class="wasted-time" rel="tooltip" id="total_wasted"></span>
                     </div>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="panel panel-fixed panel-success text-center">
                     <div class="panel-heading">
-                        <h3 class="panel-title"><img src="img/xbox-icon.png" /> Xbox</h3>
+                        <h3 class="panel-title"><img width="20" height="20" src="img/xbox-icon.svg" />&nbsp;Xbox</h3>
                     </div>
                     <div class="panel-body">
                         <img class="icon" id="xbl_icon" />
                         <h4 class="display-name" id="xbl_name"></h4>
-                        <span class="played-time" id="xbl_time"></span>
-                        <span class="wasted-time" id="xbl_wasted"></span>
+                        <span class="played-time" rel="tooltip" id="xbl_time"></span>
+                        <span class="wasted-time" rel="tooltip" id="xbl_wasted"></span>
                     </div>
                 </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <blockquote>
+                    <p class="disclaimer"><strong>Disclaimer: </strong>The time displayed does not include idle time spent in the Tower, Reef, or wating in orbit. It does, however, include time spent on deleted characters. If you find any major difference in what time should be displayed and the actual time displayed on this website, please <a href="https://github.com/BinarMorker/TimeWastedOnDestiny/issues">submit a bug</a>.</p>
+                </blockquote>
             </div>
         </div>
         <div class="row" id="ads">
