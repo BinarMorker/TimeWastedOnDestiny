@@ -93,38 +93,40 @@
         <div class="panel panel-default">
             <div class="panel-body">
                 <blockquote>
-                    <p class="disclaimer"><strong>Disclaimer: </strong>The time displayed does not include idle time spent in the Tower, Reef, or wating in orbit. It does, however, include time spent on deleted characters. If you find any major difference in what time should be displayed and the actual time displayed on this website, please <a href="https://github.com/BinarMorker/TimeWastedOnDestiny/issues">submit a bug</a>.</p>
+                    <p class="disclaimer"><strong>Disclaimer: </strong>The time displayed does not include idle time spent in the Tower, Reef, or waiting in orbit. It does, however, include time spent on deleted characters. If you find any major difference in what time should be displayed and the actual time displayed on this website, please <a href="https://github.com/BinarMorker/TimeWastedOnDestiny/issues">submit a bug</a>.</p>
                 </blockquote>
             </div>
         </div>
-        <div class="row" id="ads">
-            <div class="col-sm-6">
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-                        <ins class="adsbygoogle"
-                             style="display:block"
-                             data-ad-client="ca-pub-6332373031553935"
-                             data-ad-slot="7124654099"
-                             data-ad-format="auto"></ins>
-                        <script>
-                        (adsbygoogle = window.adsbygoogle || []).push({});
-                        </script>
+        <div id="a-d-v-e-r-t">
+            <div class="row pub_300x250 pub_300x250m pub_728x90 text-ad textAd text_ad text_ads text-ads text-ad-links" id="adsense">
+                <div class="col-sm-6">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+                            <ins class="adsbygoogle"
+                                 style="display:block"
+                                 data-ad-client="ca-pub-6332373031553935"
+                                 data-ad-slot="7124654099"
+                                 data-ad-format="auto"></ins>
+                            <script>
+                            (adsbygoogle = window.adsbygoogle || []).push({});
+                            </script>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-sm-6">
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-                        <ins class="adsbygoogle"
-                             style="display:block"
-                             data-ad-client="ca-pub-6332373031553935"
-                             data-ad-slot="7124654099"
-                             data-ad-format="auto"></ins>
-                        <script>
-                        (adsbygoogle = window.adsbygoogle || []).push({});
-                        </script>
+                <div class="col-sm-6">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+                            <ins class="adsbygoogle"
+                                 style="display:block"
+                                 data-ad-client="ca-pub-6332373031553935"
+                                 data-ad-slot="7124654099"
+                                 data-ad-format="auto"></ins>
+                            <script>
+                            (adsbygoogle = window.adsbygoogle || []).push({});
+                            </script>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -138,10 +140,12 @@
         </div>
     </div>
     <!-- JavaScript -->
+    <script>var damnAdBlock = false;</script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
     <script src="js/bootstrap-switch.min.js"></script>
     <script src="js/main.js"></script>
+    <script src="js/damnadblock.js"></script>
     <script>
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
         (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -149,6 +153,21 @@
         })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
         ga('create', 'UA-52347626-4', 'auto');
         ga('send', 'pageview');
+    </script>
+    <script>
+        damnAdBlock = new BlockAdBlock({
+            checkOnLoad: true,
+            resetOnEnd: true
+        });
+        function adBlockDetected() {
+            $("#a-d-v-e-r-t").html('<div class="panel panel-danger"><div class="panel-body"><blockquote><span class="lead">Our website uses ads to pay for hosting and traffic. If you like this website, <br/>please consider disabling your ad blocker or <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=5YLYAY74SZP6W">donate</a>. Thanks!</span></blockquote></div></div>');
+        }
+        if(typeof damnAdBlock === 'undefined') {
+            adBlockDetected();
+        } else {
+            damnAdBlock.check(true);
+            damnAdBlock.onDetected(adBlockDetected);
+        }
     </script>
 </body>
 
