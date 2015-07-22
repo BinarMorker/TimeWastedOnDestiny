@@ -65,12 +65,17 @@ function get_leaderboard() {
         $request->receive();
         $count = 0;
         foreach ($request->get_result() as $result) {
-            $response[$count]['displayName'] = $result['username'];
-            $response[$count]['membershipId'] = $result['id'];
-            $response[$count]['membershipType'] = $result['console'] + 1;
-            $response[$count]['timePlayed'] = $result['seconds'];
+            $response["leaderboard"][$count]['displayName'] = $result['username'];
+            $response["leaderboard"][$count]['membershipId'] = $result['id'];
+            $response["leaderboard"][$count]['membershipType'] = $result['console'] + 1;
+            $response["leaderboard"][$count]['timePlayed'] = $result['seconds'];
             $count++;
         }
+        $query = "SELECT COUNT(*) as `count` FROM leaderboard;";
+        $request = new Database($database, $query, null);
+        $request->receive();
+        $total = $request->get_result()[0]["count"];
+        $response["totalPlayers"] = $total;
         $error = Error::show(Error::SUCCESS, "Leaderboard loaded successfully");
 		$error['LoadTime'] = $timer->get_timer();
 		$error['CacheTime'] = date("r");

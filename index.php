@@ -149,7 +149,7 @@
                             $request = file_get_contents("http://" . $_SERVER['HTTP_HOST'] . "/request.php?leaderboard");
                             $response = json_decode($request);
                             $count = 1;
-                            foreach ($response->Response as $row) {
+                            foreach ($response->Response->leaderboard as $row) {
                                 if ($row->membershipType == 1) {
                                     $image = "xbox";
                                 } else {
@@ -165,6 +165,9 @@
                                 $count++;
                             }
                             ?>
+                            <tr>
+                                <td colspan="3"><span class="lead">Total players: <?=$response->Response->totalPlayers?></span></td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
