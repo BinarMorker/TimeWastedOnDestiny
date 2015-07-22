@@ -18,8 +18,8 @@
     <!-- CSS -->
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
     <link rel="stylesheet" href="http://bootswatch.com/cosmo/bootstrap.min.css">
-    <link rel="stylesheet" href="css/bootstrap-switch.min.css">
-    <link rel="stylesheet" href="css/stylesheet.css">
+    <link rel="stylesheet" href="/css/bootstrap-switch.min.css">
+    <link rel="stylesheet" href="/css/stylesheet.css">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -39,7 +39,7 @@
                     
                     <div class="input-group">
                         <span class="input-group-btn">
-                            <input id="console" type="checkbox" name="console" data-on-text='<img width="20" height="20" src="img/xbox-icon.svg" />' data-on-color="success" data-off-text='<img width="20" height="20" src="img/playstation-icon.svg" />' data-off-color="primary" data-size="large">
+                            <input id="console" type="checkbox" name="console" data-on-text='<img width="20" height="20" src="/img/xbox-icon.svg" />' data-on-color="success" data-off-text='<img width="20" height="20" src="/img/playstation-icon.svg" />' data-off-color="primary" data-size="large">
                         </span>
                         <input id="username" type="text" class="form-control" name="username" placeholder="Username">
                         <span class="input-group-btn">
@@ -54,10 +54,13 @@
             <div class="col-md-4">
                 <div class="panel panel-fixed panel-primary text-center">
                     <div class="panel-heading">
-                        <h3 class="panel-title"><img width="20" height="20" src="img/playstation-icon.svg" />&nbsp;Playstation</h3>
+                        <h3 class="panel-title"><img width="20" height="20" src="/img/playstation-icon.svg" />&nbsp;Playstation</h3>
                     </div>
                     <div class="panel-body">
-                        <img class="icon" id="psn_icon" />
+                        <div class="icon">
+                            <img id="psn_icon" />
+                            <h5 id="psn_rank"></h5>
+                        </div>
                         <h4 class="display-name" id="psn_name"></h4>
                         <span class="played-time" rel="tooltip" id="psn_time"></span>
                         <span class="wasted-time" rel="tooltip" id="psn_wasted"></span>
@@ -67,7 +70,7 @@
             <div class="col-md-4">
                 <div class="panel panel-fixed panel-info text-center">
                     <div class="panel-heading">
-                        <h3 class="panel-title"><img width="20" height="20" src="img/destiny-icon.svg" />&nbsp;Total time spent</h3>
+                        <h3 class="panel-title"><img width="20" height="20" src="/img/destiny-icon.svg" />&nbsp;Total time spent</h3>
                     </div>
                     <div class="panel-body">
                         <h4 class="display-name" id="display_name"></h4>
@@ -79,22 +82,18 @@
             <div class="col-md-4">
                 <div class="panel panel-fixed panel-success text-center">
                     <div class="panel-heading">
-                        <h3 class="panel-title"><img width="20" height="20" src="img/xbox-icon.svg" />&nbsp;Xbox</h3>
+                        <h3 class="panel-title"><img width="20" height="20" src="/img/xbox-icon.svg" />&nbsp;Xbox</h3>
                     </div>
                     <div class="panel-body">
-                        <img class="icon" id="xbl_icon" />
+                        <div class="icon">
+                            <img id="xbl_icon" />
+                            <h5 id="xbl_rank"></h5>
+                        </div>
                         <h4 class="display-name" id="xbl_name"></h4>
                         <span class="played-time" rel="tooltip" id="xbl_time"></span>
                         <span class="wasted-time" rel="tooltip" id="xbl_wasted"></span>
                     </div>
                 </div>
-            </div>
-        </div>
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <blockquote>
-                    <p class="disclaimer"><strong>Disclaimer: </strong>The time displayed does not include idle time spent in the Tower, Reef, or waiting in orbit. It does, however, include time spent on deleted characters. If you find any major difference in what time should be displayed and the actual time displayed on this website, please <a href="https://github.com/BinarMorker/TimeWastedOnDestiny/issues">submit a bug</a>.</p>
-                </blockquote>
             </div>
         </div>
         <div id="a-d-v-e-r-t">
@@ -131,21 +130,72 @@
                 </div>
             </div>
         </div>
-        <div class="well text-center">
-            <span>Made with <span class="glyphicon glyphicon-heart"></span> by <a href="https://www.facebook.com/BinarMorker">François Allard (BinarMorker)</a></span>
-            <br/>
-            <span><a href="https://github.com/BinarMorker/TimeWastedOnDestiny/issues">Submit a bug</a> | <a href="https://github.com/BinarMorker/TimeWastedOnDestiny">Get the source code</a></span>
-            <br/>
-            <span class="text-muted">You can also use my simple API located <a href="request.php?help">here</a>.</span>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="panel panel-warning">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><img width="20" height="20" src="/img/trophy-icon.svg" />&nbsp;Leaderboard</h3>
+                    </div>
+                    <table class="table table-condensed table-striped">
+                        <thead>
+                            <tr>
+                                <th class="text-center">Rank</th>
+                                <th class="text-center">Username</th>
+                                <th class="text-center">Time</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            $request = file_get_contents("http://" . $_SERVER['HTTP_HOST'] . "/request.php?leaderboard");
+                            $response = json_decode($request);
+                            $count = 1;
+                            foreach ($response->Response as $row) {
+                                if ($row->membershipType == 1) {
+                                    $image = "xbox";
+                                } else {
+                                    $image = "playstation";
+                                }
+                            ?>
+                            <tr>
+                                <td><?=$count?></td>
+                                <td><img width="20" height="20" src="/img/<?=$image?>-icon-black.svg" />&nbsp;<?=$row->displayName?></td>
+                                <td rel="tooltip" class="leaderboard-hours"><?=$row->timePlayed?></td>
+                            </tr>
+                            <?php
+                                $count++;
+                            }
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <blockquote>
+                            <p class="disclaimer"><strong>Disclaimer: </strong>The time displayed does not include idle time spent in the Tower, Reef, or waiting in orbit. It does, however, include time spent on deleted characters. If you find any major difference in what time should be displayed and the actual time displayed on this website, please <a href="https://github.com/BinarMorker/TimeWastedOnDestiny/issues">submit a bug</a>.</p>
+                        </blockquote>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <span>Made with <span class="glyphicon glyphicon-heart"></span> by <a href="https://www.facebook.com/BinarMorker">François Allard (BinarMorker)</a></span>
+                        <br/>
+                        <span><a href="https://github.com/BinarMorker/TimeWastedOnDestiny/issues">Submit a bug</a> | <a href="https://github.com/BinarMorker/TimeWastedOnDestiny">Get the source code</a></span>
+                        <br/>
+                        <span class="text-muted">You can also use my simple API located <a href="/request.php?help">here</a>.</span>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <!-- JavaScript -->
     <script>var damnAdBlock = false;</script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-    <script src="js/bootstrap-switch.min.js"></script>
-    <script src="js/main.js"></script>
-    <script src="js/damnadblock.js"></script>
+    <script src="/js/bootstrap-switch.min.js"></script>
+    <script src="/js/damnadblock.js"></script>
+    <script src="/js/main.js"></script>
     <script>
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
         (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

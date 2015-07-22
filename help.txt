@@ -1,4 +1,4 @@
-Time Wasted on Destiny API v1.2
+Time Wasted on Destiny API v1.5
 ===============================
 
 HELP:
@@ -11,6 +11,7 @@ SYNTAX:
 request.php?help
 request.php?console=2&user=binarmorker
 request.php?console=2&user=binarmorker&fmt
+request.php?leaderboard
 
 PARAMETERS:
 -----------
@@ -18,6 +19,7 @@ console=[_] : 1 for xbox, 2 for playstation
 user=[_]    : Your xbox or playstation username
 fmt         : Shows a structured JSON array
 help        : Show this page regardless of the other parameters
+leaderboard : Show the leaderboard data
 
 CACHE:
 ------

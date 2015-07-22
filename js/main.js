@@ -30,8 +30,8 @@ $("document").ready(function () {
         } else {
             var plat = 2;
         }
-        console.log(user);
-        var jsonUrl = "request.php?console="+plat+"&user="+user;
+        //console.log(user);
+        var jsonUrl = "/request.php?console="+plat+"&user="+user;
         $.getJSON(jsonUrl, function (json) {
             clearInterval(loading);
             $("#load").detach();
@@ -41,17 +41,18 @@ $("document").ready(function () {
                 resetFields();
             } else {
                 $("#display_name").text(json.Response.displayName);
-                $("#total_time").text(getTime(json.Response.totalTimePlayed));
-                $("#total_time").attr("title", getHours(json.Response.totalTimePlayed));
-                $("#total_wasted").html("<strong class='wasted-time'>Deleted characters only</strong>" + getTime(json.Response.totalTimeWasted));
-                $("#total_wasted").attr("title", getHours(json.Response.totalTimeWasted));
+                $("#total_time").text(getHours(json.Response.totalTimePlayed));
+                $("#total_time").attr("title", getTime(json.Response.totalTimePlayed));
+                $("#total_wasted").html("<strong class='wasted-time'>Deleted characters only</strong>" + getHours(json.Response.totalTimeWasted));
+                $("#total_wasted").attr("title", getTime(json.Response.totalTimeWasted));
                 if ('playstation' in json.Response) {
                     $("#psn_name").text(json.Response.playstation.displayName + " (" + json.Response.playstation.characters.total + " characters)");
                     $("#psn_icon").attr("src", "https://www.bungie.net" + json.Response.playstation.iconPath);
-                    $("#psn_time").text(getTime(json.Response.playstation.timePlayed));
-                    $("#psn_time").attr("title", getHours(json.Response.playstation.timePlayed));
-                    $("#psn_wasted").html("<strong class='wasted-time'>Deleted characters only (" + json.Response.playstation.characters.deleted + ")</strong>" + getTime(json.Response.playstation.timeWasted));
-                    $("#psn_wasted").attr("title", getHours(json.Response.playstation.timeWasted));
+                    $("#psn_time").text(getHours(json.Response.playstation.timePlayed));
+                    $("#psn_time").attr("title", getTime(json.Response.playstation.timePlayed));
+                    $("#psn_wasted").html("<strong class='wasted-time'>Deleted characters only (" + json.Response.playstation.characters.deleted + ")</strong>" + getHours(json.Response.playstation.timeWasted));
+                    $("#psn_wasted").attr("title", getTime(json.Response.playstation.timeWasted));
+                    $("#psn_rank").text("Rank " + json.Response.playstation.leaderboardPosition);
                 } else {
                     $("#psn_name").text("Never played");
                     $("#psn_icon").attr("src", "");
@@ -59,14 +60,16 @@ $("document").ready(function () {
                     $("#psn_time").attr("title", "");
                     $("#psn_wasted").text("");
                     $("#psn_wasted").attr("title", "");
+                    $("#psn_rank").text("");
                 }
                 if ('xbox' in json.Response) {
                     $("#xbl_name").text(json.Response.xbox.displayName + " (" + json.Response.xbox.characters.total + " characters)");
                     $("#xbl_icon").attr("src", "https://www.bungie.net" + json.Response.xbox.iconPath);
-                    $("#xbl_time").text(getTime(json.Response.xbox.timePlayed));
-                    $("#xbl_time").attr("title", getHours(json.Response.xbox.timePlayed));
-                    $("#xbl_wasted").html("<strong class='wasted-time'>Deleted characters only (" + json.Response.xbox.characters.deleted + ")</strong>" + getTime(json.Response.xbox.timeWasted));
-                    $("#xbl_wasted").attr("title", getHours(json.Response.xbox.timeWasted));
+                    $("#xbl_time").text(getHours(json.Response.xbox.timePlayed));
+                    $("#xbl_time").attr("title", getTime(json.Response.xbox.timePlayed));
+                    $("#xbl_wasted").html("<strong class='wasted-time'>Deleted characters only (" + json.Response.xbox.characters.deleted + ")</strong>" + getHours(json.Response.xbox.timeWasted));
+                    $("#xbl_wasted").attr("title", getTime(json.Response.xbox.timeWasted));
+                    $("#xbl_rank").text("Rank " + json.Response.xbox.leaderboardPosition);
                 } else {
                     $("#xbl_name").text("Never played");
                     $("#xbl_icon").attr("src", "");
@@ -74,14 +77,33 @@ $("document").ready(function () {
                     $("#xbl_time").attr("title", "");
                     $("#xbl_wasted").text("");
                     $("#xbl_wasted").attr("title", "");
+                    $("#xbl_rank").text("");
                 }
                 $("#fields").removeClass("hide");
+                var console = "playstation";
+                if (plat == 1) {
+                    console = "xbox";
+                }
+                changeUrl(json.Response.displayName, "http://" + window.location.hostname + "/" + console + "/" + json.Response.displayName.toLowerCase());
             }
         });
     });
-});
-
-$(function() {
+    
+    $(".leaderboard-hours").each(function() {
+        var time = $(this).text();
+        $(this).text(getHours(time));
+        $(this).attr("title", getTime(time));
+    });
+    
+    var params = cleanArray(window.location.pathname.split('/'));
+    if (params.length > 0) {
+        if (params[0] == "xbox") {
+            $("input[name='console']").bootstrapSwitch('state', true, true);
+        }
+        $("#username").val(params[1]);
+        $("#search").submit();
+    }
+    
     var targets = $('[rel~=tooltip]');
     var target = false;
     var tooltip = false;
@@ -153,6 +175,23 @@ $(function() {
     });
 });
 
+function cleanArray(actual){
+    var newArray = new Array();
+        for(var i = 0; i < actual.length; i++) {
+        if (actual[i]) {
+            newArray.push(actual[i]);
+        }
+    }
+    return newArray;
+}
+
+function changeUrl(title, url) {
+    if (typeof (history.pushState) != "undefined") {
+        var obj = { Title: title, Url: url };
+        history.pushState(obj, obj.Title, obj.Url);
+    }
+}
+
 function resetFields() {
     $("#display_name").text("");
     $("#total_time").text("");
@@ -163,12 +202,14 @@ function resetFields() {
     $("#psn_time").attr("title", "");
     $("#psn_wasted").text("");
     $("#psn_wasted").attr("title", "");
+    $("#psn_rank").text("");
     $("#xbl_name").text("");
     $("#xbl_icon").attr("src", "");
     $("#xbl_time").text("");
     $("#xbl_time").attr("title", "");
     $("#xbl_wasted").text("");
     $("#xbl_wasted").attr("title", "");
+    $("#xbl_rank").text("");
 }
 
 function showError(json) {
@@ -184,6 +225,9 @@ function showError(json) {
 }
 
 function getHours(seconds) {
+    if (seconds == 0) {
+        return "None";
+    }
     var hours = Math.floor(seconds / (60 * 60));
     if (hours > 0) {
         hours = hours + " hours";
@@ -196,9 +240,6 @@ function getHours(seconds) {
 }
 
 function getTime(seconds) {
-    if (seconds == 0) {
-        return "None";
-    }
     var weeks = Math.floor(seconds / (7 * 24 * 60 * 60));
     if (weeks > 1) {
         weeks = weeks + " weeks ";

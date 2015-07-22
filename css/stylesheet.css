@@ -32,24 +32,25 @@ body:before {
     display: block;
     margin-top: -5px;
     margin-bottom: 5px;
+    font-size: 20px;
 }
 
 .played-time {
     display: block;
-    font-size: 14px;
+    font-size: 16px;
 }
 
 .wasted-time {
     display: block;
-    font-size: 12px;
+    font-size: 14px;
 }
 
 .wasted-time strong {
-    font-size: 14px;
+    font-size: 16px;
 }
 
 .disclaimer {
-    font-size: 14px;
+    font-size: 18px;
 }
 
 .switch {
@@ -99,11 +100,17 @@ body:before {
 .icon {
     float: left;
     display: block;
-    width: 90px;
-    height: 90px;
+    width: 110px;
+    height: 140px;
     padding: 20px;
-    margin-left: -15px;
-    margin-right: -15px;
+    margin-top: -25px;
+    margin-left: -25px;
+    margin-right: -25px;
+}
+
+.icon img {
+    width: 100%;
+    height: auto;
 }
 
 .vert-middle{
