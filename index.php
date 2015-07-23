@@ -173,22 +173,28 @@
                 </div>
             </div>
             <div class="col-sm-6">
-                <div class="panel panel-default">
-                    <div class="panel-body">
+                <div class="panel panel-danger">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">FAQ</h3>
+                    </div>
+                    <div class="panel-body text-left">
                         <blockquote>
-                            <p class="disclaimer"><strong>Disclaimer: </strong>The time displayed does not include idle time spent in the Tower, Reef, or waiting in orbit. It does, however, include time spent on deleted characters. If you find any major difference in what time should be displayed and the actual time displayed on this website, please <a href="https://github.com/BinarMorker/TimeWastedOnDestiny/issues">submit a bug</a>.</p>
+                            <p class="disclaimer"><strong>Do I have to add deleted time to the total time?</strong><br/>The total time includes time spent on deleted characters.</p>
+                            <p class="disclaimer"><strong>This is only about half my time on another website!</strong><br/>The time displayed does not include idle time spent in the Tower, Reef, or waiting in orbit.</p>
+                            <p class="disclaimer"><strong>My username does not work!!!</strong><br/>If your username does not work, please <a href="https://github.com/BinarMorker/TimeWastedOnDestiny/issues">submit a bug</a>.</p>
+                            <p class="disclaimer"><strong>Am I ranked against every player in the world?</strong><br/>No, you are only ranked against every played whose name has been entered on this website.</p>
                         </blockquote>
                     </div>
                 </div>
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <span>Made with <span class="glyphicon glyphicon-heart"></span> by <a href="https://www.facebook.com/BinarMorker">François Allard (BinarMorker)</a></span>
-                        <br/>
-                        <span><a href="https://github.com/BinarMorker/TimeWastedOnDestiny/issues">Submit a bug</a> | <a href="https://github.com/BinarMorker/TimeWastedOnDestiny">Get the source code</a></span>
-                        <br/>
-                        <span class="text-muted">You can also use my simple API located <a href="/request.php?help">here</a>.</span>
-                    </div>
-                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <span>Made with <span class="glyphicon glyphicon-heart"></span> by <a href="https://www.facebook.com/BinarMorker">François Allard (BinarMorker)</a></span>
+                <br/>
+                <span><a href="https://github.com/BinarMorker/TimeWastedOnDestiny/issues">Submit a bug</a> | <a href="https://github.com/BinarMorker/TimeWastedOnDestiny">Get the source code</a></span>
+                <br/>
+                <span class="text-muted">You can also use my simple API located <a href="/request.php?help">here</a>.</span>
             </div>
         </div>
     </div>

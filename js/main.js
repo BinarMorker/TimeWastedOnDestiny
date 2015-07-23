@@ -6,87 +6,91 @@ $("document").ready(function () {
     });
     $("#search").submit(function(event) {
         event.preventDefault();
-        resetFields();
-
-        $("#fields").addClass("hide");
-        $("#error").html("<div id='load' class='panel panel-info'><div class='panel-body'><blockquote class='loading'></blockquote></div></div>");
-        $(".loading").attr("load", 0);
-        $(".loading").text("Loading");
-        var loading = window.setInterval(function () {
-            var dots = "";
-            var dotNum = $(".loading").attr("load");
-            dotNum++;
-            dotNum %= 4;
-            for (var i = 0; i < dotNum; i++) {
-                dots += ".";
-            }
-            $(".loading").attr("load", dotNum);
-            $(".loading").text("Loading" + dots);
-        }, 1000);
-
         var user = $("#username").val();
         if (platform) {
             var plat = 1;
         } else {
             var plat = 2;
         }
-        //console.log(user);
-        var jsonUrl = "/request.php?console="+plat+"&user="+user;
-        $.getJSON(jsonUrl, function (json) {
-            clearInterval(loading);
-            $("#load").detach();
-            //console.log(json);
-            showError(json.Info);
-            if (json.Info.Status == "Error") {
-                resetFields();
-            } else {
-                $("#display_name").text(json.Response.displayName);
-                $("#total_time").text(getHours(json.Response.totalTimePlayed));
-                $("#total_time").attr("title", getTime(json.Response.totalTimePlayed));
-                $("#total_wasted").html("<strong class='wasted-time'>Deleted characters only</strong>" + getHours(json.Response.totalTimeWasted));
-                $("#total_wasted").attr("title", getTime(json.Response.totalTimeWasted));
-                if ('playstation' in json.Response) {
-                    $("#psn_name").text(json.Response.playstation.displayName + " (" + json.Response.playstation.characters.total + " characters)");
-                    $("#psn_icon").attr("src", "https://www.bungie.net" + json.Response.playstation.iconPath);
-                    $("#psn_time").text(getHours(json.Response.playstation.timePlayed));
-                    $("#psn_time").attr("title", getTime(json.Response.playstation.timePlayed));
-                    $("#psn_wasted").html("<strong class='wasted-time'>Deleted characters only (" + json.Response.playstation.characters.deleted + ")</strong>" + getHours(json.Response.playstation.timeWasted));
-                    $("#psn_wasted").attr("title", getTime(json.Response.playstation.timeWasted));
-                    $("#psn_rank").text("Rank " + json.Response.playstation.leaderboardPosition);
+        if (user === undefined || user == "") {
+            $("#error").html("<div class='panel panel-danger'><div class='panel-body'><blockquote>You must enter a username</blockquote></div></div>");
+        } else {
+            resetFields();
+            $("#fields").addClass("hide");
+            $("#error").html("<div id='load' class='panel panel-info'><div class='panel-body'><blockquote class='loading'></blockquote></div></div>");
+            $(".loading").attr("load", 0);
+            $(".loading").text("Loading");
+            var loading = window.setInterval(function () {
+                var dots = "";
+                var dotNum = $(".loading").attr("load");
+                dotNum++;
+                dotNum %= 4;
+                for (var i = 0; i < dotNum; i++) {
+                    dots += ".";
+                }
+                $(".loading").attr("load", dotNum);
+                $(".loading").text("Loading" + dots);
+            }, 1000);
+
+            var jsonUrl = "/request.php?console="+plat+"&user="+user;
+            $.getJSON(jsonUrl, function (json) {
+                clearInterval(loading);
+                $("#load").detach();
+                showError(json.Info);
+                if (json.Info.Status == "Error") {
+                    resetFields();
                 } else {
-                    $("#psn_name").text("Never played");
-                    $("#psn_icon").attr("src", "");
-                    $("#psn_time").text("");
-                    $("#psn_time").attr("title", "");
-                    $("#psn_wasted").text("");
-                    $("#psn_wasted").attr("title", "");
-                    $("#psn_rank").text("");
+                    $("#display_name").text(json.Response.displayName);
+                    $("#total_time").text(getHours(json.Response.totalTimePlayed));
+                    $("#total_time").attr("title", getTime(json.Response.totalTimePlayed));
+                    $("#total_wasted").html("<strong class='wasted-time'>Deleted characters only</strong>" + getHours(json.Response.totalTimeWasted));
+                    $("#total_wasted").attr("title", getTime(json.Response.totalTimeWasted));
+                    if ('playstation' in json.Response) {
+                        $("#psn_name").text(json.Response.playstation.displayName + " (" + json.Response.playstation.characters.total + " characters)");
+                        $("#psn_icon").attr("src", "https://www.bungie.net" + json.Response.playstation.iconPath);
+                        $("#psn_time").text(getHours(json.Response.playstation.timePlayed));
+                        $("#psn_time").attr("title", getTime(json.Response.playstation.timePlayed));
+                        $("#psn_wasted").html("<strong class='wasted-time'>Deleted characters only (" + json.Response.playstation.characters.deleted + ")</strong>" + getHours(json.Response.playstation.timeWasted));
+                        $("#psn_wasted").attr("title", getTime(json.Response.playstation.timeWasted));
+                        $("#psn_rank").text("Rank " + json.Response.playstation.leaderboardPosition);
+                    } else {
+                        $("#psn_name").text("Never played");
+                        $("#psn_icon").attr("src", "");
+                        $("#psn_time").text("");
+                        $("#psn_time").attr("title", "");
+                        $("#psn_wasted").text("");
+                        $("#psn_wasted").attr("title", "");
+                        $("#psn_rank").text("");
+                    }
+                    if ('xbox' in json.Response) {
+                        $("#xbl_name").text(json.Response.xbox.displayName + " (" + json.Response.xbox.characters.total + " characters)");
+                        $("#xbl_icon").attr("src", "https://www.bungie.net" + json.Response.xbox.iconPath);
+                        $("#xbl_time").text(getHours(json.Response.xbox.timePlayed));
+                        $("#xbl_time").attr("title", getTime(json.Response.xbox.timePlayed));
+                        $("#xbl_wasted").html("<strong class='wasted-time'>Deleted characters only (" + json.Response.xbox.characters.deleted + ")</strong>" + getHours(json.Response.xbox.timeWasted));
+                        $("#xbl_wasted").attr("title", getTime(json.Response.xbox.timeWasted));
+                        $("#xbl_rank").text("Rank " + json.Response.xbox.leaderboardPosition);
+                    } else {
+                        $("#xbl_name").text("Never played");
+                        $("#xbl_icon").attr("src", "");
+                        $("#xbl_time").text("");
+                        $("#xbl_time").attr("title", "");
+                        $("#xbl_wasted").text("");
+                        $("#xbl_wasted").attr("title", "");
+                        $("#xbl_rank").text("");
+                    }
+                    $("#fields").removeClass("hide");
+                    if (plat == 1) {
+                        var type = "xbox";
+                        var name = encodeURI(json.Response.xbox.displayName).toLowerCase();
+                    } else {
+                        var type = "playstation";
+                        var name = encodeURI(json.Response.playstation.displayName).toLowerCase();
+                    }
+                    changeUrl(json.Response.displayName, "http://" + window.location.hostname + "/" + type + "/" + name);
                 }
-                if ('xbox' in json.Response) {
-                    $("#xbl_name").text(json.Response.xbox.displayName + " (" + json.Response.xbox.characters.total + " characters)");
-                    $("#xbl_icon").attr("src", "https://www.bungie.net" + json.Response.xbox.iconPath);
-                    $("#xbl_time").text(getHours(json.Response.xbox.timePlayed));
-                    $("#xbl_time").attr("title", getTime(json.Response.xbox.timePlayed));
-                    $("#xbl_wasted").html("<strong class='wasted-time'>Deleted characters only (" + json.Response.xbox.characters.deleted + ")</strong>" + getHours(json.Response.xbox.timeWasted));
-                    $("#xbl_wasted").attr("title", getTime(json.Response.xbox.timeWasted));
-                    $("#xbl_rank").text("Rank " + json.Response.xbox.leaderboardPosition);
-                } else {
-                    $("#xbl_name").text("Never played");
-                    $("#xbl_icon").attr("src", "");
-                    $("#xbl_time").text("");
-                    $("#xbl_time").attr("title", "");
-                    $("#xbl_wasted").text("");
-                    $("#xbl_wasted").attr("title", "");
-                    $("#xbl_rank").text("");
-                }
-                $("#fields").removeClass("hide");
-                var console = "playstation";
-                if (plat == 1) {
-                    console = "xbox";
-                }
-                changeUrl(json.Response.displayName, "http://" + window.location.hostname + "/" + console + "/" + json.Response.displayName.toLowerCase());
-            }
-        });
+            });
+        }
     });
     
     $(".leaderboard-hours").each(function() {
@@ -98,9 +102,9 @@ $("document").ready(function () {
     var params = cleanArray(window.location.pathname.split('/'));
     if (params.length > 0) {
         if (params[0] == "xbox") {
-            $("input[name='console']").bootstrapSwitch('state', true, true);
+            $("[name='console']").bootstrapSwitch('state', true, false);
         }
-        $("#username").val(params[1]);
+        $("#username").val(decodeURI(params[1]));
         $("#search").submit();
     }
     

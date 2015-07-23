@@ -8,6 +8,8 @@
  * @copyright 2015 François Allard
  */
 
+error_reporting(E_ALL);
+ini_set("display_errors", 1);
 define("VERSION", 1.5); // The API version
 require("config.php");
 
@@ -61,7 +63,7 @@ function get_leaderboard() {
         $database = Database::init(DBHOST, DBNAME, DBUSER, DBPASS);
 		$response = array();
         $query = "SELECT * FROM leaderboard ORDER BY `seconds` DESC LIMIT 10;";
-        $request = new Database($database, $query, array(0, $name, null));
+        $request = new Database($database, $query, null);
         $request->receive();
         $count = 0;
         foreach ($request->get_result() as $result) {
@@ -210,7 +212,7 @@ class DestinyAccount {
 		// This endpoint returns the membershipId of a player
 		$url = "https://www.bungie.net/platform/destiny/SearchDestinyPlayer/" . $this->console . "/" . $this->name;
 		$lookup = file_get_contents($url);
-		$response = json_decode($lookup);
+		$response = json_decode(preg_replace('/NaN/', '"NaN"', $lookup));
 		if ($response->ErrorCode == 5) {
 			// ErrorCode 5 means servers are in maintenance
 			$this->error = Error::show(Error::ERROR, "Destiny is in maintenance");
@@ -261,7 +263,7 @@ class DestinyAccount {
 	function add_account($console, $contents) {
 		$this->accounts[$console] = $contents;
 	}
-	
+    
 	/**
 	 * Get the Bungie account.
 	 * Get membership information for each console fro the fetched Bungie account.
@@ -272,7 +274,7 @@ class DestinyAccount {
 		// This endpoint returns relevant data on each console account linked to a Bungie account
 		$url = "https://www.bungie.net/platform/user/GetBungieAccount/" . $this->temp_account_id . "/" . $this->console;
 		$lookup = file_get_contents($url);
-		$response = json_decode($lookup);
+		$response = json_decode(preg_replace('/NaN/', '"NaN"', $lookup));
 		if (isset($response->Response->bungieNetUser)) {
 			$this->display_name = $response->Response->bungieNetUser->displayName;
 		}
@@ -302,7 +304,7 @@ class DestinyAccount {
 		// This endpoint returns stats for every character created on the account
 		$url = "https://www.bungie.net/Platform/Destiny/Stats/Account/" . $this->accounts[$console]['membershipType'] . "/" . $this->accounts[$console]['membershipId'];
 		$lookup = file_get_contents($url);
-		$response = json_decode($lookup);
+		$response = json_decode(preg_replace('/NaN/', '"NaN"', $lookup));
         $count = 0;
         $deleted_count = 0;
         $time_played = 0;
