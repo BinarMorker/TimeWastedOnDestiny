@@ -20,6 +20,18 @@ body:before {
   margin-right: -0.25em;
 }
 
+a {
+    text-decoration: none !important;
+    color: inherit;
+    border-bottom: 1px dotted #000;
+}
+
+a:hover {
+    text-decoration: none !important;
+    color: inherit;
+    border-bottom: 1px solid #000;
+}
+
 .panel-fixed {
     height: 160px;
 }
@@ -132,4 +144,31 @@ blockquote {
 
 .panel-info blockquote {
     border-color: #7643a8;
+}
+
+.popover {
+    background: #000;
+    border: 0;
+    padding: 0;
+    color: #fff;
+}
+
+.popover a {
+    border-color: #fff;
+    display: inline-block;
+    margin-bottom: 5px;
+}
+
+.popover.right > .arrow:after {
+    border-right-color: #000;
+}
+
+.popover-title {
+    background: #222;
+    border: 0;
+    border-radius: 0;
+}
+
+.popover-content {
+    background: #000;
 }

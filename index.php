@@ -58,7 +58,9 @@
                     </div>
                     <div class="panel-body">
                         <div class="icon">
-                            <img id="psn_icon" />
+                            <a id="psn_links" tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="External links" data-content="">
+                                <img id="psn_icon" />
+                            </a>
                             <h5 id="psn_rank"></h5>
                         </div>
                         <h4 class="display-name" id="psn_name"></h4>
@@ -86,7 +88,9 @@
                     </div>
                     <div class="panel-body">
                         <div class="icon">
-                            <img id="xbl_icon" />
+                            <a id="xbl_links" tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="External links" data-content="">
+                                <img id="xbl_icon" />
+                            </a>
                             <h5 id="xbl_rank"></h5>
                         </div>
                         <h4 class="display-name" id="xbl_name"></h4>
@@ -158,7 +162,7 @@
                             ?>
                             <tr>
                                 <td><?=$count?></td>
-                                <td><img width="20" height="20" src="/img/<?=$image?>-icon-black.svg" />&nbsp;<?=$row->displayName?></td>
+                                <td><img width="20" height="20" src="/img/<?=$image?>-icon-black.svg" />&nbsp;<a href="/<?=$image?>/<?=strtolower($row->displayName)?>"><?=$row->displayName?></a></td>
                                 <td rel="tooltip" class="leaderboard-hours"><?=$row->timePlayed?></td>
                             </tr>
                             <?php
@@ -175,7 +179,7 @@
             <div class="col-sm-6">
                 <div class="panel panel-danger">
                     <div class="panel-heading">
-                        <h3 class="panel-title">FAQ</h3>
+                        <h3 class="panel-title"><img width="20" height="20" src="/img/question-icon.svg" />&nbsp;FAQ</h3>
                     </div>
                     <div class="panel-body text-left">
                         <blockquote>

@@ -9,8 +9,10 @@ $("document").ready(function () {
         var user = $("#username").val();
         if (platform) {
             var plat = 1;
+            var type = "xbox";
         } else {
             var plat = 2;
+            var type = "playstation";
         }
         if (user === undefined || user == "") {
             $("#error").html("<div class='panel panel-danger'><div class='panel-body'><blockquote>You must enter a username</blockquote></div></div>");
@@ -53,6 +55,12 @@ $("document").ready(function () {
                         $("#psn_wasted").html("<strong class='wasted-time'>Deleted characters only (" + json.Response.playstation.characters.deleted + ")</strong>" + getHours(json.Response.playstation.timeWasted));
                         $("#psn_wasted").attr("title", getTime(json.Response.playstation.timeWasted));
                         $("#psn_rank").text("Rank " + json.Response.playstation.leaderboardPosition);
+                        var playstation_bng_link = "<a target='_blank' href='https://www.bungie.net/en/Profile/" + json.Response.playstation.membershipType + "/" + json.Response.playstation.membershipId + "'>Bungie profile</a>";
+                        var playstation_dnk_link = "<a target='_blank' href='http://www.dinklebot.net/" + json.Response.playstation.membershipType + "/" + json.Response.playstation.displayName.toLowerCase() + "'>Dinklebot stats</a>";
+                        var playstation_ddb_link = "<a target='_blank' href='http://www.destinydb.com/guardians/playstation/" + json.Response.playstation.membershipId + "-" + json.Response.playstation.displayName.toLowerCase() + "'>DestinyDB profile</a>";
+                        var playstation_dtr_link = "<a target='_blank' href='http://www.destinytracker.com/destiny/player/ps/" + json.Response.playstation.displayName.toLowerCase() + "'>DestinyTracker stats</a>";
+                        $("#psn_links").attr("data-content", playstation_bng_link + "<br/>" + playstation_dnk_link + "<br/>" + playstation_ddb_link + "<br/>" + playstation_dtr_link);
+                        $("#psn_links").css("visibility", "visible");
                     } else {
                         $("#psn_name").text("Never played");
                         $("#psn_icon").attr("src", "");
@@ -61,6 +69,8 @@ $("document").ready(function () {
                         $("#psn_wasted").text("");
                         $("#psn_wasted").attr("title", "");
                         $("#psn_rank").text("");
+                        $("#psn_links").attr("data-content", "");
+                        $("#psn_links").css("visibility", "hidden");
                     }
                     if ('xbox' in json.Response) {
                         $("#xbl_name").text(json.Response.xbox.displayName + " (" + json.Response.xbox.characters.total + " characters)");
@@ -70,6 +80,12 @@ $("document").ready(function () {
                         $("#xbl_wasted").html("<strong class='wasted-time'>Deleted characters only (" + json.Response.xbox.characters.deleted + ")</strong>" + getHours(json.Response.xbox.timeWasted));
                         $("#xbl_wasted").attr("title", getTime(json.Response.xbox.timeWasted));
                         $("#xbl_rank").text("Rank " + json.Response.xbox.leaderboardPosition);
+                        var xbox_bng_link = "<a target='_blank' href='https://www.bungie.net/en/Profile/" + json.Response.xbox.membershipType + "/" + json.Response.xbox.membershipId + "'>Bungie profile</a>";
+                        var xbox_dnk_link = "<a target='_blank' href='http://www.dinklebot.net/" + json.Response.xbox.membershipType + "/" + json.Response.xbox.displayName.toLowerCase() + "'>Dinklebot stats</a>";
+                        var xbox_ddb_link = "<a target='_blank' href='http://www.destinydb.com/guardians/xbox/" + json.Response.xbox.membershipId + "-" + json.Response.xbox.displayName.toLowerCase() + "'>DestinyDB profile</a>";
+                        var xbox_dtr_link = "<a target='_blank' href='http://www.destinytracker.com/destiny/player/xbox/" + json.Response.xbox.displayName.toLowerCase() + "'>DestinyTracker stats</a>";
+                        $("#xbl_links").attr("data-content", xbox_bng_link + "<br/>" + xbox_dnk_link + "<br/>" + xbox_ddb_link + "<br/>" + xbox_dtr_link);
+                        $("#xbl_links").css("visibility", "visible");
                     } else {
                         $("#xbl_name").text("Never played");
                         $("#xbl_icon").attr("src", "");
@@ -78,13 +94,13 @@ $("document").ready(function () {
                         $("#xbl_wasted").text("");
                         $("#xbl_wasted").attr("title", "");
                         $("#xbl_rank").text("");
+                        $("#xbl_links").attr("data-content", "");
+                        $("#xbl_links").css("visibility", "hidden");
                     }
                     $("#fields").removeClass("hide");
                     if (plat == 1) {
-                        var type = "xbox";
                         var name = encodeURI(json.Response.xbox.displayName).toLowerCase();
                     } else {
-                        var type = "playstation";
                         var name = encodeURI(json.Response.playstation.displayName).toLowerCase();
                     }
                     changeUrl(json.Response.displayName, "http://" + window.location.hostname + "/" + type + "/" + name);
@@ -108,12 +124,18 @@ $("document").ready(function () {
         $("#search").submit();
     }
     
+    $(function () {
+        $('[data-toggle="popover"]').popover({
+            html: true
+        })
+    })
+    
     var targets = $('[rel~=tooltip]');
     var target = false;
     var tooltip = false;
     var title = false;
- 
-    targets.bind('mouseenter', function() {
+    
+    var do_tooltip = function() {
         target = $(this);
         tip = target.attr('title');
         tooltip = $('<div id="tooltip"></div>');
@@ -176,7 +198,9 @@ $("document").ready(function () {
         
         target.bind('mouseleave', remove_tooltip);
         tooltip.bind('click', remove_tooltip);
-    });
+    }
+ 
+    targets.bind('mouseenter', do_tooltip);
 });
 
 function cleanArray(actual){
