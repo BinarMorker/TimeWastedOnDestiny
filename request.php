@@ -277,7 +277,9 @@ class DestinyAccount {
 		$response = json_decode(preg_replace('/NaN/', '"NaN"', $lookup));
 		if (isset($response->Response->bungieNetUser)) {
 			$this->display_name = $response->Response->bungieNetUser->displayName;
-		}
+        } else {
+			$this->display_name = $response->Response->destinyAccounts[0]->userInfo->displayName;
+        }
 		if (count($response->Response->destinyAccounts) == 0) {
 			// No destiny account mean something went wrong (because we looked 
 			// up the bungie account using a destiny account, so it must exist. DUH)
