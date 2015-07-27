@@ -55,10 +55,10 @@ $("document").ready(function () {
                         $("#psn_wasted").html("<strong class='wasted-time'>Deleted characters only (" + json.Response.playstation.characters.deleted + ")</strong>" + getHours(json.Response.playstation.timeWasted));
                         $("#psn_wasted").attr("title", getTime(json.Response.playstation.timeWasted));
                         $("#psn_rank").text("Rank " + json.Response.playstation.leaderboardPosition);
-                        var playstation_bng_link = "<a target='_blank' href='https://www.bungie.net/en/Profile/" + json.Response.playstation.membershipType + "/" + json.Response.playstation.membershipId + "'>Bungie profile</a>";
-                        var playstation_dnk_link = "<a target='_blank' href='http://www.dinklebot.net/" + json.Response.playstation.membershipType + "/" + json.Response.playstation.displayName.toLowerCase() + "'>Dinklebot stats</a>";
-                        var playstation_ddb_link = "<a target='_blank' href='http://www.destinydb.com/guardians/playstation/" + json.Response.playstation.membershipId + "-" + json.Response.playstation.displayName.toLowerCase() + "'>DestinyDB profile</a>";
-                        var playstation_dtr_link = "<a target='_blank' href='http://www.destinytracker.com/destiny/player/ps/" + json.Response.playstation.displayName.toLowerCase() + "'>DestinyTracker stats</a>";
+                        var playstation_bng_link = "<a target='_blank' href='https://bungie.net/en/Profile/" + json.Response.playstation.membershipType + "/" + json.Response.playstation.membershipId + "'>Bungie profile</a>";
+                        var playstation_dnk_link = "<a target='_blank' href='http://dinklebot.net/" + json.Response.playstation.membershipType + "/" + json.Response.playstation.displayName.toLowerCase() + "'>Dinklebot stats</a>";
+                        var playstation_ddb_link = "<a target='_blank' href='http://destinydb.com/guardians/playstation/" + json.Response.playstation.membershipId + "-" + json.Response.playstation.displayName.toLowerCase() + "'>DestinyDB profile</a>";
+                        var playstation_dtr_link = "<a target='_blank' href='http://destinytracker.com/destiny/player/ps/" + json.Response.playstation.displayName.toLowerCase() + "'>DestinyTracker stats</a>";
                         $("#psn_links").attr("data-content", playstation_bng_link + "<br/>" + playstation_dnk_link + "<br/>" + playstation_ddb_link + "<br/>" + playstation_dtr_link);
                         $("#psn_links").css("visibility", "visible");
                     } else {
@@ -80,10 +80,10 @@ $("document").ready(function () {
                         $("#xbl_wasted").html("<strong class='wasted-time'>Deleted characters only (" + json.Response.xbox.characters.deleted + ")</strong>" + getHours(json.Response.xbox.timeWasted));
                         $("#xbl_wasted").attr("title", getTime(json.Response.xbox.timeWasted));
                         $("#xbl_rank").text("Rank " + json.Response.xbox.leaderboardPosition);
-                        var xbox_bng_link = "<a target='_blank' href='https://www.bungie.net/en/Profile/" + json.Response.xbox.membershipType + "/" + json.Response.xbox.membershipId + "'>Bungie profile</a>";
-                        var xbox_dnk_link = "<a target='_blank' href='http://www.dinklebot.net/" + json.Response.xbox.membershipType + "/" + json.Response.xbox.displayName.toLowerCase() + "'>Dinklebot stats</a>";
-                        var xbox_ddb_link = "<a target='_blank' href='http://www.destinydb.com/guardians/xbox/" + json.Response.xbox.membershipId + "-" + json.Response.xbox.displayName.toLowerCase() + "'>DestinyDB profile</a>";
-                        var xbox_dtr_link = "<a target='_blank' href='http://www.destinytracker.com/destiny/player/xbox/" + json.Response.xbox.displayName.toLowerCase() + "'>DestinyTracker stats</a>";
+                        var xbox_bng_link = "<a target='_blank' href='https://bungie.net/en/Profile/" + json.Response.xbox.membershipType + "/" + json.Response.xbox.membershipId + "'>Bungie profile</a>";
+                        var xbox_dnk_link = "<a target='_blank' href='http://dinklebot.net/" + json.Response.xbox.membershipType + "/" + json.Response.xbox.displayName.toLowerCase() + "'>Dinklebot stats</a>";
+                        var xbox_ddb_link = "<a target='_blank' href='http://destinydb.com/guardians/xbox/" + json.Response.xbox.membershipId + "-" + json.Response.xbox.displayName.toLowerCase() + "'>DestinyDB profile</a>";
+                        var xbox_dtr_link = "<a target='_blank' href='http://destinytracker.com/destiny/player/xbox/" + json.Response.xbox.displayName.toLowerCase() + "'>DestinyTracker stats</a>";
                         $("#xbl_links").attr("data-content", xbox_bng_link + "<br/>" + xbox_dnk_link + "<br/>" + xbox_ddb_link + "<br/>" + xbox_dtr_link);
                         $("#xbl_links").css("visibility", "visible");
                     } else {
