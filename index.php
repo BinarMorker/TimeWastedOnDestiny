@@ -186,7 +186,7 @@
                             <p class="disclaimer"><strong>Do I have to add deleted time to the total time?</strong><br/>The total time includes time spent on deleted characters.</p>
                             <p class="disclaimer"><strong>This is only about half my time on another website!</strong><br/>The time displayed does not include idle time spent in the Tower, Reef, or waiting in orbit.</p>
                             <p class="disclaimer"><strong>My username does not work!!!</strong><br/>If your username does not work, please <a href="https://github.com/BinarMorker/TimeWastedOnDestiny/issues">submit a bug</a>.</p>
-                            <p class="disclaimer"><strong>Am I ranked against every player in the world?</strong><br/>No, you are only ranked against every played whose name has been entered on this website.</p>
+                            <p class="disclaimer"><strong>Am I ranked against every player in the world?</strong><br/>No, you are only ranked against every player whose name has been entered on this website.</p>
                         </blockquote>
                     </div>
                 </div>
