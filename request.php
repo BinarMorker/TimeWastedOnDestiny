@@ -111,7 +111,7 @@ function get_time_wasted($console, $name) {
 			$xbl_time = $account->accounts[1];
 			$response["xbox"] = $xbl_time;
             // Insert the time in the Xbox leaderboard
-            $query = "INSERT IGNORE INTO leaderboard (`id`, `console`, `username`, `seconds`) VALUES (?, ?, ?, ?);";
+            $query = "REPLACE INTO leaderboard (`id`, `console`, `username`, `seconds`) VALUES (?, ?, ?, ?);";
             $request = new Database($database, $query, array($xbl_time['membershipId'], 0, $xbl_time['displayName'], $xbl_time['timePlayed']));
             $request->send();
             // Get back the player's position
