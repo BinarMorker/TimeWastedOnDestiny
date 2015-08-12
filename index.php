@@ -199,6 +199,8 @@
                 <span><a href="https://github.com/BinarMorker/TimeWastedOnDestiny/issues">Submit a bug</a> | <a href="https://github.com/BinarMorker/TimeWastedOnDestiny">Get the source code</a></span>
                 <br/>
                 <span class="text-muted">You can also use my simple API located <a href="/request.php?help">here</a>.</span>
+                <br/>
+                <strong>For some more Destiny love for PS4, visit this sweet <a href="https://www.facebook.com/groups/DestinyPlaystation4/">Facebook page</a>.</strong>
             </div>
         </div>
     </div>
