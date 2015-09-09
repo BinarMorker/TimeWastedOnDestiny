@@ -60,8 +60,9 @@ if (isset($_GET['help'])) {
 function get_leaderboard() {
 	try {
 		$timer = new Timer();
-        $database = Database::init(DBHOST, DBNAME, DBUSER, DBPASS);
 		$response = array();
+        $error = Error::show(Error::ERROR, "Database error");
+        $database = Database::init(DBHOST, DBNAME, DBUSER, DBPASS);
         $query = "SELECT * FROM leaderboard ORDER BY `seconds` DESC LIMIT 10;";
         $request = new Database($database, $query, null);
         $request->receive();
@@ -99,9 +100,10 @@ function get_leaderboard() {
 function get_time_wasted($console, $name) {
 	try {
 		$timer = new Timer();
-        $database = Database::init(DBHOST, DBNAME, DBUSER, DBPASS);
 		$response = array();
 		$account = new DestinyAccount($name, $console);
+        $account->error = Error::show(Error::ERROR, "Database error");
+        $database = Database::init(DBHOST, DBNAME, DBUSER, DBPASS);
 		$account->lookup();
 		$account->get_accounts();
 		$response["displayName"] = $account->display_name;
@@ -133,7 +135,7 @@ function get_time_wasted($console, $name) {
 			$psn_time = $account->accounts[2];
 			$response["playstation"] = $psn_time;
             // Insert the time in the Playstation leaderboard
-            $query = "INSERT IGNORE INTO leaderboard (`id`, `console`, `username`, `seconds`) VALUES (?, ?, ?, ?);";
+            $query = "REPLACE INTO leaderboard (`id`, `console`, `username`, `seconds`) VALUES (?, ?, ?, ?);";
             $request = new Database($database, $query, array($psn_time['membershipId'], 1, $psn_time['displayName'], $psn_time['timePlayed']));
             $request->send();
             // Get back the player's position
@@ -434,7 +436,13 @@ class Database {
 	}
 
 	public static function init($host, $database, $username, $password) {
-		return new PDO('mysql:host='.$host.';dbname='.$database.';charset=utf8', $username, $password);
+        try {
+		  return new PDO('mysql:host='.$host.';dbname='.$database.';charset=utf8', $username, $password);
+        }
+        
+        catch (PDOException $e) {
+            throw $e;
+        }
 	}
 
 }
