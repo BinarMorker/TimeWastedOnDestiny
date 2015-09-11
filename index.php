@@ -194,7 +194,7 @@
         </div>
         <div class="panel panel-default">
             <div class="panel-body">
-                <span>Made with <span class="glyphicon glyphicon-heart"></span> by <a href="https://www.facebook.com/BinarMorker">François Allard (BinarMorker)</a></span>
+                <span>Made with <span class="glyphicon glyphicon-heart"></span> by <a href="https://www.facebook.com/BinarMorker">François Allard (BinarMorker)</a>. Please <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=5YLYAY74SZP6W">donate</a>!</span>
                 <br/>
                 <span><a href="https://github.com/BinarMorker/TimeWastedOnDestiny/issues">Submit a bug</a> | <a href="https://github.com/BinarMorker/TimeWastedOnDestiny">Get the source code</a></span>
                 <br/>
