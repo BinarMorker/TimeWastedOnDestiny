@@ -12,6 +12,7 @@ error_reporting(E_ALL);
 ini_set("display_errors", 1);
 define("VERSION", 1.5); // The API version
 require("config.php");
+define("CONTEXT", stream_context_create(array("http" => array("method" => "GET", "header" => APIKEY))));
 
 if (isset($_GET['help'])) {
 	// If help is called
@@ -213,7 +214,7 @@ class DestinyAccount {
 	function lookup($retry = false) {
 		// This endpoint returns the membershipId of a player
 		$url = "https://www.bungie.net/platform/destiny/SearchDestinyPlayer/" . $this->console . "/" . $this->name;
-		$lookup = file_get_contents($url);
+		$lookup = file_get_contents($url, false, CONTEXT);
 		$response = json_decode(preg_replace('/NaN/', '"NaN"', $lookup));
 		if ($response->ErrorCode == 5) {
 			// ErrorCode 5 means servers are in maintenance
@@ -275,7 +276,7 @@ class DestinyAccount {
 	function get_accounts() {
 		// This endpoint returns relevant data on each console account linked to a Bungie account
 		$url = "https://www.bungie.net/platform/user/GetBungieAccount/" . $this->temp_account_id . "/" . $this->console;
-		$lookup = file_get_contents($url);
+		$lookup = file_get_contents($url, false, CONTEXT);
 		$response = json_decode(preg_replace('/NaN/', '"NaN"', $lookup));
 		if (isset($response->Response->bungieNetUser)) {
 			$this->display_name = $response->Response->bungieNetUser->displayName;
@@ -307,7 +308,7 @@ class DestinyAccount {
 	function fetch($console) {
 		// This endpoint returns stats for every character created on the account
 		$url = "https://www.bungie.net/Platform/Destiny/Stats/Account/" . $this->accounts[$console]['membershipType'] . "/" . $this->accounts[$console]['membershipId'];
-		$lookup = file_get_contents($url);
+		$lookup = file_get_contents($url, false, CONTEXT);
 		$response = json_decode(preg_replace('/NaN/', '"NaN"', $lookup));
         $count = 0;
         $deleted_count = 0;
