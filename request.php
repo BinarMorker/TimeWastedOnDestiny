@@ -10,8 +10,13 @@
 
 error_reporting(E_ALL);
 ini_set("display_errors", 1);
-define("VERSION", 1.5); // The API version
+define("VERSION", 1.6); // The API version
+// Import config
 require("config.php");
+if (!defined("CACHES")) {
+    define("CACHES", true);
+}
+// API calls context
 define("CONTEXT", stream_context_create(array("http" => array("method" => "GET", "header" => APIKEY))));
 
 if (isset($_GET['help'])) {
@@ -31,7 +36,7 @@ if (isset($_GET['help'])) {
 } else if (isset($_GET['user']) && isset($_GET['console']) && !empty($_GET['user']) && !empty($_GET['console'])) {
 	$hash = md5($_GET['console'] . "-" . $_GET['user']); // Create a unique hash for the entry
     $cacheFile = "cache/" . $hash;
-    if (file_exists($cacheFile) && abs(filemtime($cacheFile) - time()) < (60 * 60)) { // 60 seconds x 60 minutes = 1 hour
+    if (CACHES && (file_exists($cacheFile) && abs(filemtime($cacheFile) - time()) < (60 * 60))) { // 60 seconds x 60 minutes = 1 hour
     	// If the file exists and hasn't expired, just show the file
         $data = file_get_contents($cacheFile);
     } else {
@@ -154,6 +159,7 @@ function get_time_wasted($console, $name) {
 		}
 		$response["totalTimePlayed"] = $account->total_time;
 		$response["totalTimeWasted"] = $account->wasted_time;
+        $response["lastPlayed"] = $account->last_played["total"];
 		$account->error['LoadTime'] = $timer->get_timer();
 		$account->error['CacheTime'] = date("r");
 		return json_encode(array("Response" => $response, "Info" => $account->error));
@@ -188,6 +194,9 @@ class DestinyAccount {
 
 	/** @var int The play time for deleted characters */
 	public $wasted_time = 0;
+    
+    /** @var int[] Last time the user played */
+    public $last_played = array();
 
 	/** @var mixed[] The error definition at the end of the returned data */
 	public $error = array();
@@ -213,7 +222,7 @@ class DestinyAccount {
 	 */
 	function lookup($retry = false) {
 		// This endpoint returns the membershipId of a player
-		$url = "https://www.bungie.net/platform/destiny/SearchDestinyPlayer/" . $this->console . "/" . $this->name;
+		$url = "https://www.bungie.net/platform/destiny/SearchDestinyPlayer/" . $this->console . "/" . rawurlencode($this->name);
 		$lookup = file_get_contents($url, false, CONTEXT);
 		$response = json_decode(preg_replace('/NaN/', '"NaN"', $lookup));
 		if ($response->ErrorCode == 5) {
@@ -277,6 +286,7 @@ class DestinyAccount {
 		// This endpoint returns relevant data on each console account linked to a Bungie account
 		$url = "https://www.bungie.net/platform/user/GetBungieAccount/" . $this->temp_account_id . "/" . $this->console;
 		$lookup = file_get_contents($url, false, CONTEXT);
+        //header("Content-Type: text/plain"); echo json_encode(json_decode($lookup), JSON_PRETTY_PRINT); die;
 		$response = json_decode(preg_replace('/NaN/', '"NaN"', $lookup));
 		if (isset($response->Response->bungieNetUser)) {
 			$this->display_name = $response->Response->bungieNetUser->displayName;
@@ -295,6 +305,15 @@ class DestinyAccount {
 				// but left to play the complete game on another console, this would show up.
 				$this->error = Error::show(Error::WARNING, "Account found but played an earlier version of the game");
 			}
+            foreach ($account->characters as $character) {
+                $last_played = date("U", strtotime($character->dateLastPlayed));
+                if (!array_key_exists($account->userInfo->membershipType, $this->last_played) || $this->last_played[$account->userInfo->membershipType] < $last_played) {
+                    if (!array_key_exists("total", $this->last_played) || $this->last_played["total"] < $last_played) {
+                        $this->last_played["total"] = $last_played;
+                    }
+                    $this->last_played[$account->userInfo->membershipType] = $last_played;
+                }
+            }
 			$this->add_account($account->userInfo->membershipType, json_decode(json_encode($account->userInfo), true));
 		}
 	}
@@ -332,6 +351,7 @@ class DestinyAccount {
 		$this->accounts[$console]['characters']['deleted'] = $deleted_count;
 		$this->accounts[$console]['timePlayed'] = $time_played;
 		$this->accounts[$console]['timeWasted'] = $time_wasted;
+        $this->accounts[$console]['lastPlayed'] = $this->last_played[$console];
 		$this->total_time += $time_played;
 		$this->wasted_time += $time_wasted;
 	}

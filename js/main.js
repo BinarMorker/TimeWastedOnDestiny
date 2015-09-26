@@ -43,12 +43,14 @@ $("document").ready(function () {
                     resetFields();
                 } else {
                     $("#display_name").text(json.Response.displayName);
+                    $("#display_name").attr("title", "Last played " + new Date(json.Response.lastPlayed * 1000));
                     $("#total_time").text(getHours(json.Response.totalTimePlayed));
                     $("#total_time").attr("title", getTime(json.Response.totalTimePlayed));
                     $("#total_wasted").html("<strong class='wasted-time'>Deleted characters only</strong>" + getHours(json.Response.totalTimeWasted));
                     $("#total_wasted").attr("title", getTime(json.Response.totalTimeWasted));
                     if ('playstation' in json.Response) {
                         $("#psn_name").text(json.Response.playstation.displayName + " (" + json.Response.playstation.characters.total + " characters)");
+                        $("#psn_name").attr("title", "Last played " + new Date(json.Response.playstation.lastPlayed * 1000));
                         $("#psn_icon").attr("src", "https://www.bungie.net" + json.Response.playstation.iconPath);
                         $("#psn_time").text(getHours(json.Response.playstation.timePlayed));
                         $("#psn_time").attr("title", getTime(json.Response.playstation.timePlayed));
@@ -63,6 +65,7 @@ $("document").ready(function () {
                         $("#psn_links").css("visibility", "visible");
                     } else {
                         $("#psn_name").text("Never played");
+                        $("#psn_name").attr("title", "");
                         $("#psn_icon").attr("src", "");
                         $("#psn_time").text("");
                         $("#psn_time").attr("title", "");
@@ -74,6 +77,7 @@ $("document").ready(function () {
                     }
                     if ('xbox' in json.Response) {
                         $("#xbl_name").text(json.Response.xbox.displayName + " (" + json.Response.xbox.characters.total + " characters)");
+                        $("#xbl_name").attr("title", "Last played " + new Date(json.Response.xbox.lastPlayed * 1000));
                         $("#xbl_icon").attr("src", "https://www.bungie.net" + json.Response.xbox.iconPath);
                         $("#xbl_time").text(getHours(json.Response.xbox.timePlayed));
                         $("#xbl_time").attr("title", getTime(json.Response.xbox.timePlayed));
@@ -88,6 +92,7 @@ $("document").ready(function () {
                         $("#xbl_links").css("visibility", "visible");
                     } else {
                         $("#xbl_name").text("Never played");
+                        $("#xbl_name").attr("title", "");
                         $("#xbl_icon").attr("src", "");
                         $("#xbl_time").text("");
                         $("#xbl_time").attr("title", "");
@@ -222,6 +227,7 @@ function changeUrl(title, url) {
 
 function resetFields() {
     $("#display_name").text("");
+    $("#display_name").attr("title", "");
     $("#total_time").text("");
     $("#total_time").attr("title", "");
     $("#psn_name").text("");

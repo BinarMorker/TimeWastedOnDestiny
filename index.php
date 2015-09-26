@@ -63,7 +63,7 @@
                             </a>
                             <h5 id="psn_rank"></h5>
                         </div>
-                        <h4 class="display-name" id="psn_name"></h4>
+                        <h4 class="display-name" rel="tooltip" id="psn_name"></h4>
                         <span class="played-time" rel="tooltip" id="psn_time"></span>
                         <span class="wasted-time" rel="tooltip" id="psn_wasted"></span>
                     </div>
@@ -75,7 +75,7 @@
                         <h3 class="panel-title"><img width="20" height="20" src="/img/destiny-icon.svg" />&nbsp;Total time spent</h3>
                     </div>
                     <div class="panel-body">
-                        <h4 class="display-name" id="display_name"></h4>
+                        <h4 class="display-name" rel="tooltip" id="display_name"></h4>
                         <span class="played-time" rel="tooltip" id="total_time"></span>
                         <span class="wasted-time" rel="tooltip" id="total_wasted"></span>
                     </div>
@@ -93,7 +93,7 @@
                             </a>
                             <h5 id="xbl_rank"></h5>
                         </div>
-                        <h4 class="display-name" id="xbl_name"></h4>
+                        <h4 class="display-name" rel="tooltip" id="xbl_name"></h4>
                         <span class="played-time" rel="tooltip" id="xbl_time"></span>
                         <span class="wasted-time" rel="tooltip" id="xbl_wasted"></span>
                     </div>
