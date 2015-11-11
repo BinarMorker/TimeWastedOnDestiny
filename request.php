@@ -110,8 +110,8 @@ function get_time_wasted($console, $name) {
 		$account = new DestinyAccount($name, $console);
         $account->error = Error::show(Error::ERROR, "Database error");
         $database = Database::init(DBHOST, DBNAME, DBUSER, DBPASS);
-        var_dump($account);
 		$account->lookup();
+        var_dump($account);
 		$account->get_accounts();
 		$response["displayName"] = $account->display_name;
 		if (array_key_exists(1, $account->accounts)) {
