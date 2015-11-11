@@ -112,7 +112,6 @@ function get_time_wasted($console, $name) {
         $database = Database::init(DBHOST, DBNAME, DBUSER, DBPASS);
 		$account->lookup();
 		$account->get_accounts();
-        var_dump($account);
 		$response["displayName"] = $account->display_name;
 		if (array_key_exists(1, $account->accounts)) {
 			// If the account contains an entry for Xbox
@@ -158,6 +157,7 @@ function get_time_wasted($console, $name) {
             }
             $response["playstation"]["leaderboardPosition"] = $row;
 		}
+        var_dump($account);
 		$response["totalTimePlayed"] = $account->total_time;
 		$response["totalTimeWasted"] = $account->wasted_time;
         $response["lastPlayed"] = $account->last_played["total"];
