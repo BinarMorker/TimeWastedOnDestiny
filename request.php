@@ -135,7 +135,7 @@ function get_time_wasted($console, $name) {
             }
             $response["xbox"]["leaderboardPosition"] = $row;
 		}
-        var_dump($account->accounts);
+        var_dump($account);
 		if (array_key_exists(2, $account->accounts)) {
 			// If the account contains an entry for Playstation
 			$account->fetch(2);
