@@ -112,6 +112,10 @@ function get_time_wasted($console, $name) {
         $database = Database::init(DBHOST, DBNAME, DBUSER, DBPASS);
 		$account->lookup();
 		$account->get_accounts();
+		if (!is_array($account->accounts)) {
+        	$account->error = Error::show(Error::ERROR, "Destiny is in maintenance");
+        	throw new Exception();
+		}
 		$response["displayName"] = $account->display_name;
 		if (array_key_exists(1, $account->accounts)) {
 			// If the account contains an entry for Xbox
@@ -135,7 +139,6 @@ function get_time_wasted($console, $name) {
             }
             $response["xbox"]["leaderboardPosition"] = $row;
 		}
-        var_dump($account);
 		if (array_key_exists(2, $account->accounts)) {
 			// If the account contains an entry for Playstation
 			$account->fetch(2);
