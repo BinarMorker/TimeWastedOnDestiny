@@ -113,6 +113,7 @@ function get_time_wasted($console, $name) {
 		$account->lookup();
 		$account->get_accounts();
 		$response["displayName"] = $account->display_name;
+        var_dump($account);
 		if (array_key_exists(1, $account->accounts)) {
 			// If the account contains an entry for Xbox
 			$account->fetch(1);
@@ -137,7 +138,6 @@ function get_time_wasted($console, $name) {
 		}
 		if (array_key_exists(2, $account->accounts)) {
 			// If the account contains an entry for Playstation
-        var_dump($account);
 			$account->fetch(2);
 			$psn_time = $account->accounts[2];
 			$response["playstation"] = $psn_time;
