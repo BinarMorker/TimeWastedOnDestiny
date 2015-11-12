@@ -137,6 +137,7 @@ function get_time_wasted($console, $name) {
 		}
 		if (array_key_exists(2, $account->accounts)) {
 			// If the account contains an entry for Playstation
+        var_dump($account);
 			$account->fetch(2);
 			$psn_time = $account->accounts[2];
 			$response["playstation"] = $psn_time;
@@ -157,7 +158,6 @@ function get_time_wasted($console, $name) {
             }
             $response["playstation"]["leaderboardPosition"] = $row;
 		}
-        var_dump($account);
 		$response["totalTimePlayed"] = $account->total_time;
 		$response["totalTimeWasted"] = $account->wasted_time;
         $response["lastPlayed"] = $account->last_played["total"];
