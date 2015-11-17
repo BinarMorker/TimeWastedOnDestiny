@@ -127,17 +127,10 @@ function get_time_wasted($console, $name) {
             $request = new Database($database, $query, array($xbl_time['membershipId'], 0, $xbl_time['displayName'], $xbl_time['timePlayed']));
             $request->send();
             // Get back the player's position
-            $query = "SELECT @rownum:=@rownum+1 `rank`, `id` FROM leaderboard, (SELECT @rownum:=0) r ORDER BY `seconds` DESC;";
-            $request = new Database($database, $query, null);
+            $query = "SELECT * FROM (SELECT @rownum:=@rownum+1 `rank`, `id` FROM leaderboard, (SELECT @rownum:=0) r ORDER BY `seconds` DESC) AS `ranks` WHERE `id`=?;";
+            $request = new Database($database, $query, array($xbl_time['membershipId']));
             $request->receive();
-            $row = 0;
-            foreach ($request->get_result() as $result) {
-                if ($result['id'] == $xbl_time['membershipId']) {
-                    $row = $result['rank'];
-                    break;
-                }
-            }
-            $response["xbox"]["leaderboardPosition"] = $row;
+            $response["xbox"]["leaderboardPosition"] = $request->get_result()[0]['rank'];
 		}
 		if (array_key_exists(2, $account->accounts)) {
 			// If the account contains an entry for Playstation
@@ -149,17 +142,10 @@ function get_time_wasted($console, $name) {
             $request = new Database($database, $query, array($psn_time['membershipId'], 1, $psn_time['displayName'], $psn_time['timePlayed']));
             $request->send();
             // Get back the player's position
-            $query = "SELECT @rownum:=@rownum+1 `rank`, `id` FROM leaderboard, (SELECT @rownum:=0) r ORDER BY `seconds` DESC;";
-            $request = new Database($database, $query, null);
+            $query = "SELECT * FROM (SELECT @rownum:=@rownum+1 `rank`, `id` FROM leaderboard, (SELECT @rownum:=0) r ORDER BY `seconds` DESC) AS `ranks` WHERE `id`=?;";
+            $request = new Database($database, $query, array($psn_time['membershipId']));
             $request->receive();
-            $row = 0;
-            foreach ($request->get_result() as $result) {
-                if ($result['id'] == $psn_time['membershipId']) {
-                    $row = $result['rank'];
-                    break;
-                }
-            }
-            $response["playstation"]["leaderboardPosition"] = $row;
+            $response["playstation"]["leaderboardPosition"] = $request->get_result()[0]['rank'];
 		}
 		$response["totalTimePlayed"] = $account->total_time;
 		$response["totalTimeWasted"] = $account->wasted_time;
@@ -564,3 +550,4 @@ class Timer {
 		return $this->exec_time;
 	}
 }
+
