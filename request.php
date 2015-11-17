@@ -228,7 +228,7 @@ class DestinyAccount {
 		if ($response->ErrorCode == 5) {
 			// ErrorCode 5 means servers are in maintenance
 			$this->error = Error::show(Error::ERROR, "Destiny is in maintenance");
-			throw(new Exception());
+			throw new Exception();
 		}
 		if (!empty($response->Response)) {
 			if (!$retry) {
@@ -247,7 +247,7 @@ class DestinyAccount {
 			} else {
 				// That's it, the player can't be found under that name. Bummer.
 				$this->error = Error::show(Error::ERROR, "Account not found");
-				throw(new Exception());
+				throw new Exception();
 			}
 		}
 	}
@@ -297,7 +297,7 @@ class DestinyAccount {
 			// No destiny account mean something went wrong (because we looked 
 			// up the bungie account using a destiny account, so it must exist. DUH)
 			$this->error = Error::show(Error::ERROR, "Destiny is in maintenance");
-			throw(new Exception());
+			throw new Exception();
 		}
 		foreach ($response->Response->destinyAccounts as $account) {
 			if ($account->userInfo->membershipType != $this->console && count($response->Response->destinyAccounts) == 1) {
@@ -404,6 +404,14 @@ class Database {
     /** @var mixed[] The returned result for the query */
 	private $result;
 
+	/**
+	 * Construct the database request.
+	 * A PDO request wrapper for quicker use.
+	 * 
+	 * @param PDO $database The initialized database
+	 * @param string $query The query to be executed
+	 * @param array $parameters the parameters to be passed to the request
+	 */
 	public function __construct($database, $query, $parameters) {
 		if (empty($this->database)) {
 			try {
@@ -417,6 +425,10 @@ class Database {
 		}
 	}
 
+	/**
+	 * Send the request to the database.
+	 * Send an INSERT, UPDATE, REPLACE, etc. request and fill class parameters.
+	 */
 	public function send() {
 		if (!empty($this->database)) {
 			try {
@@ -430,6 +442,10 @@ class Database {
 		}
 	}
 
+	/**
+	 * Retreive data from the database.
+	 * Send a SELECT request to the database and retreive the result.
+	 */
 	public function receive() {
 		if (!empty($this->database) && empty($this->result)) {
 			try {
@@ -444,18 +460,36 @@ class Database {
 		}
 	}
 
+	/**
+	 * Get request row count.
+	 * Retreive the count for rows changed by the request.
+	 * 
+	 * @return The row count
+	 */
 	public function get_count() {
 		if (!empty($this->count)) {
 			return $this->count;
 		}
 	}
 
+	/**
+	 * Get request result.
+	 * Retreive the result for a "send()" request.
+	 * 
+	 * @return The result
+	 */
 	public function get_result() {
 		if (!empty($this->result)) {
 			return $this->result;
 		}
 	}
 
+	/**
+	 * Initialize the database.
+	 * A wrapper for the PDO database, without the complex string.
+	 * 
+	 * @return The row count
+	 */
 	public static function init($host, $database, $username, $password) {
         try {
 		  return new PDO('mysql:host='.$host.';dbname='.$database.';charset=utf8', $username, $password);
