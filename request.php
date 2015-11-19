@@ -215,8 +215,10 @@ class DestinyAccount {
 		$url = "https://www.bungie.net/platform/destiny/SearchDestinyPlayer/" . $this->console . "/" . rawurlencode($this->name);
 		$lookup = file_get_contents($url, false, CONTEXT);
 		$response = json_decode(preg_replace('/NaN/', '"NaN"', $lookup));
-		if ($response->ErrorCode == 5) {
+		if ($response->ErrorCode == 5 || $response->ErrorCode == 2102 || $response->ErrorCode == 1618) {
 			// ErrorCode 5 means servers are in maintenance
+			// ErrorCode 2102 means the API key is not set or wrong (which we will disguise as a maintenance)
+			// ErrorCode 1618 means Bungie has some problems (weird)
 			$this->error = Error::show(Error::ERROR, "Destiny is in maintenance");
 			throw new Exception();
 		}
@@ -313,12 +315,20 @@ class DestinyAccount {
 	 * Fetch information from bungie given a console and an already set membership identifier.
 	 * 
 	 * @param int $console The console number (1 for xbox, 2 for playstation)
+	 * @throws Exception if the servers are unreachable
 	 */
 	function fetch($console) {
 		// This endpoint returns stats for every character created on the account
 		$url = "https://www.bungie.net/Platform/Destiny/Stats/Account/" . $this->accounts[$console]['membershipType'] . "/" . $this->accounts[$console]['membershipId'];
 		$lookup = file_get_contents($url, false, CONTEXT);
 		$response = json_decode(preg_replace('/NaN/', '"NaN"', $lookup));
+		if ($response->ErrorCode == 5 || $response->ErrorCode == 2102 || $response->ErrorCode == 1618) {
+			// ErrorCode 5 means servers are in maintenance
+			// ErrorCode 2102 means the API key is not set or wrong (which we will disguise as a maintenance)
+			// ErrorCode 1618 means Bungie has some problems (weird)
+			$this->error = Error::show(Error::ERROR, "Destiny is in maintenance");
+			throw new Exception();
+		}
         $count = 0;
         $deleted_count = 0;
         $time_played = 0;
