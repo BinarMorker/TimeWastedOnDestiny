@@ -103,7 +103,7 @@ $("document").ready(function () {
                         $("#playstationTime").text(getHours(json.Response.playstation.timePlayed));
                         $("#playstationWasted").html("- " + getHours(json.Response.playstation.timeWasted));
                         $("#playstationPlayed").html("Last played " + new Date(json.Response.playstation.lastPlayed * 1000).toDateString());
-                        $("#playstationRank").text("Top " + Math.floor(json.Response.playstation.leaderboardPosition / parseInt($("#player-count").text()) * 100) + "%");
+                        $("#playstationRank").text("Top " + Math.ceil(json.Response.playstation.leaderboardPosition / parseInt($("#player-count").text()) * 100) + "%");
                         $("#playstationBNGLink").attr("href", "http://bungie.net/en/Profile/" + json.Response.playstation.membershipType + "/" + json.Response.playstation.membershipId);
                         $("#playstationDNKLink").attr("href", "http://dinklebot.net/" + json.Response.playstation.membershipType + "/" + json.Response.playstation.displayName.toLowerCase());
                         $("#playstationDDBLink").attr("href", "http://destinydb.com/guardians/playstation/" + json.Response.playstation.membershipId + "-" + json.Response.playstation.displayName.toLowerCase());
@@ -121,7 +121,7 @@ $("document").ready(function () {
                         $("#xboxTime").text(getHours(json.Response.xbox.timePlayed));
                         $("#xboxWasted").html("- " + getHours(json.Response.xbox.timeWasted));
                         $("#xboxPlayed").html("Last played " + new Date(json.Response.xbox.lastPlayed * 1000).toDateString());
-                        $("#xboxRank").text("Top " + Math.floor(json.Response.xbox.leaderboardPosition / parseInt($("#player-count").text()) * 100) + "%");
+                        $("#xboxRank").text("Top " + Math.ceil(json.Response.xbox.leaderboardPosition / parseInt($("#player-count").text()) * 100) + "%");
                         $("#xboxBNGLink").attr("href", "http://bungie.net/en/Profile/" + json.Response.xbox.membershipType + "/" + json.Response.xbox.membershipId);
                         $("#xboxDNKLink").attr("href", "http://dinklebot.net/" + json.Response.xbox.membershipType + "/" + json.Response.xbox.displayName.toLowerCase());
                         $("#xboxDDBLink").attr("href", "http://destinydb.com/guardians/xbox/" + json.Response.xbox.membershipId + "-" + json.Response.xbox.displayName.toLowerCase());
