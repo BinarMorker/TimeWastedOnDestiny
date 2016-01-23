@@ -103,6 +103,10 @@ $("document").ready(function () {
                         $("#playstationTime").text(getHours(json.Response.playstation.timePlayed));
                         $("#playstationWasted").html("- " + getHours(json.Response.playstation.timeWasted));
                         $("#playstationPlayed").html("Last played " + new Date(json.Response.playstation.lastPlayed * 1000).toDateString());
+                        console.log(json.Response.playstation.leaderboardPosition);
+                        console.log(json.Response.playstation.leaderboardPosition / parseInt($("#player-count").text()));
+                        console.log(json.Response.playstation.leaderboardPosition / parseInt($("#player-count").text()) * 100);
+                        console.log(Math.ceil(json.Response.playstation.leaderboardPosition / parseInt($("#player-count").text()) * 100));
                         $("#playstationRank").text("Top " + Math.ceil(json.Response.playstation.leaderboardPosition / parseInt($("#player-count").text()) * 100) + "%");
                         $("#playstationBNGLink").attr("href", "http://bungie.net/en/Profile/" + json.Response.playstation.membershipType + "/" + json.Response.playstation.membershipId);
                         $("#playstationDNKLink").attr("href", "http://dinklebot.net/" + json.Response.playstation.membershipType + "/" + json.Response.playstation.displayName.toLowerCase());
