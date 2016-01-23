@@ -81,6 +81,9 @@ $("document").ready(function () {
                     $("#displayName").text(json.Response.displayName);
                     $("#totalTime").text(getHours(json.Response.totalTimePlayed));
                     $("#totalWasted").html("- " + getHours(json.Response.totalTimeWasted));
+                    $("#shareGPlus").attr("href", "https://plus.google.com/share?url=http%3A//" + window.location.hostname + "/" + (platform==1?"xbox":"playstation") + "/" + user);
+                    $("#shareTwitter").attr("href", "https://twitter.com/home?status=Check%20out%20my%20time%20spent%20on%20Destiny%20%23wastedondestiny%20http%3A//" + window.location.hostname + "/" + (platform==1?"xbox":"playstation") + "/" + user);
+                    $("#shareFacebook").attr("href", "https://www.facebook.com/sharer/sharer.php?u=http%3A//" + window.location.hostname + "/" + (platform==1?"xbox":"playstation") + "/" + user);
                     if ('playstation' in json.Response && 'xbox' in json.Response) {
                     	var psChars = json.Response.playstation.characters.total - json.Response.playstation.characters.deleted;
                     	var xbChars = json.Response.xbox.characters.total - json.Response.xbox.characters.deleted;
@@ -103,7 +106,6 @@ $("document").ready(function () {
                         $("#playstationTime").text(getHours(json.Response.playstation.timePlayed));
                         $("#playstationWasted").html("- " + getHours(json.Response.playstation.timeWasted));
                         $("#playstationPlayed").html("Last played " + new Date(json.Response.playstation.lastPlayed * 1000).toDateString());
-                        console.log(Math.ceil(json.Response.playstation.leaderboardPosition / parseInt($("#player-count").text()) * 100));
                         $("#playstationRank").text("Top " + Math.ceil(json.Response.playstation.leaderboardPosition / parseInt($("#player-count").text()) * 100) + "%");
                         $("#playstationBNGLink").attr("href", "http://bungie.net/en/Profile/" + json.Response.playstation.membershipType + "/" + json.Response.playstation.membershipId);
                         $("#playstationDNKLink").attr("href", "http://dinklebot.net/" + json.Response.playstation.membershipType + "/" + json.Response.playstation.displayName.toLowerCase());
