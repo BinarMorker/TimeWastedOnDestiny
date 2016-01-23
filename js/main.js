@@ -34,7 +34,7 @@ $("document").ready(function () {
                 $(".loading").text("Loading" + dots);
             }, 1000);
 
-            var jsonUrl = "/request.php?console="+plat+"&user="+user;
+            var jsonUrl = "/api?console="+plat+"&user="+user;
             $.getJSON(jsonUrl, function (json) {
                 clearInterval(loading);
                 $("#load").detach();
@@ -108,7 +108,7 @@ $("document").ready(function () {
                     } else {
                         var name = encodeURI(json.Response.playstation.displayName).toLowerCase();
                     }
-                    changeUrl(json.Response.displayName, "http://" + window.location.hostname + "/" + type + "/" + name);
+                    changeUrl(json.Response.displayName, "http://" + window.location.hostname + "/old/" + type + "/" + name);
                 }
             });
         }
@@ -121,11 +121,11 @@ $("document").ready(function () {
     });
     
     var params = cleanArray(window.location.pathname.split('/'));
-    if (params.length > 0) {
-        if (params[0] == "xbox") {
+    if (params.length > 1) {
+        if (params[1] == "xbox") {
             $("[name='console']").bootstrapSwitch('state', true, false);
         }
-        $("#username").val(decodeURI(params[1]));
+        $("#username").val(decodeURI(params[2]));
         $("#search").submit();
     }
     

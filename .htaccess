@@ -77,5 +77,8 @@ Options +FollowSymLinks
   RewriteEngine on
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
-  RewriteRule ^([\sa-zA-Z0-9_-]+)/([\sa-zA-Z0-9_-]+)$ index.php [L]
+  RewriteRule ^api$ request.php [L]
+  RewriteRule ^old/([\sa-zA-Z0-9_-]+)/([\sa-zA-Z0-9_-]+)$ old.php [L]
+  RewriteRule ^old$ old.php [L]
+  RewriteRule ^([\sa-zA-Z0-9_-]+)/([\sa-zA-Z0-9_-]+)$ index.html [L]
 </IfModule>

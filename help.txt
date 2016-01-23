@@ -1,17 +1,17 @@
-Time Wasted on Destiny API v1.6
+Time Wasted on Destiny API v1.7
 ===============================
 
 HELP:
 -----
-To see this page again, remove everything after ".php"
+To see this page again, remove everything after "api"
 or add the "help" parameter
 
 SYNTAX:
 -------
-request.php?help
-request.php?console=2&user=binarmorker
-request.php?console=2&user=binarmorker&fmt
-request.php?leaderboard
+api?help
+api?console=2&user=binarmorker
+api?console=2&user=binarmorker&fmt
+api?leaderboard
 
 PARAMETERS:
 -----------

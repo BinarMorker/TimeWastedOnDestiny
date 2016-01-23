@@ -10,7 +10,7 @@
 
 error_reporting(E_ALL);
 ini_set("display_errors", 1);
-define("VERSION", 1.6); // The API version
+define("VERSION", 1.7); // The API version
 // Import config
 require("config.php");
 if (!defined("CACHES")) {
@@ -117,11 +117,19 @@ function get_time_wasted($console, $name) {
 			throw new Exception();
 		}
 		$response["displayName"] = $account->display_name;
+		$new_entry = false;
 		if (array_key_exists(1, $account->accounts)) {
 			// If the account contains an entry for Xbox
 			$account->fetch(1);
 			$xbl_time = $account->accounts[1];
 			$response["xbox"] = $xbl_time;
+			// Check if the player exists
+			$query = "SELECT * FROM leaderboard WHERE `id`=?;";
+			$request = new Database($database, $query, array($xbl_time['membershipId']));
+			$request->receive();
+			if (count($request->get_result()) == 0) {
+				$new_entry = true;
+			}
 			// Insert the time in the Xbox leaderboard
 			$query = "REPLACE INTO leaderboard (`id`, `console`, `username`, `seconds`) VALUES (?, ?, ?, ?);";
 			$request = new Database($database, $query, array($xbl_time['membershipId'], 0, $xbl_time['displayName'], $xbl_time['timePlayed']));
@@ -137,6 +145,13 @@ function get_time_wasted($console, $name) {
 			$account->fetch(2);
 			$psn_time = $account->accounts[2];
 			$response["playstation"] = $psn_time;
+			// Check if the player exists
+			$query = "SELECT * FROM leaderboard WHERE `id`=?;";
+			$request = new Database($database, $query, array($psn_time['membershipId']));
+			$request->receive();
+			if (count($request->get_result()) == 0) {
+				$new_entry = true;
+			}
 			// Insert the time in the Playstation leaderboard
 			$query = "REPLACE INTO leaderboard (`id`, `console`, `username`, `seconds`) VALUES (?, ?, ?, ?);";
 			$request = new Database($database, $query, array($psn_time['membershipId'], 1, $psn_time['displayName'], $psn_time['timePlayed']));
@@ -150,6 +165,7 @@ function get_time_wasted($console, $name) {
 		$response["totalTimePlayed"] = $account->total_time;
 		$response["totalTimeWasted"] = $account->wasted_time;
 		$response["lastPlayed"] = $account->last_played["total"];
+		$response["newEntry"] = $new_entry;
 		$account->error['LoadTime'] = $timer->get_timer();
 		$account->error['CacheTime'] = date("r");
 		return json_encode(array("Response" => $response, "Info" => $account->error));
