@@ -1,7 +1,6 @@
 $("document").ready(function () {
 	var images = 50;
 	$('#index-banner').css({'background-image': 'url(/img/background/' +pad(Math.floor(Math.random() * images), 3) + '.jpg)'});
-	leaderboard();
 	
 	$(document).scroll(function() {
 		var y = $(this).scrollTop();
@@ -52,7 +51,7 @@ $("document").ready(function () {
         search(event, $("#search-xbox").val(), 1);
     });
 	
-	function leaderboard () {
+	function leaderboard (callback) {
         var jsonUrl = "/api?leaderboard&"+new Date().getTime();
 		$("#leaderboard").html("");
         $.getJSON(jsonUrl, function (json) {
@@ -66,6 +65,9 @@ $("document").ready(function () {
         		$("#leaderboard").append('<span class="collection-footer">Players: <span id="player-count">'+json.Response.totalPlayers+'</span></span>');
         	}
         });
+        if (callback !== null) {
+        	callback();
+        }
 	}
 	
 	function search (event, user, platform) {
@@ -148,25 +150,70 @@ $("document").ready(function () {
                         changeUrl(json.Response.displayName, "http://" + window.location.hostname + "/" + (platform==1?"xbox":"playstation") + "/" + name);
                     }
                 }
+
+            	var easter_egg = new Konami(function() {
+            		var m_names = new Array("January", "February", "March", 
+            				"April", "May", "June", "July", "August", "September", 
+            				"October", "November", "December");
+            		var d = new Date();
+            		var diff = d.getTime() - new Date("Sep 9 2014").getTime();
+            		var curr_date = d.getDate();
+            		var curr_month = d.getMonth();
+            		var curr_year = d.getFullYear();
+            		var sup = "";
+            		if (curr_date == 1 || curr_date == 21 || curr_date ==31)
+            		   {
+            		   sup = "st";
+            		   }
+            		else if (curr_date == 2 || curr_date == 22)
+            		   {
+            		   sup = "nd";
+            		   }
+            		else if (curr_date == 3 || curr_date == 23)
+            		   {
+            		   sup = "rd";
+            		   }
+            		else
+            		   {
+            		   sup = "th";
+            		   }
+            		var elem = '<div id="modal1" class="modal"><div class="modal-content"> \
+            <h4>Your time in proportions...</h4> \
+            <p>Destiny launched September 9th 2014.</p> \
+            <p>Today is '+m_names[curr_month]+" "+curr_date+sup+" "+curr_year+'.</p> \
+            <p>It means that the game launched '+getTime(Math.floor(diff/1000))+' ago.</p> \
+            <p>It also means that you have spent '+Math.round(json.Response.totalTimePlayed / (diff/1000) * 100)+'% of your time on Destiny since launch.</p> \
+            <h3>Wow!</h3> \
+            </div><div class="modal-footer"><a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">OK</a></div></div>';
+            		$('body').append(elem);
+            		$('#modal1').openModal({
+            		      complete: function() {
+            		    	  $('#modal1').remove();
+            		      }
+            		    });
+            	});
             });
         }
+        
     }
-	
-    var params = cleanArray(window.location.pathname.split('/'));
-    
-    if (params.length > 0) {
-        if (params[0] == "xbox") {
-        	$("#choice").addClass("hide");
-        	$("#search-xbox").val(decodeURI(params[1]));
-        	$("#input-xbox").removeClass("hide");
-            search(event, decodeURI(params[1]), 1);
-        } else {
-        	$("#choice").addClass("hide");
-        	$("#search-playstation").val(decodeURI(params[1]));
-        	$("#input-playstation").removeClass("hide");
-            search(event, decodeURI(params[1]), 2);
-        }
-    }
+
+	leaderboard(function () {
+	    var params = cleanArray(window.location.pathname.split('/'));
+	    
+	    if (params.length > 0) {
+	        if (params[0] == "xbox") {
+	        	$("#choice").addClass("hide");
+	        	$("#search-xbox").val(decodeURI(params[1]));
+	        	$("#input-xbox").removeClass("hide");
+	            search(event, decodeURI(params[1]), 1);
+	        } else {
+	        	$("#choice").addClass("hide");
+	        	$("#search-playstation").val(decodeURI(params[1]));
+	        	$("#input-playstation").removeClass("hide");
+	            search(event, decodeURI(params[1]), 2);
+	        }
+	    }
+	});
 });
 
 function scrollTo(elem) {
