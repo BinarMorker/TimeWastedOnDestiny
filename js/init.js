@@ -43,12 +43,12 @@ $("document").ready(function () {
 	
 	$("#form-playstation").on('submit', function (event) {
         event.preventDefault();
-        search(event, $("#search-playstation").val(), 2);
+        search($("#search-playstation").val(), 2);
     });
 	
 	$("#form-xbox").on('submit', function (event) {
         event.preventDefault();
-        search(event, $("#search-xbox").val(), 1);
+        search($("#search-xbox").val(), 1);
     });
 	
 	function leaderboard (callback) {
@@ -70,7 +70,7 @@ $("document").ready(function () {
         });
 	}
 	
-	function search (event, user, platform) {
+	function search (user, platform) {
         if (user === undefined || user == "") {
             $("#error").html("<div class='card-panel red lighten-2'>You must enter a username</div>");
         } else {
@@ -205,12 +205,12 @@ $("document").ready(function () {
 	        	$("#choice").addClass("hide");
 	        	$("#search-xbox").val(decodeURI(params[1]));
 	        	$("#input-xbox").removeClass("hide");
-	            search(event, decodeURI(params[1]), 1);
+	            search(decodeURI(params[1]), 1);
 	        } else {
 	        	$("#choice").addClass("hide");
 	        	$("#search-playstation").val(decodeURI(params[1]));
 	        	$("#input-playstation").removeClass("hide");
-	            search(event, decodeURI(params[1]), 2);
+	            search(decodeURI(params[1]), 2);
 	        }
 	    }
 	});
@@ -309,7 +309,15 @@ function getHours(seconds) {
 }
 
 function getTime(seconds) {
-    var weeks = Math.floor(seconds / (7 * 24 * 60 * 60));
+    var years = Math.floor(seconds / (7 * 24 * 60 * 60 * 52));
+    if (years > 1) {
+    	years = years + " years ";
+    } else if (years > 0) {
+    	years = years + " year ";
+    } else {
+    	years = "";
+    }
+    var weeks = Math.floor(seconds / (7 * 24 * 60 * 60)) % 52;
     if (weeks > 1) {
         weeks = weeks + " weeks ";
     } else if (weeks > 0) {
@@ -349,7 +357,7 @@ function getTime(seconds) {
     } else {
         seconds = "";
     }
-    return weeks + days + hours + minutes + seconds;
+    return years + weeks + days + hours + minutes + seconds;
 }
 
 function pad(num, size) {
