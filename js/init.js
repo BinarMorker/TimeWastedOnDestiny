@@ -65,7 +65,7 @@ $("document").ready(function () {
         		$("#leaderboard").append('<span class="collection-footer">Players: <span id="player-count">'+json.Response.totalPlayers+'</span></span>');
         	}
         });
-        if (callback !== null) {
+        if (typeof callback === "function") {
         	callback();
         }
 	}
