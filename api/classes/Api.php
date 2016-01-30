@@ -38,18 +38,19 @@ class Api {
 			
 		try {
 			if ($_SERVER['HTTP_HOST'] != self::DOMAIN) {
-				$request = new HttpRequest('http://'.self::DOMAIN.'/api/');
+				$request = new HttpFileRequest('http://'.self::DOMAIN.'/api/');
 				$request->addParams(array('version'));
-				$result = $request->query('GET', Config::get('apiKey'));
+				$result = json_decode($request->query('GET', Config::get('apiKey')));
+				$version = $result->Response->currentVersion;
 			} else {
-				$result = self::VERSION;
+				$version = self::VERSION;
 			}
 			
-			$data['onlineVersion'] = $result;
+			$data['onlineVersion'] = $version;
 			$info = new JsonInfoBuilder(new ResponseSuccessInfo());
 			$json = new JsonBuilder($data, $info);
 			return $json->get();
-		} catch (HttpRequestException $exception) {
+		} catch (HttpFileRequestException $exception) {
 			$data['onlineVersion'] = self::VERSION;
 			$status = new ResponseExceptionInfo($exception);
 			$info = new JsonInfoBuilder($status);
