@@ -8,7 +8,7 @@ class JsonInfoBuilder extends JsonBuilder {
 		$json['Code'] = $info->getErrorCode();
 		$json['Message'] = $info->getMessage();
 		$json['LoadTime'] = Timer::stop();
-		$json['CacheTime'] = (new DateTimeImmutable())->format("r");
+		$json['CacheTime'] = (new DateTime())->format("r");
 		$json['ApiVersion'] = Api::VERSION;
 		$this->json = $json;
 	}

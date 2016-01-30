@@ -10,7 +10,7 @@ class BungieNetPlatform {
 		$params = null
 	) {
 		try {
-			$uri = new HttpRequest(
+			$uri = new HttpFileRequest(
 				self::BUNGIE_URI.
 				"User/".
 				"getBungieAccount/".
@@ -33,7 +33,7 @@ class BungieNetPlatform {
 					$result->ErrorCode
 				);
 			}
-		} catch (HttpRequestException $exception) {
+		} catch (HttpFileRequestException $exception) {
 			throw new BungieNetPlatformException(
 				'Could not access Bungie at this time.', 
 				500
@@ -49,7 +49,7 @@ class BungieNetPlatform {
 		$params = null
 	) {
 		try {
-			$uri = new HttpRequest(
+			$uri = new HttpFileRequest(
 				self::BUNGIE_URI.
 				"Destiny/".
 				"SearchDestinyPlayer/".
@@ -72,7 +72,7 @@ class BungieNetPlatform {
 					$result->ErrorCode
 				);
 			}
-		} catch (HttpRequestException $exception) {
+		} catch (HttpFileRequestException $exception) {
 			throw new BungieNetPlatformException(
 				'Could not find the player at this time.', 
 				500
@@ -88,7 +88,7 @@ class BungieNetPlatform {
 		$params = null
 	) {
 		try {
-			$uri = new HttpRequest(
+			$uri = new HttpFileRequest(
 				self::BUNGIE_URI.
 				"Destiny/".
 				"Stats/".
@@ -112,7 +112,7 @@ class BungieNetPlatform {
 					$result->ErrorCode
 				);
 			}
-		} catch (HttpRequestException $exception) {
+		} catch (HttpFileRequestException $exception) {
 			throw new BungieNetPlatformException(
 				'Could not access stats at this time.', 
 				500

@@ -34,7 +34,7 @@ class HttpFileRequest {
 		$content = @file_get_contents($this->uri, false, $context);
 		
 		if ($content === false) {
-			throw new HttpRequestException();
+			throw new HttpFileRequestException();
 		}
 		
 		return $content;
