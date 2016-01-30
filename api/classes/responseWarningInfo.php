@@ -8,6 +8,10 @@ class ResponseWarningInfo extends ResponseInfo {
 		$this->message = $message;
 	}
 	
+	public function getStatus() {
+		return 'Warning';
+	}
+	
 	public function getErrorCode() {
 		return 1;
 	}

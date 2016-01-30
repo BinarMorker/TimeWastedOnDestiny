@@ -10,6 +10,10 @@ class ResponseExceptionInfo extends ResponseInfo {
 		$this->message = $exception->getMessage();
 	}
 	
+	public function getStatus() {
+		return 'Error';
+	}
+	
 	public function getErrorCode() {
 		return $this->errorCode;
 	}

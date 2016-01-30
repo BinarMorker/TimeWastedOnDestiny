@@ -23,7 +23,7 @@ class BungieNetPlatform {
 				'"NaN"', 
 				$uri->query("GET", Config::get('apiKey'))
 			));
-
+			
 			if (in_array(
 				$result->ErrorCode, 
 				BungieNetPlatformError::getErrors()

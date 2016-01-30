@@ -72,17 +72,33 @@ $("document").ready(function () {
 	
 	function search (user, platform) {
         if (user === undefined || user == "") {
-            $("#error").html("<div class='card-panel red lighten-2'>You must enter a username</div>");
+            Materialize.toast('You must enter a username', 3000, 'red');
         } else {
         	loading();
             var jsonUrl = "/api?console="+platform+"&user="+user;
             $.getJSON(jsonUrl, function (json) {
             	resetFields();
             	showError(json.Info);
+                
                 if (json.Info.Status != "Error") {
                     $("#displayName").text(json.Response.displayName);
                     $("#totalTime").text(getHours(json.Response.totalTimePlayed));
                     $("#totalWasted").html("- " + getHours(json.Response.totalTimeWasted));
+                    
+                    if ('playstation' in json.Response) {
+                    	platform = 2;
+                    } else {
+                    	platform = 1;
+                    }
+                    
+                    if (platform == 1) {
+                        var name = encodeURI(json.Response.xbox.displayName).toLowerCase();
+                        changeUrl(json.Response.displayName, "http://" + window.location.hostname + "/" + (platform==1?"xbox":"playstation") + "/" + name);
+                    } else {
+                        var name = encodeURI(json.Response.playstation.displayName).toLowerCase();
+                        changeUrl(json.Response.displayName, "http://" + window.location.hostname + "/" + (platform==1?"xbox":"playstation") + "/" + name);
+                    }
+                    
                     $("#shareGPlus").attr("href", "https://plus.google.com/share?url=http%3A//" + window.location.hostname + "/" + (platform==1?"xbox":"playstation") + "/" + user);
                     $("#shareTwitter").attr("href", "https://twitter.com/home?status=Check%20out%20my%20time%20spent%20on%20Destiny%20%23wastedondestiny%20http%3A//" + window.location.hostname + "/" + (platform==1?"xbox":"playstation") + "/" + user);
                     $("#shareFacebook").attr("href", "https://www.facebook.com/sharer/sharer.php?u=http%3A//" + window.location.hostname + "/" + (platform==1?"xbox":"playstation") + "/" + user);
@@ -141,14 +157,6 @@ $("document").ready(function () {
                     }
                     $("#panels").removeClass("hide");
                     scrollTo("#panels");
-                    
-                    if (platform == 1 && 'xbox' in json.Response) {
-                        var name = encodeURI(json.Response.xbox.displayName).toLowerCase();
-                        changeUrl(json.Response.displayName, "http://" + window.location.hostname + "/" + (platform==1?"xbox":"playstation") + "/" + name);
-                    } else if (platform == 2 && 'playstation' in json.Response) {
-                        var name = encodeURI(json.Response.playstation.displayName).toLowerCase();
-                        changeUrl(json.Response.displayName, "http://" + window.location.hostname + "/" + (platform==1?"xbox":"playstation") + "/" + name);
-                    }
                 }
 
             	var easter_egg = new Konami(function() {
@@ -279,18 +287,17 @@ function resetFields() {
 }
 
 function loading() {
-	$("#error").html("<div class='preloader-wrapper big active'><div class='spinner-layer spinner-blue-only'><div class='circle-clipper left'><div class='circle'></div></div><div class='gap-patch'><div class='circle'></div></div><div class='circle-clipper right'><div class='circle'></div></div></div></div>");
+	$("#loading").html("<div class='preloader-wrapper big active'><div class='spinner-layer spinner-blue-only'><div class='circle-clipper left'><div class='circle'></div></div><div class='gap-patch'><div class='circle'></div></div><div class='circle-clipper right'><div class='circle'></div></div></div></div>");
 }
 
 function showError(json) {
-    if (json.Status == "Success") {
-        $("#error").html("");
-    } else {
-        var weight = "yellow";
+	$("#loading").html("");
+    if (json.Status != "Success") {
+        var weight = "yellow darken-3";
         if (json.Status == "Error") {
-            weight = "red";
+            weight = "red darken-1";
         }
-        $("#error").html("<div class='card-panel "+weight+"'>"+json.Message+"</div>");
+        Materialize.toast(json.Message, 3000, weight);
     }
 }
 

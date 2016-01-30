@@ -40,8 +40,18 @@ class AccountManager {
 		);
 
 		if (count($bungieAccountRequest->destinyAccounts) > 0) {
+			$isCorrectPlatform = false;
+			
 			foreach ($bungieAccountRequest->destinyAccounts as $destinyAccount) {
 				$this->destinyAccounts[] = $destinyAccount;
+				
+				if ($destinyAccount->userInfo->membershipType == $playerRequest[0]->membershipType) {
+					$isCorrectPlatform = true;
+				}
+			}
+			
+			if (!$isCorrectPlatform) {
+				Api::setWarnStatus('Account found but played an earlier version of the game');
 			}
 		} else {
 			throw new BungieNetPlatformException(

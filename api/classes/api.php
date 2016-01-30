@@ -2,7 +2,7 @@
 
 class Api {
 
-	const VERSION = "1.8";
+	const VERSION = 1.8;
 	const DOMAIN = "wastedondestiny.com";
 	private static $warnStatus;
 

@@ -2,6 +2,10 @@
 
 class ResponseSuccessInfo extends ResponseInfo {
 	
+	public function getStatus() {
+		return 'Success';
+	}
+	
 	public function getErrorCode() {
 		return 0;
 	}
