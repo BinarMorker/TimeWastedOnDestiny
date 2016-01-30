@@ -38,7 +38,7 @@ Please give credit if you use this!
 EOT;
 
 spl_autoload_register(function ($class_name) {
-	include 'classes/' . $class_name . '.php';
+	include $_SERVER['DOCUMENT_ROOT'].'/api/classes/' . $class_name . '.php';
 });
 
 Api::request($help);
