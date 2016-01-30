@@ -1,0 +1,8 @@
+{
+	"databaseHost": "Your database server",
+	"databaseName": "The database name",
+	"databaseUsername": "The user that has access to the database",
+	"databasePassword": "The password for the user",
+	"shouldCache": "Should only be true or false, without brackets",
+	"apiKey": "X-API-Key: Replace this text (and not the 'X-API-Key: ') with your API key from Bungie.net"
+}
