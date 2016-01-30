@@ -1,6 +1,6 @@
 <?php
 
-class HttpRequest {
+class HttpFileRequest {
 	
 	private $uri = "";
 	
