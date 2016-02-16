@@ -1,28 +1,39 @@
 <?php
 
 /**
- * Create and manage a system timer.
- * The Timer can be used to calculate the script execution time.
+ * A simple timer
+ * @author François Allard <binarmorker@gmail.com>
+ * @version 1.8
  */
 class Timer {
-	
-	private static $instance;
-
-	/** @var boolean True if the timer is still counting */
-	private $time_running;
-
-	/** @var int Total time the script has been running */
-	private $exec_time;
 
 	/**
-	 * Create the timer.
-	 * The timer object, once being created, sets itself to 0.
+	 * The current instance for the timer object
+	 * @var Timer
 	 */
+	private static $instance;
+
+	/**
+	 * Is the time still running?
+	 * @var boolean
+	 */
+	private $time_running;
+
+	/**
+	 * Total time the script has been running
+	 * @var int
+	 */
+	private $exec_time;
+
 	private function __construct() {
 		
 	}
-	
-	public static function getInstance() {
+
+	/**
+	 * Get the timer instance or create it
+	 * @return The instance
+	 */
+	private static function getInstance() {
 		if (!isset(self::$instance)) {
 			self::$instance = new static();
 		}
@@ -31,8 +42,7 @@ class Timer {
 	}
 
 	/**
-	 * Reset the timer.
-	 * The timer stops itself and sets itself to 0.
+	 * Stop the timer and set it to 0
 	 */
 	public static function reset() {
 		self::getInstance()->time_running = false;
@@ -40,23 +50,18 @@ class Timer {
 	}
 
 	/**
-	 * Start the timer.
-	 * The timer starts with the current computer time as value.
+	 * Start the timer with the current computer time as value
 	 */
 	public static function start() {
-		// Starts the timer
 		self::getInstance()->exec_time = microtime(true);
 		self::getInstance()->time_running = true;
 	}
 
 	/**
-	 * Stop and get time timer value.
-	 * The timer is stopped and its value is calculated returned.
-	 *
-	 * @return int The time counted from the start
+	 * Stop and get time timer value
+	 * @return The time counted from the start
 	 */
 	public static function stop() {
-		// Stops and saves the timer if it's started
 		if (self::getInstance()->time_running) {
 			// Don't calculate again if the timer was already stopped
 			self::getInstance()->time_running = false;
@@ -65,7 +70,7 @@ class Timer {
 				4
 			);
 		}
-		// Shows the timer value
+		
 		return self::getInstance()->exec_time;
 	}
 }

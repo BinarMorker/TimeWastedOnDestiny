@@ -1,11 +1,29 @@
 <?php
 
+/**
+ * Manage Destiny accounts and get relevant information
+ * @author François Allard <binarmorker@gmail.com>
+ * @version 1.8
+ */
 class AccountManager {
 	
+	/**
+	 * The global Bungie account
+	 * @var stdClass
+	 */
 	private $bungieAccount;
+
+	/**
+	 * All Destiny accounts linked to the Bungie account
+	 * @var array
+	 */
 	private $destinyAccounts = array();
-	private $warnStatus;
 	
+	/**
+	 * @param int $console
+	 * @param string $username
+	 * @throws BungieNetPlatformException
+	 */
 	public function __construct($console, $username) {
 		$playerRequest = BungieNetPlatform::searchDestinyPlayer(
 			$console, 
@@ -42,16 +60,20 @@ class AccountManager {
 		if (count($bungieAccountRequest->destinyAccounts) > 0) {
 			$isCorrectPlatform = false;
 			
-			foreach ($bungieAccountRequest->destinyAccounts as $destinyAccount) {
+			foreach ($bungieAccountRequest->destinyAccounts 
+				as $destinyAccount) {
 				$this->destinyAccounts[] = $destinyAccount;
 				
-				if ($destinyAccount->userInfo->membershipType == $playerRequest[0]->membershipType) {
+				if ($destinyAccount->userInfo->membershipType == 
+					$playerRequest[0]->membershipType) {
 					$isCorrectPlatform = true;
 				}
 			}
 			
 			if (!$isCorrectPlatform) {
-				Api::setWarnStatus('Account found but played an earlier version of the game');
+				Api::setWarnStatus(
+					'Account found but played an earlier version of the game'
+				);
 			}
 		} else {
 			throw new BungieNetPlatformException(
@@ -64,13 +86,19 @@ class AccountManager {
 		$this->bungieAccount = $bungieAccountRequest;
 	}
 
+	/**
+	 * Get the time spent on Destiny (and many other characters information)
+	 * @return The information array
+	 */
 	public function getTimeWasted() {
 		$data = array();
 		
 		if (empty($this->bungieAccount->bungieNetUser)) {
-			$data['displayName'] = $this->destinyAccounts[0]->userInfo->displayName;
+			$data['displayName'] = 
+				$this->destinyAccounts[0]->userInfo->displayName;
 		} else {
-			$data['displayName'] = $this->bungieAccount->bungieNetUser->displayName;
+			$data['displayName'] = 
+				$this->bungieAccount->bungieNetUser->displayName;
 		}
 		
 		$data['totalTimePlayed'] = 0;
@@ -103,7 +131,8 @@ class AccountManager {
 
 			if (isset($accountStats->mergedAllCharacters->
 				merged->allTime->secondsPlayed->basic->value)) {
-				$currentData->timePlayed = $accountStats->mergedAllCharacters->
+				$currentData->timePlayed = 
+					$accountStats->mergedAllCharacters->
 					merged->allTime->secondsPlayed->basic->value;
 				$data['totalTimePlayed'] += $currentData->timePlayed;
 			} else {
@@ -112,7 +141,8 @@ class AccountManager {
 			
 			if (isset($accountStats->mergedDeletedCharacters->
 				merged->allTime->secondsPlayed->basic->value)) {
-				$currentData->timeWasted = $accountStats->mergedDeletedCharacters->
+				$currentData->timeWasted = 
+					$accountStats->mergedDeletedCharacters->
 					merged->allTime->secondsPlayed->basic->value;
 					$data['totalTimeWasted'] += $currentData->timeWasted;
 			} else {
@@ -122,7 +152,9 @@ class AccountManager {
 			$currentData->lastPlayed = 0;
 			
 			foreach ($destinyAccount->characters as $character) {
-				$dateLastPlayed = date("U", strtotime($character->dateLastPlayed));
+				$dateLastPlayed = date("U", 
+					strtotime($character->dateLastPlayed)
+				);
 				
 				if ($currentData->lastPlayed < $dateLastPlayed) {
 					$currentData->lastPlayed = $dateLastPlayed;

@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Success response info implementation
+ * @author François Allard <binarmorker@gmail.com>
+ * @version 1.8
+ */
 class ResponseSuccessInfo extends ResponseInfo {
 	
 	public function getStatus() {

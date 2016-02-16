@@ -1,8 +1,9 @@
 <?php
 
+// Help text in HEREDOC format
 $help = <<<EOT
-Time Wasted on Destiny API v1.8
-===============================
+Time Wasted on Destiny API
+==========================
 
 HELP:
 -----
@@ -37,8 +38,10 @@ Created by François Allard
 Please give credit if you use this!
 EOT;
 
+// Autoloading of all needed classes
 spl_autoload_register(function ($class_name) {
 	include $_SERVER['DOCUMENT_ROOT'].'/api/classes/' . $class_name . '.php';
 });
 
+// Call the API
 Api::request($help);
