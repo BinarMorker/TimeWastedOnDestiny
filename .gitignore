@@ -1,3 +1,6 @@
 cache/*
 -cache/donotdelete.me
 config.json
+.buildpath
+.project
+.settings
