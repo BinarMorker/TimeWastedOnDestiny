@@ -83,7 +83,7 @@ $("document").ready(function () {
                 if (json.Info.Status != "Error") {
                     $("#displayName").text(json.Response.displayName);
                     $("#totalTime").text(getHours(json.Response.totalTimePlayed));
-                    $("#totalWasted").html("- " + getHours(json.Response.totalTimeWasted));
+                    $("#totalWasted").html("- " + getHours(json.Response.totalTimeWasted) + " deleted");
                     
                     if ('playstation' in json.Response) {
                     	platform = 2;
@@ -114,7 +114,7 @@ $("document").ready(function () {
                     	var actChars = json.Response.xbox.characters.total - json.Response.xbox.characters.deleted;
                         var delChars = json.Response.xbox.characters.deleted;
                     }
-                    $("#characters").html((actChars>0?actChars:"no") + " active characters and " + (delChars>0?delChars:"no") + " deleted characters.");
+                    $("#characters").html((actChars>0?actChars:"no") + " active and " + (delChars>0?delChars:"no") + " deleted characters.");
                     $("#formatTime").html("Makes up " + getTime(json.Response.totalTimePlayed) + ".");
                     if ('playstation' in json.Response) {
                     	$("#yesPlaystation").removeClass("hide");
@@ -122,7 +122,7 @@ $("document").ready(function () {
                         $("#playstationName").text(json.Response.playstation.displayName);
                         $("#playstationIcon").attr("src", "https://www.bungie.net" + json.Response.playstation.iconPath);
                         $("#playstationTime").text(getHours(json.Response.playstation.timePlayed));
-                        $("#playstationWasted").html("- " + getHours(json.Response.playstation.timeWasted));
+                        $("#playstationWasted").html("- " + getHours(json.Response.playstation.timeWasted) + " deleted");
                         $("#playstationPlayed").html("Last played " + new Date(json.Response.playstation.lastPlayed * 1000).toDateString());
                         $("#playstationRank").text("Top " + Math.ceil(json.Response.playstation.leaderboardPosition / parseInt($("#player-count").text()) * 100) + "%");
                         $("#playstationBNGLink").attr("href", "http://bungie.net/en/Profile/" + json.Response.playstation.membershipType + "/" + json.Response.playstation.membershipId);
@@ -140,7 +140,7 @@ $("document").ready(function () {
                         $("#xboxName").text(json.Response.xbox.displayName);
                         $("#xboxIcon").attr("src", "https://www.bungie.net" + json.Response.xbox.iconPath);
                         $("#xboxTime").text(getHours(json.Response.xbox.timePlayed));
-                        $("#xboxWasted").html("- " + getHours(json.Response.xbox.timeWasted));
+                        $("#xboxWasted").html("- " + getHours(json.Response.xbox.timeWasted) + " deleted");
                         $("#xboxPlayed").html("Last played " + new Date(json.Response.xbox.lastPlayed * 1000).toDateString());
                         $("#xboxRank").text("Top " + Math.ceil(json.Response.xbox.leaderboardPosition / parseInt($("#player-count").text()) * 100) + "%");
                         $("#xboxBNGLink").attr("href", "http://bungie.net/en/Profile/" + json.Response.xbox.membershipType + "/" + json.Response.xbox.membershipId);
