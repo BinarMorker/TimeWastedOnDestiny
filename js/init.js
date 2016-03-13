@@ -93,10 +93,10 @@ $("document").ready(function () {
                     
                     if (platform == 1) {
                         var name = encodeURI(json.Response.xbox.displayName).toLowerCase();
-                        changeUrl(json.Response.displayName, "http://" + window.location.hostname + "/" + (platform==1?"xbox":"playstation") + "/" + name);
+                        changeUrl(json.Response.displayName, window.location.protocol + "//" + window.location.hostname + "/" + (platform==1?"xbox":"playstation") + "/" + name);
                     } else {
                         var name = encodeURI(json.Response.playstation.displayName).toLowerCase();
-                        changeUrl(json.Response.displayName, "http://" + window.location.hostname + "/" + (platform==1?"xbox":"playstation") + "/" + name);
+                        changeUrl(json.Response.displayName, window.location.protocol + "//" + window.location.hostname + "/" + (platform==1?"xbox":"playstation") + "/" + name);
                     }
                     
                     $("#shareGPlus").attr("href", "https://plus.google.com/share?url=http%3A//" + window.location.hostname + "/" + (platform==1?"xbox":"playstation") + "/" + user);
@@ -125,12 +125,12 @@ $("document").ready(function () {
                         $("#playstationWasted").html("- " + getHours(json.Response.playstation.timeWasted) + " deleted");
                         $("#playstationPlayed").html("Last played " + new Date(json.Response.playstation.lastPlayed * 1000).toDateString());
                         $("#playstationRank").text("Top " + Math.ceil(json.Response.playstation.leaderboardPosition / parseInt($("#player-count").text()) * 100) + "%");
-                        $("#playstationBNGLink").attr("href", "http://bungie.net/en/Profile/" + json.Response.playstation.membershipType + "/" + json.Response.playstation.membershipId);
-                        $("#playstationDNKLink").attr("href", "http://dinklebot.net/" + json.Response.playstation.membershipType + "/" + json.Response.playstation.displayName.toLowerCase());
-                        $("#playstationDDBLink").attr("href", "http://destinydb.com/guardians/playstation/" + json.Response.playstation.membershipId + "-" + json.Response.playstation.displayName.toLowerCase());
-                        $("#playstationDTCLink").attr("href", "http://destinytracker.com/destiny/player/ps/" + json.Response.playstation.displayName.toLowerCase());
-                        $("#playstationGGGLink").attr("href", "http://guardian.gg/en/profile/" + json.Response.playstation.membershipType + "/" + json.Response.playstation.displayName.toLowerCase());
-                        $("#playstationDTRLink").attr("href", "http://my.destinytrialsreport.com/ps/" + json.Response.playstation.displayName.toLowerCase());
+                        $("#playstationBNGLink").attr("href", "https://bungie.net/en/Profile/" + json.Response.playstation.membershipType + "/" + json.Response.playstation.membershipId);
+                        $("#playstationDNKLink").attr("href", "https://dinklebot.net/" + json.Response.playstation.membershipType + "/" + json.Response.playstation.displayName.toLowerCase());
+                        $("#playstationDDBLink").attr("href", "https://destinydb.com/guardians/playstation/" + json.Response.playstation.membershipId + "-" + json.Response.playstation.displayName.toLowerCase());
+                        $("#playstationDTCLink").attr("href", "https://destinytracker.com/destiny/player/ps/" + json.Response.playstation.displayName.toLowerCase());
+                        $("#playstationGGGLink").attr("href", "https://guardian.gg/en/profile/" + json.Response.playstation.membershipType + "/" + json.Response.playstation.displayName.toLowerCase());
+                        $("#playstationDTRLink").attr("href", "https://my.destinytrialsreport.com/ps/" + json.Response.playstation.displayName.toLowerCase());
                     } else {
                     	resetPlaystation();
                     }
@@ -143,12 +143,12 @@ $("document").ready(function () {
                         $("#xboxWasted").html("- " + getHours(json.Response.xbox.timeWasted) + " deleted");
                         $("#xboxPlayed").html("Last played " + new Date(json.Response.xbox.lastPlayed * 1000).toDateString());
                         $("#xboxRank").text("Top " + Math.ceil(json.Response.xbox.leaderboardPosition / parseInt($("#player-count").text()) * 100) + "%");
-                        $("#xboxBNGLink").attr("href", "http://bungie.net/en/Profile/" + json.Response.xbox.membershipType + "/" + json.Response.xbox.membershipId);
-                        $("#xboxDNKLink").attr("href", "http://dinklebot.net/" + json.Response.xbox.membershipType + "/" + json.Response.xbox.displayName.toLowerCase());
-                        $("#xboxDDBLink").attr("href", "http://destinydb.com/guardians/xbox/" + json.Response.xbox.membershipId + "-" + json.Response.xbox.displayName.toLowerCase());
-                        $("#xboxDTCLink").attr("href", "http://destinytracker.com/destiny/player/xb/" + json.Response.xbox.displayName.toLowerCase());
-                        $("#xboxGGGLink").attr("href", "http://guardian.gg/en/profile/" + json.Response.xbox.membershipType + "/" + json.Response.xbox.displayName.toLowerCase());
-                        $("#xboxDTRLink").attr("href", "http://my.destinytrialsreport.com/xb/" + json.Response.xbox.displayName.toLowerCase());
+                        $("#xboxBNGLink").attr("href", "https://bungie.net/en/Profile/" + json.Response.xbox.membershipType + "/" + json.Response.xbox.membershipId);
+                        $("#xboxDNKLink").attr("href", "https://dinklebot.net/" + json.Response.xbox.membershipType + "/" + json.Response.xbox.displayName.toLowerCase());
+                        $("#xboxDDBLink").attr("href", "https://destinydb.com/guardians/xbox/" + json.Response.xbox.membershipId + "-" + json.Response.xbox.displayName.toLowerCase());
+                        $("#xboxDTCLink").attr("href", "https://destinytracker.com/destiny/player/xb/" + json.Response.xbox.displayName.toLowerCase());
+                        $("#xboxGGGLink").attr("href", "https://guardian.gg/en/profile/" + json.Response.xbox.membershipType + "/" + json.Response.xbox.displayName.toLowerCase());
+                        $("#xboxDTRLink").attr("href", "https://my.destinytrialsreport.com/xb/" + json.Response.xbox.displayName.toLowerCase());
                     } else {
                     	resetXbox();
                     }
