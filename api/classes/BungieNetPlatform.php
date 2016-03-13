@@ -2,7 +2,7 @@
 
 /**
  * A wrapper of Bungie Net Platform
- * @author François Allard <binarmorker@gmail.com>
+ * @author Franï¿½ois Allard <binarmorker@gmail.com>
  * @version 1.8
  */
 class BungieNetPlatform {
@@ -52,10 +52,14 @@ class BungieNetPlatform {
 				);
 			}
 		} catch (ExternalURIRequestException $exception) {
-			throw new BungieNetPlatformException(
-				'Could not access Bungie at this time.', 
-				500
-			);
+			if (Config::get("debug")) {
+				throw $exception;
+			} else {
+				throw new BungieNetPlatformException(
+					'Could not access Bungie at this time.', 
+					500
+				);
+			}
 		}
 		
 		return $result->Response;
@@ -100,10 +104,14 @@ class BungieNetPlatform {
 				);
 			}
 		} catch (ExternalURIRequestException $exception) {
-			throw new BungieNetPlatformException(
-				'Could not find the player at this time.', 
-				500
-			);
+			if (Config::get("debug")) {
+				throw $exception;
+			} else {
+				throw new BungieNetPlatformException(
+					'Could not find the player at this time.', 
+					500
+				);
+			}
 		}
 
 		return $result->Response;
@@ -149,10 +157,14 @@ class BungieNetPlatform {
 				);
 			}
 		} catch (ExternalURIRequestException $exception) {
-			throw new BungieNetPlatformException(
-				'Could not access stats at this time.', 
-				500
-			);
+			if (Config::get("debug")) {
+				throw $exception;
+			} else {
+				throw new BungieNetPlatformException(
+					'Could not access stats at this time.', 
+					500
+				);
+			}
 		}
 
 		return $result->Response;

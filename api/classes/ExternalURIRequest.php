@@ -2,7 +2,7 @@
 
 /**
  * External HTTP request
- * @author François Allard <binarmorker@gmail.com>
+ * @author Franï¿½ois Allard <binarmorker@gmail.com>
  * @version 1.8
  */
 class ExternalURIRequest {
@@ -58,7 +58,7 @@ class ExternalURIRequest {
 		$content = @file_get_contents($this->uri, false, $context);
 		
 		if ($content === false) {
-			throw new ExternalURIRequestException();
+			throw new ExternalURIRequestException($this->uri, $context);
 		}
 		
 		return $content;

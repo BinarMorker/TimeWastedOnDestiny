@@ -2,7 +2,7 @@
 
 /**
  * Manage Destiny accounts and get relevant information
- * @author François Allard <binarmorker@gmail.com>
+ * @author Franï¿½ois Allard <binarmorker@gmail.com>
  * @version 1.8
  */
 class AccountManager {
@@ -25,10 +25,14 @@ class AccountManager {
 	 * @throws BungieNetPlatformException
 	 */
 	public function __construct($console, $username) {
-		$playerRequest = BungieNetPlatform::searchDestinyPlayer(
-			$console, 
-			$username
-		);
+		try {
+			$playerRequest = BungieNetPlatform::searchDestinyPlayer(
+				$console, 
+				$username
+			);
+		} catch (Exception $exception) {
+			throw ApiException::copy($exception);
+		}
 		
 		if (empty($playerRequest)) {
 			Api::setWarnStatus("The player was found on another platform");
@@ -39,23 +43,31 @@ class AccountManager {
 				$console = 1;
 			}
 
-			$playerRequest = BungieNetPlatform::searchDestinyPlayer(
-				$console,
-				$username
-			);
+			try {
+				$playerRequest = BungieNetPlatform::searchDestinyPlayer(
+					$console,
+					$username
+				);
+			} catch (Exception $exception) {
+				throw ApiException::copy($exception);
+			}
 			
 			if (empty($playerRequest)) {
-				throw new BungieNetPlatformException(
+				throw new ApiException(
 					'Player not found', 
 					3
 				);
 			}
 		}
 		
-		$bungieAccountRequest = BungieNetPlatform::getBungieAccount(
-			$playerRequest[0]->membershipType, 
-			$playerRequest[0]->membershipId
-		);
+		try {
+			$bungieAccountRequest = BungieNetPlatform::getBungieAccount(
+				$playerRequest[0]->membershipType, 
+				$playerRequest[0]->membershipId
+			);
+		} catch (Exception $exception) {
+			throw ApiException::copy($exception);
+		}
 
 		if (count($bungieAccountRequest->destinyAccounts) > 0) {
 			$isCorrectPlatform = false;
@@ -76,7 +88,7 @@ class AccountManager {
 				);
 			}
 		} else {
-			throw new BungieNetPlatformException(
+			throw new ApiException(
 				'Could not access Destiny servers at this time.', 
 				500
 			);
@@ -115,10 +127,16 @@ class AccountManager {
 		
 			$currentData = array();
 			$currentData = $destinyAccount->userInfo;
-			$accountStats = BungieNetPlatform::getAccountStats(
-				$destinyAccount->userInfo->membershipType, 
-				$destinyAccount->userInfo->membershipId
-			);
+			
+			try {
+				$accountStats = BungieNetPlatform::getAccountStats(
+					$destinyAccount->userInfo->membershipType, 
+					$destinyAccount->userInfo->membershipId
+				);
+			} catch (Exception $exception) {
+				throw ApiException::copy($exception);
+			}
+			
 			$currentData->characters = new stdClass();
 			$currentData->characters->total = count($accountStats->characters);
 			$currentData->characters->deleted = 0;

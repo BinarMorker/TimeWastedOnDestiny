@@ -297,7 +297,8 @@ function showError(json) {
         if (json.Status == "Error") {
             weight = "red darken-1";
         }
-        Materialize.toast(json.Message, 3000, weight);
+        var message = json.Message.replace(new RegExp('\r?\n','g'), '<br />');
+        Materialize.toast(message, 3000, weight);
     }
 }
 

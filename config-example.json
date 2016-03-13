@@ -4,5 +4,6 @@
 	"databaseUsername": "The user that has access to the database",
 	"databasePassword": "The password for the user",
 	"shouldCache": "Should only be true or false, without brackets",
+	"debug": "True means the errors will be more verbose",
 	"apiKey": "X-API-Key: Replace this text (and not the 'X-API-Key: ') with your API key from Bungie.net"
 }

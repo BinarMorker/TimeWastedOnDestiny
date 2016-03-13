@@ -2,7 +2,7 @@
 
 /**
  * Route the requests and return the results in JSON
- * @author François Allard <binarmorker@gmail.com>
+ * @author Franï¿½ois Allard <binarmorker@gmail.com>
  * @version 1.8
  */
 class Api {
@@ -11,7 +11,7 @@ class Api {
 	 * The current API version
 	 * @var float
 	 */
-	const VERSION = 1.8;
+	const VERSION = 1.9;
 	
 	/**
 	 * The main website's domain name
@@ -81,14 +81,13 @@ class Api {
 			}
 			
 			$data['onlineVersion'] = $version;
-			$info = new JsonInfoBuilder(new ResponseSuccessInfo());
-			$json = new JsonBuilder($data, $info);
+			$json = new JsonBuilder($data);
+			$json->addInfo(new JsonInfoBuilder(new ResponseSuccessInfo()));
 			return $json->get();
 		} catch (ExternalURIRequestException $exception) {
 			$data['onlineVersion'] = self::VERSION;
 			$status = new ResponseExceptionInfo($exception);
-			$info = new JsonInfoBuilder($status);
-			$json = new JsonBuilder($data, $info);
+			$json = new JsonBuilder($data, new JsonInfoBuilder($status));
 			return $json->get();
 		}
 	}
@@ -102,20 +101,19 @@ class Api {
 	private static function getTimeWasted($console, $username) {
 		try {
 			$account = new AccountManager($console, $username);
+			$json = new JsonBuilder($account->getTimeWasted());
 				
 			if (empty(self::$warnStatus)) {
 				$status = new ResponseSuccessInfo();
 			} else {
 				$status = new ResponseWarningInfo(self::$warnStatus);
 			}
-				
-			$info = new JsonInfoBuilder($status);
-			$json = new JsonBuilder($account->getTimeWasted(), $info);
+
+			$json->addInfo(new JsonInfoBuilder($status));
 			return $json->get();
-		} catch (BungieNetPlatformException $exception) {
+		} catch (ApiException $exception) {
 			$status = new ResponseExceptionInfo($exception);
-			$info = new JsonInfoBuilder($status);
-			$json = new JsonBuilder(array(), $info);
+			$json = new JsonBuilder(array(), new JsonInfoBuilder($status));
 			return $json->get();
 		}
 	}
@@ -146,13 +144,12 @@ class Api {
 				$status = new ResponseWarningInfo(self::$warnStatus);
 			}
 				
-			$info = new JsonInfoBuilder($status);
-			$json = new JsonBuilder($leaderboard, $info);
+			$json = new JsonBuilder($leaderboard);
+			$json->addInfo(new JsonInfoBuilder($status));
 			return $json->get();
-		} catch (BungieNetPlatformException $exception) {
+		} catch (ApiException $exception) {
 			$status = new ResponseExceptionInfo($exception);
-			$info = new JsonInfoBuilder($status);
-			$json = new JsonBuilder(array(), $info);
+			$json = new JsonBuilder(array(), new JsonInfoBuilder($status));
 			return $json->get();
 		}
 	}
