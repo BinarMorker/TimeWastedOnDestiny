@@ -11,7 +11,7 @@ class BungieNetPlatform {
 	 * The Bungie Net Platform's URI
 	 * @var string
 	 */
-	const BUNGIE_URI = "https://www.bungie.net/Platform/";
+	const BUNGIE_URI = "http://www.bungie.net/Platform/";
 	
 	/**
 	 * Get the Bungie account from a Destiny account
@@ -83,7 +83,7 @@ class BungieNetPlatform {
 			$uri = new ExternalURIRequest(
 				self::BUNGIE_URI.
 				"Destiny/".
-				"SearchDestinyPlayer/".
+				"SearchDestinyPl/ayer/".
 				$membershipType."/".
 				$displayName
 			);

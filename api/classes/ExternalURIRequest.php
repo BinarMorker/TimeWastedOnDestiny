@@ -14,6 +14,20 @@ class ExternalURIRequest {
 	private $uri = "";
 	
 	/**
+	 * Possible http errors to catch
+	 * @var array
+	 */
+	public static $errors = array(
+		400,
+		401,
+		403,
+		404,
+		500,
+		501,
+		503
+	);
+	
+	/**
 	 * @param string $uri The URI to set for the request
 	 */
 	public function __construct($uri) {
@@ -48,19 +62,20 @@ class ExternalURIRequest {
 	 * @throws ExternalURIRequestException
 	 */
 	public function query($method, $header) {
-		$context = stream_context_create(array(
-			"http" => array(
-				"method" => $method, 
-				"header" => $header
-			)
+		$curl = curl_init($this->uri);
+		curl_setopt_array($curl, array(
+			CURLOPT_FOLLOWLOCATION => true,
+			CURLOPT_CUSTOMREQUEST => $method, 
+			CURLOPT_HTTPHEADER => array($header),
+			CURLOPT_RETURNTRANSFER => true
 		));
-		// This line is made error-free for proper error handling afterwards
-		$content = file_get_contents($this->uri, false, $context);
+		$content = curl_exec($curl);
 		
-		if (!$content) {
-			throw new ExternalURIRequestException($this->uri, $context);
+		if (curl_errno($curl) != 0 || in_array(curl_getinfo($curl, CURLINFO_HTTP_CODE), self::$errors)) {
+			throw new ExternalURIRequestException($this->uri, curl_error($curl));
 		}
 		
+		curl_close($curl);
 		return $content;
 	}
 }
