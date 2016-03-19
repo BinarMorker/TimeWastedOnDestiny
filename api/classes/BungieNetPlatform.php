@@ -83,7 +83,7 @@ class BungieNetPlatform {
 			$uri = new ExternalURIRequest(
 				self::BUNGIE_URI.
 				"Destiny/".
-				"SearchDestinyPl/ayer/".
+				"SearchDestinyPlayer/".
 				$membershipType."/".
 				$displayName
 			);
