@@ -51,6 +51,8 @@ class BungieNetPlatform {
 					$result->ErrorCode
 				);
 			}
+
+			return $result->Response;
 		} catch (ExternalURIRequestException $exception) {
 			if (Config::get("debug")) {
 				throw $exception;
@@ -61,8 +63,6 @@ class BungieNetPlatform {
 				);
 			}
 		}
-		
-		return $result->Response;
 	}
 
 	/**
@@ -103,6 +103,8 @@ class BungieNetPlatform {
 					$result->ErrorCode
 				);
 			}
+
+			return $result->Response;
 		} catch (ExternalURIRequestException $exception) {
 			if (Config::get("debug")) {
 				throw $exception;
@@ -113,8 +115,6 @@ class BungieNetPlatform {
 				);
 			}
 		}
-
-		return $result->Response;
 	}
 
 	/**
@@ -156,6 +156,8 @@ class BungieNetPlatform {
 					$result->ErrorCode
 				);
 			}
+
+			return $result->Response;
 		} catch (ExternalURIRequestException $exception) {
 			if (Config::get("debug")) {
 				throw $exception;
@@ -166,8 +168,6 @@ class BungieNetPlatform {
 				);
 			}
 		}
-
-		return $result->Response;
 	}
 	
 }
