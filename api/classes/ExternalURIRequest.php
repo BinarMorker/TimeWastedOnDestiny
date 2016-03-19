@@ -55,7 +55,7 @@ class ExternalURIRequest {
 			)
 		));
 		// This line is made error-free for proper error handling afterwards
-		$content = @file_get_contents($this->uri, false, $context);
+		$content = file_get_contents($this->uri, false, $context);
 		
 		if (!$content) {
 			throw new ExternalURIRequestException($this->uri, $context);
