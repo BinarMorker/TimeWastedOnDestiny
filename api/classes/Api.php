@@ -101,7 +101,11 @@ class Api {
 	private static function getTimeWasted($console, $username) {
 		try {
 			$account = new AccountManager($console, $username);
-			$json = new JsonBuilder($account->getTimeWasted());
+			if (isset($_GET['dbg'])) {
+				$json = new JsonBuilder($account->getTimeWasted(true));
+			} else {
+				$json = new JsonBuilder($account->getTimeWasted());
+			}
 				
 			if (empty(self::$warnStatus)) {
 				$status = new ResponseSuccessInfo();

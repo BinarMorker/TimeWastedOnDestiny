@@ -18,6 +18,12 @@ class AccountManager {
 	 * @var array
 	 */
 	private $destinyAccounts = array();
+
+	/**
+	 * All API calls
+	 * @var array
+	 */
+	private $apiQueries = array();
 	
 	/**
 	 * @param int $console
@@ -30,6 +36,7 @@ class AccountManager {
 				$console, 
 				$username
 			);
+			if (Config::get('debug')) $this->apiQueries[] = $playerRequest;
 		} catch (Exception $exception) {
 			throw ApiException::copy($exception);
 		}
@@ -48,6 +55,7 @@ class AccountManager {
 					$console,
 					$username
 				);
+				if (Config::get('debug')) $this->apiQueries[] = $playerRequest;
 			} catch (Exception $exception) {
 				throw ApiException::copy($exception);
 			}
@@ -65,6 +73,7 @@ class AccountManager {
 				$playerRequest[0]->membershipType, 
 				$playerRequest[0]->membershipId
 			);
+			if (Config::get('debug')) $this->apiQueries[] = $bungieAccountRequest;
 		} catch (Exception $exception) {
 			throw ApiException::copy($exception);
 		}
@@ -102,7 +111,7 @@ class AccountManager {
 	 * Get the time spent on Destiny (and many other characters information)
 	 * @return The information array
 	 */
-	public function getTimeWasted() {
+	public function getTimeWasted($debug = false) {
 		$data = array();
 		
 		if (empty($this->bungieAccount->bungieNetUser)) {
@@ -133,6 +142,7 @@ class AccountManager {
 					$destinyAccount->userInfo->membershipType, 
 					$destinyAccount->userInfo->membershipId
 				);
+				if (Config::get('debug')) $this->apiQueries[] = $accountStats;
 			} catch (Exception $exception) {
 				throw ApiException::copy($exception);
 			}
@@ -200,6 +210,15 @@ class AccountManager {
 			} else {
 				$data['other'] = $currentData;
 			}
+		}
+
+		if (Config::get('debug') && $debug) {
+			$data['debug'] = true;
+			$data['apiQueries'] = $this->apiQueries;
+			$data['characters'] = array_map(function($x) {
+				return $x->characterId;
+			}, $accountStats->characters);
+			$data['count'] = count($accountStats->characters);
 		}
 		
 		return $data;
