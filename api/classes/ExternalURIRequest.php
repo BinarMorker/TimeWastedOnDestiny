@@ -62,7 +62,9 @@ class ExternalURIRequest {
 	 * @throws ExternalURIRequestException
 	 */
 	public function query($method, $header) {
-		$curl = curl_init($this->uri);
+        // Just why!?
+        $escaped_uri = str_replace(' ', '%20', $this->uri);
+		$curl = curl_init($escaped_uri);
 		curl_setopt_array($curl, array(
 			CURLOPT_FOLLOWLOCATION => true,
 			CURLOPT_CUSTOMREQUEST => $method, 
@@ -72,7 +74,7 @@ class ExternalURIRequest {
 		$content = curl_exec($curl);
 		
 		if (curl_errno($curl) != 0 || in_array(curl_getinfo($curl, CURLINFO_HTTP_CODE), self::$errors)) {
-			throw new ExternalURIRequestException($this->uri, curl_error($curl));
+			throw new ExternalURIRequestException($escaped_uri, curl_error($curl));
 		}
 		
 		curl_close($curl);

@@ -163,3 +163,21 @@ footer.page-footer {
 .header-text {
     font-size: 5rem;
 }
+
+.input-field .zmdi-search {
+    margin-left: 0.25rem;
+}
+
+.input-field input[type=search]:focus ~ .zmdi-close {
+    color: #444;
+}
+
+.input-field input[type=search] ~ .zmdi-close {
+    position: absolute;
+    top: 0;
+    right: 1.5rem;
+    color: transparent;
+    cursor: pointer;
+    font-size: 2rem;
+    transition: .3s color;
+}

@@ -13,9 +13,8 @@
   <title>Time Wasted on Destiny</title>
 
   <!-- CSS  -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css" type="text/css" rel="stylesheet" media="screen,projection"/>
   <link href="/css/stylesheet2.css" type="text/css" rel="stylesheet" media="screen,projection"/>
 </head>
 <body>
@@ -33,10 +32,10 @@
 	      </div>
 	      <div id="choice" class="row">
 	        <div class="col s12 m6">
-	          <button type="button" id="choice-playstation" class="btn-large-block waves-effect waves-light indigo darken-4"><img style="margin-bottom:-3px" height="18" width="18" src="/img/playstation-icon.svg" /> Playstation</button>
+	          <button type="button" id="choice-playstation" class="btn-large-block waves-effect waves-light indigo darken-4"><i class="zmdi zmdi-playstation zmdi-hc-lg"></i> Playstation</button>
 	        </div>
 	        <div class="col s12 m6">
-	          <button type="button" id="choice-xbox" class="btn-large-block waves-effect waves-light green darken-4"><img style="margin-bottom:-3px" height="18" width="18" src="/img/xbox-icon.svg" /> Xbox</button>
+	          <button type="button" id="choice-xbox" class="btn-large-block waves-effect waves-light green darken-4"><i class="zmdi zmdi-xbox zmdi-hc-lg"></i> Xbox</button>
 	        </div>
 	      </div>
 		  <nav id="input-playstation" class="hide">
@@ -44,8 +43,8 @@
 		      <form id="form-playstation">
 		        <div class="input-field">
 		          <input id="search-playstation" type="search" required>
-		          <label for="search"><i class="material-icons">search</i></label>
-		          <i class="material-icons">close</i>
+		          <label for="search-playstation"><i class="zmdi zmdi-search"></i></label>
+		          <i class="zmdi zmdi-close"></i>
 		        </div>
 		        <div class="row">
 		          <div class="col s12 m6">
@@ -63,8 +62,8 @@
 		      <form id="form-xbox">
 		        <div class="input-field">
 		          <input id="search-xbox" type="search" required>
-		          <label for="search"><i class="material-icons">search</i></label>
-		          <i class="material-icons">close</i>
+		          <label for="search-xbox"><i class="zmdi zmdi-search"></i></label>
+		          <i class="zmdi zmdi-close"></i>
 		        </div>
 		        <div class="row">
 		          <div class="col s12 m6">
@@ -94,16 +93,15 @@
         <div class="col s12 l6">
           <div class="card small grey lighten-4">
             <div class="card-image orange darken-2" style="position; relative;">
-              <!-- <img src="/img/background.jpg"> -->
               <span class="card-title" id="displayName"></span>
 			  <div class="fixed-action-btn horizontal click-to-toggle right" style="position: absolute; right: 20px; top: 5px;">
 			    <a class="btn-block red waves-effect waves-light z-depth-1" style="position: relative; top: 10px;">
-			      <span class="material-icons" style="line-height: inherit;">share</span>
+			      <i class="zmdi zmdi-share zmdi-hc-lg"></i>
 			    </a>
 			    <ul>
-			      <li><a id="shareGPlus" href="" class="social btn-floating red darken-2"><i class="fa fa-google-plus"></i></a></li>
-			      <li><a id="shareTwitter" href="" class="social btn-floating light-blue lighten-2"><i class="fa fa-twitter"></i></a></li>
-			      <li><a id="shareFacebook" href="" class="social btn-floating indigo darken-1"><i class="fa fa-facebook"></i></a></li>
+			      <li><a id="shareGPlus" href="" class="social btn-floating red darken-2"><i class="zmdi zmdi-google-plus"></i></a></li>
+			      <li><a id="shareTwitter" href="" class="social btn-floating light-blue lighten-2"><i class="zmdi zmdi-twitter"></i></a></li>
+			      <li><a id="shareFacebook" href="" class="social btn-floating indigo darken-1"><i class="zmdi zmdi-facebook"></i></a></li>
 			    </ul>
 			  </div>
             </div>
@@ -119,14 +117,14 @@
             <div class="card-content white-text">
               <img class="hide-on-small-only profile-image left" id="playstationIcon" src="" /> 
               <div>
-                <span class="card-title"><img style="margin-bottom:-3px" height="25" width="25" src="/img/playstation-icon.svg" /> <span id="playstationName"></span></span>
+                <span class="card-title"><i class="zmdi zmdi-playstation zmdi-hc-lg"></i> <span id="playstationName"></span></span>
                 <span class="right" id="playstationRank"></span>
                 <h5><span id="playstationTime"></span> <small class="orange-text text-lighten-1" id="playstationWasted"></small></h5>
                 <span id="playstationPlayed"></span>
               </div>
             </div>
             <div class="card-action">
-              <a class="white-text btn-link-block dropdown-button" data-activates="dropdown-playstation" href="#">View profile <i class="material-icons right">keyboard_arrow_down</i></a>
+              <a class="white-text btn-link-block dropdown-button" data-activates="dropdown-playstation" href="#">View profile <i class="zmdi zmdi-chevron-down zmdi-hc-lg"></i></a>
 			  <ul id='dropdown-playstation' class='dropdown-content'>
 			    <li><a target="_blank" href="" id="playstationBNGLink">Bungie.net</a></li>
 			    <li><a target="_blank" href="" id="playstationDTCLink">DestinyTracker.com</a></li>
@@ -139,21 +137,21 @@
           </div>
           <div class="card grey lighten-4 hide" id="noPlaystation">
             <div class="card-content grey-text">
-              <span class="flow-text">Play Destiny on Playstation 3 or Playstation 4 and link your profile on Bungie.net to see your stats appear.</span>
+              <span class="flow-text"><i class="zmdi zmdi-playstation zmdi-hc-lg"></i> Play Destiny on Playstation 3 or Playstation 4 and link your profile on Bungie.net to see your stats appear.</span>
             </div>
           </div>
           <div class="card green darken-4" id="yesXbox">
             <div class="card-content white-text">
               <img class="hide-on-small-only profile-image left" id="xboxIcon" src="" /> 
               <div>
-                <span class="card-title"><img style="margin-bottom:-3px" height="25" width="25" src="/img/xbox-icon.svg" /> <span id="xboxName"></span></span>
+                <span class="card-title"><i class="zmdi zmdi-xbox zmdi-hc-lg"></i> <span id="xboxName"></span></span>
                 <span class="right" id="xboxRank"></span>
                 <h5><span id="xboxTime"></span> <small class="orange-text text-lighten-1" id="xboxWasted"></small></h5>
                 <span id="xboxPlayed"></span>
               </div>
             </div>
             <div class="card-action">
-              <a class="white-text btn-link-block dropdown-button" data-activates="dropdown-xbox" href="#">View profile <i class="material-icons right">keyboard_arrow_down</i></a>
+              <a class="white-text btn-link-block dropdown-button" data-activates="dropdown-xbox" href="#">View profile <i class="zmdi zmdi-chevron-down zmdi-hc-lg"></i></a>
 			  <ul id='dropdown-xbox' class='dropdown-content'>
 			    <li><a target="_blank" href="" id="xboxBNGLink">Bungie.net</a></li>
 			    <li><a target="_blank" href="" id="xboxDTCLink">DestinyTracker.com</a></li>
@@ -166,7 +164,7 @@
           </div>
           <div class="card grey lighten-4 hide" id="noXbox">
             <div class="card-content grey-text">
-              <span class="flow-text">Play Destiny on Xbox 360 or Xbox One and link your profile on Bungie.net to see your stats appear.</span>
+              <span class="flow-text"><i class="zmdi zmdi-xbox zmdi-hc-lg"></i> Play Destiny on Xbox 360 or Xbox One and link your profile on Bungie.net to see your stats appear.</span>
             </div>
           </div>
         </div>
@@ -224,13 +222,13 @@
         <div class="col l4 s12">
           <h5 class="white-text">Useful links</h5>
           <ul>
-            <li><a class="white-text btn-block orange darken-3 waves-effect waves-light" href="https://www.reddit.com/r/DestinyTheGame/"><i class="fa fa-reddit"></i> /r/DestinyTheGame</a></li>
-            <li><a class="white-text btn-block orange darken-3 waves-effect waves-light" href="https://www.facebook.com/groups/DestinyPlaystation4/"><i class="fa fa-facebook-official"></i> Destiny PS4 Community</a></li>
-            <li><a class="white-text btn-block orange darken-3 waves-effect waves-light" href="https://github.com/BinarMorker/TimeWastedOnDestiny"><i class="fa fa-github"></i> Source code</a></li>
-            <li><a class="white-text btn-block orange darken-3 waves-effect waves-light" href="https://github.com/BinarMorker/TimeWastedOnDestiny/issues"><i class="fa fa-bug"></i> Report an issue</a></li>
-            <li><a class="white-text btn-block orange darken-3 waves-effect waves-light" href="/api"><i class="fa fa-code"></i> Use the API</a></li>
-            <li><a class="white-text btn-block orange darken-3 waves-effect waves-light" href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=5YLYAY74SZP6W"><i class="fa fa-paypal"></i> Donate!</a></li>
-            <li><a class="white-text btn-block orange darken-3 waves-effect waves-light" href="/old"><i class="fa fa-history"></i> Prefer the old website?</a></li>
+            <li><a class="white-text btn-block orange darken-3 waves-effect waves-light" href="https://www.reddit.com/r/DestinyTheGame/"><i class="zmdi zmdi-reddit zmdi-lg"></i> /r/DestinyTheGame</a></li>
+            <li><a class="white-text btn-block orange darken-3 waves-effect waves-light" href="https://www.facebook.com/groups/DestinyPlaystation4/"><i class="zmdi zmdi-facebook zmdi-lg"></i> Destiny PS4 Community</a></li>
+            <li><a class="white-text btn-block orange darken-3 waves-effect waves-light" href="https://github.com/BinarMorker/TimeWastedOnDestiny"><i class="zmdi zmdi-github zmdi-lg"></i> Source code</a></li>
+            <li><a class="white-text btn-block orange darken-3 waves-effect waves-light" href="https://github.com/BinarMorker/TimeWastedOnDestiny/issues"><i class="zmdi zmdi-bug zmdi-lg"></i> Report an issue</a></li>
+            <li><a class="white-text btn-block orange darken-3 waves-effect waves-light" href="/api"><i class="zmdi zmdi-code zmdi-lg"></i> Use the API</a></li>
+            <li><a class="white-text btn-block orange darken-3 waves-effect waves-light" href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=5YLYAY74SZP6W"><i class="zmdi zmdi-paypal zmdi-lg"></i> Donate!</a></li>
+            <li><a class="white-text btn-block orange darken-3 waves-effect waves-light" href="/old"><i class="zmdi zmdi-time-restore-setting zmdi-lg"></i> Prefer the old website?</a></li>
           </ul>
         </div>
       </div>
@@ -242,12 +240,12 @@
   
   <div class="fixed-action-btn hide" id="returnToTopElem" style="bottom: 35px; right: 35px;">
     <a id="returnToTop" class="btn-floating btn-large red">
-      <i class="large material-icons">keyboard_capslock</i>
+      <i class="zmdi zmdi-chevron-up zmdi-lg"></i>
     </a>
   </div>
 
   <!--  Scripts-->
-  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script src="https://code.jquery.com/jquery-2.2.2.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js"></script>
   <script src="/js/konami.js"></script>
   <script src="/js/init.js"></script>
