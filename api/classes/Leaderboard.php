@@ -2,7 +2,7 @@
 
 /**
  * Leaderboard interface with database wrapper
- * @author François Allard <binarmorker@gmail.com>
+ * @author Franï¿½ois Allard <binarmorker@gmail.com>
  * @version 1.8
  */
 class Leaderboard {
@@ -53,10 +53,14 @@ class Leaderboard {
 				 'FROM (SELECT @rownum:=@rownum+1 `rank`, `id` '.
 				 'FROM leaderboard, (SELECT @rownum:=0) r ORDER BY `seconds` DESC) '.
 				 'AS `ranks` WHERE `id`=:id;';
-		$statement = self::getInstance()->database->prepare($query);
-		$statement->execute(array(
-			':id' => $membershipId
-		));
+        try {
+            $statement = self::getInstance()->database->prepare($query);
+            $statement->execute(array(
+                ':id' => $membershipId
+            ));
+        } catch (Exception $e) {
+            return false;
+        }
 		
 		if ($player = $statement->fetch()) {
 			return $player['rank'];
@@ -72,10 +76,16 @@ class Leaderboard {
 	 */
 	public static function isNew($membershipId) {
 		$query = 'SELECT * FROM leaderboard WHERE `id`=:id;';
-		$statement = self::getInstance()->database->prepare($query);
-		$statement->execute(array(
-			':id' => $membershipId
-		));
+        
+        try {
+            $statement = self::getInstance()->database->prepare($query);
+            $statement->execute(array(
+                ':id' => $membershipId
+            ));
+        } catch (Exception $e) {
+            return false;
+        }
+        
 		return $statement->fetch() ? false : true;
 	}
 
@@ -85,8 +95,14 @@ class Leaderboard {
 	 */
 	public static function getLastTen() {
 		$query = "SELECT * FROM leaderboard ORDER BY `seconds` DESC LIMIT 10;";
-		$statement = self::getInstance()->database->prepare($query);
-		$statement->execute();
+        
+        try {
+            $statement = self::getInstance()->database->prepare($query);
+            $statement->execute();
+        } catch (Exception $e) {
+            return false;
+        }
+        
 		return $statement->fetchAll(PDO::FETCH_ASSOC);
 	}
 
@@ -96,8 +112,13 @@ class Leaderboard {
 	 */
 	public static function getTotalPlayers() {
 		$query = "SELECT COUNT(*) as `count` FROM leaderboard;";
-		$statement = self::getInstance()->database->prepare($query);
-		$statement->execute();
+        
+        try {
+            $statement = self::getInstance()->database->prepare($query);
+            $statement->execute();
+        } catch (Exception $e) {
+            return false;
+        }
 		
 		if ($count = $statement->fetch()) {
 			return $count[0];
@@ -118,13 +139,18 @@ class Leaderboard {
 		$query = 'REPLACE INTO leaderboard '.
 				 '(`console`, `id`, `username`, `seconds`) '.
 				 'VALUES (:console, :id, :username, :seconds);';
-		$statement = self::getInstance()->database->prepare($query);
-		return $statement->execute(array(
-			':console' => $membershipType - 1,
-			':id' => $membershipId,
-			':username' => $displayName,
-			':seconds' => $timePlayed
-		));
+                 
+        try {
+            $statement = self::getInstance()->database->prepare($query);
+            return $statement->execute(array(
+                ':console' => $membershipType - 1,
+                ':id' => $membershipId,
+                ':username' => $displayName,
+                ':seconds' => $timePlayed
+            ));
+        } catch (Exception $e) {
+            return false;
+        }
 	}
 	
 }
