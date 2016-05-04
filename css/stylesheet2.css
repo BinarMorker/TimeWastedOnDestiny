@@ -181,3 +181,7 @@ footer.page-footer {
     font-size: 2rem;
     transition: .3s color;
 }
+
+nav .nav-wrapper form, nav .nav-wrapper form .input-field{
+    height: 100%;
+}
