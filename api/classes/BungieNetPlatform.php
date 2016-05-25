@@ -36,11 +36,7 @@ class BungieNetPlatform {
 				$membershipType
 			);
 			$uri->addParams($params);
-			$result = json_decode(preg_replace(
-				'/NaN/', 
-				'"NaN"', 
-				$uri->query("GET", Config::get('apiKey'))
-			));
+			$result = json_decode(preg_replace("/\bNaN\b/", "null", $uri->query("GET", Config::get('apiKey'))));
 			
 			if (in_array(
 				$result->ErrorCode, 
@@ -88,11 +84,7 @@ class BungieNetPlatform {
 				$displayName
 			);
 			$uri->addParams($params);
-			$result = json_decode(preg_replace(
-				'/NaN/', 
-				'"NaN"', 
-				$uri->query("GET", Config::get('apiKey'))
-			));
+			$result = json_decode(preg_replace("/\bNaN\b/", "null", $uri->query("GET", Config::get('apiKey'))));
 
 			if (in_array(
 				$result->ErrorCode, 
@@ -141,11 +133,7 @@ class BungieNetPlatform {
 				$membershipId
 			);
 			$uri->addParams($params);
-			$result = json_decode(preg_replace(
-				'/NaN/', 
-				'"NaN"', 
-				$uri->query("GET", Config::get('apiKey'))
-			));
+			$result = json_decode(preg_replace("/\bNaN\b/", "null", $uri->query("GET", Config::get('apiKey'))));
 
 			if (in_array(
 				$result->ErrorCode, 
