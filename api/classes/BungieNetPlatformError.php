@@ -2,7 +2,7 @@
 
 /**
  * List Bungie Net Platform errors
- * @author François Allard <binarmorker@gmail.com>
+ * @author Franï¿½ois Allard <binarmorker@gmail.com>
  * @version 1.8
  */
 class BungieNetPlatformError {
@@ -30,6 +30,12 @@ class BungieNetPlatformError {
 	 * @var integer
 	 */
 	const privacySettingsError = 1665;
+
+	/**
+	 * ErrorCode 1670 means the account is on a legacy console
+	 * @var integer
+	 */
+	const legacyConsoleError = 1670;
 	
 	/**
 	 * Get all errors in an array
@@ -40,7 +46,8 @@ class BungieNetPlatformError {
 			self::maintenanceError, 
 			self::badKeyError, 
 			self::bungieServerError, 
-			self::privacySettingsError
+			self::privacySettingsError, 
+			self::legacyConsoleError
 		);
 	}
 	

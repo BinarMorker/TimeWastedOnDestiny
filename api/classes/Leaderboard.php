@@ -93,8 +93,8 @@ class Leaderboard {
 	 * Get last ten players from the leaderboard
 	 * @return An array of the ten players
 	 */
-	public static function getLastTen() {
-		$query = "SELECT * FROM leaderboard ORDER BY `seconds` DESC LIMIT 10;";
+	public static function getTopTen($page) {
+		$query = "SELECT * FROM leaderboard ORDER BY `seconds` DESC LIMIT 10 OFFSET ".(($page - 1) * 10).";";
         
         try {
             $statement = self::getInstance()->database->prepare($query);
@@ -104,27 +104,6 @@ class Leaderboard {
         }
         
 		return $statement->fetchAll(PDO::FETCH_ASSOC);
-	}
-
-	/**
-	 * Get the total number of entries in the leaderboard
-	 * @return The number of players
-	 */
-	public static function getTotalPlayers() {
-		$query = "SELECT COUNT(*) as `count` FROM leaderboard;";
-        
-        try {
-            $statement = self::getInstance()->database->prepare($query);
-            $statement->execute();
-        } catch (Exception $e) {
-            return false;
-        }
-		
-		if ($count = $statement->fetch()) {
-			return $count[0];
-		}
-		
-		return false;
 	}
 
 	/**
@@ -151,6 +130,27 @@ class Leaderboard {
         } catch (Exception $e) {
             return false;
         }
+	}
+
+	/**
+	 * Get the total number of entries in the leaderboard
+	 * @return The number of players
+	 */
+	public static function getTotalPlayers() {
+		$query = "SELECT COUNT(*) as `count` FROM leaderboard;";
+        
+        try {
+            $statement = self::getInstance()->database->prepare($query);
+            $statement->execute();
+        } catch (Exception $e) {
+            return false;
+        }
+		
+		if ($count = $statement->fetch()) {
+			return $count[0];
+		}
+		
+		return false;
 	}
 	
 }

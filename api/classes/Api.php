@@ -9,15 +9,15 @@ class Api {
 
 	/**
 	 * The current API version
-	 * @var float
+	 * @var string
 	 */
-	const VERSION = 1.9;
+	const VERSION = "1.10";
 	
 	/**
 	 * The main website's domain name
 	 * @var string
 	 */
-	const DOMAIN = "wastedondestiny.com";
+	const DOMAIN = "www.wastedondestiny.com";
 	
 	/**
 	 * The warning status if something went wrong
@@ -39,7 +39,11 @@ class Api {
 				$response = self::getVersion();
 				self::displayJson($response);
 			} elseif (isset($_GET['leaderboard'])) {
-				$response = self::getLeaderboard();
+				if (isset($_GET['page'])) {
+					$response = self::getLeaderboard($_GET['page']);
+				} else {
+					$response = self::getLeaderboard(1);
+				}
 				self::displayJson($response);
 			} elseif (isset($_GET['console']) && isset($_GET['user'])) {
 				$response = self::getTimeWasted($_GET['console'], $_GET['user']);
@@ -74,7 +78,7 @@ class Api {
 			if ($_SERVER['HTTP_HOST'] != self::DOMAIN) {
 				$request = new ExternalURIRequest('http://'.self::DOMAIN.'/api/');
 				$request->addParams(array('version'));
-				$result = json_decode($request->query('GET', Config::get('apiKey')));
+				$result = json_decode($request->query('GET'));
 				$version = $result->Response->currentVersion;
 			} else {
 				$version = self::VERSION;
@@ -126,13 +130,14 @@ class Api {
 	 * Get the leaderboard from the database
 	 * @return The json request string
 	 */
-	private static function getLeaderboard() {
+	private static function getLeaderboard($page) {
 		try {
-			$request = Leaderboard::getLastTen();
+			$request = Leaderboard::getTopTen($page);
 			$leaderboard = array();
 			$count = 0;
 			
 			foreach ($request as $row) {
+				$leaderboard['leaderboard'][$count]['rank'] = $count + (($page * 10) - 10) + 1;
 				$leaderboard['leaderboard'][$count]['displayName'] = $row['username'];
 				$leaderboard['leaderboard'][$count]['membershipId'] = $row['id'];
 				$leaderboard['leaderboard'][$count]['membershipType'] = $row['console'] + 1;

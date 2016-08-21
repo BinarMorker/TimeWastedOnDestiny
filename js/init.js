@@ -13,15 +13,18 @@ $("document").ready(function () {
 
 	$(".social").on('click', function (event) {
 		event.preventDefault();
+        ga('send', 'event', 'Links', 'Share');
 		window.open($(this).attr('href'), "_blank", "toolbar=no, scrollbars=no, resizable=yes, top=0, left=0, width=500, height=300");
 	});
 	
 	$("#returnToTop").on('click', function (event) {
+        ga('send', 'event', 'Links', 'Return to top');
 		scrollTo('#index-banner');
 	})
 	
 	$("#choice-playstation").on('click', function (event) {
 		event.preventDefault();
+        ga('send', 'event', 'Links', 'Search on Playstation');
 		$("#choice").addClass("hide");
 		$("#input-playstation").removeClass("hide");
 		$("#search-playstation").focus();
@@ -29,6 +32,7 @@ $("document").ready(function () {
 	
 	$("#choice-xbox").on('click', function (event) {
 		event.preventDefault();
+        ga('send', 'event', 'Links', 'Search on Xbox');
 		$("#choice").addClass("hide");
 		$("#input-xbox").removeClass("hide");
 		$("#search-xbox").focus();
@@ -36,6 +40,7 @@ $("document").ready(function () {
 	
 	$(".return-button").on('click', function (event) {
 		event.preventDefault();
+        ga('send', 'event', 'Links', 'Return to platform choice');
 		$("#choice").removeClass("hide");
 		$("#input-playstation").addClass("hide");
 		$("#input-xbox").addClass("hide");
@@ -51,18 +56,37 @@ $("document").ready(function () {
         search($("#search-xbox").val(), 1);
     });
 	
-	function leaderboard (callback) {
-        var jsonUrl = "/api?leaderboard&"+new Date().getTime();
+	function leaderboard (page, callback) {
+        var jsonUrl = "/api?leaderboard&page="+page+"&"+new Date().getTime();
 		$("#leaderboard").html("");
         $.getJSON(jsonUrl, function (json) {
         	if (json.Info.Status != "Error") {
         		$("#leaderboard").append('<span class="collection-header">Leaderboard</span>');
-        		var count = 0;
         		for (row in json.Response.leaderboard) {
-        			count++;
-            		$("#leaderboard").append('<a href="/'+(json.Response.leaderboard[row].membershipType==1?"xbox":"playstation")+'/'+json.Response.leaderboard[row].displayName.toLowerCase()+'" class="collection-item row"><span class="col s2">'+count+'</span><span class="col s7"><img style="margin-bottom:-3px" height="18" width="18" src="/img/'+(json.Response.leaderboard[row].membershipType==1?"xbox":"playstation")+'-icon-black.svg" /> '+json.Response.leaderboard[row].displayName+'</span><span class="col s3 right-align">'+getHours(json.Response.leaderboard[row].timePlayed)+'</span></a>');
+                    var clickEvent = "ga('send', 'event', 'Leaderboard', 'View profile', '"+json.Response.leaderboard[row].membershipType+"/"+json.Response.leaderboard[row].displayName+"');";
+            		$("#leaderboard").append('<a href="/'+(json.Response.leaderboard[row].membershipType==1?"xbox":"playstation")+'/'+json.Response.leaderboard[row].displayName.toLowerCase()+'" class="collection-item row" onclick="'+clickEvent+'"><span class="col s2">'+json.Response.leaderboard[row].rank+'</span><span class="col s7"><img style="margin-bottom:-3px" height="18" width="18" src="/img/'+(json.Response.leaderboard[row].membershipType==1?"xbox":"playstation")+'-icon-black.svg" /> '+json.Response.leaderboard[row].displayName+'</span><span class="col s3 right-align">'+getHours(json.Response.leaderboard[row].timePlayed)+'</span></a>');
         		}
-        		$("#leaderboard").append('<span class="collection-footer">Players: <span id="player-count">'+json.Response.totalPlayers+'</span></span>');
+                var leftDisabled = page == 1;
+                var rightDisabled = json.Response.totalPlayers <= (page * 10);
+                var leftButton = "<a href='#' class='btn-invis left' id='leftLeaderboardButton'><i class='zmdi zmdi-chevron-left zmdi-hc-lg'></i></a>";
+                var rightButton = "<a href='#' class='btn-invis right' id='rightLeaderboardButton'><i class='zmdi zmdi-chevron-right zmdi-hc-lg'></i></a>";
+        		$("#leaderboard").append('<span class="collection-footer">'+(leftDisabled?"":leftButton)+'Page: '+page+', Players: <span id="player-count">'+json.Response.totalPlayers+'</span>'+(rightDisabled?"":rightButton)+'</span>');
+                
+                if (!leftDisabled) {
+                    $("#leftLeaderboardButton").click(function(event) {
+                        event.preventDefault();
+                        ga('send', 'event', 'Leaderboard', 'Navigate', page - 1);
+                        leaderboard(page - 1);
+                    });
+                }
+
+                if (!rightDisabled) {
+                    $("#rightLeaderboardButton").click(function(event) {
+                        event.preventDefault();
+                        ga('send', 'event', 'Leaderboard', 'Navigate', page + 1);
+                        leaderboard(page + 1);
+                    });
+                }
         	}
             if (typeof callback === "function") {
             	callback();
@@ -73,6 +97,7 @@ $("document").ready(function () {
 	function search (user, platform) {
         if (user === undefined || user == "") {
             Materialize.toast('You must enter a username', 3000, 'red');
+            ga('send', 'event', 'Search', 'Empty username');
         } else {
         	loading();
             var jsonUrl = "/api?console="+platform+"&user="+user;
@@ -126,8 +151,9 @@ $("document").ready(function () {
                         $("#playstationPlayed").html("Last played " + new Date(json.Response.playstation.lastPlayed * 1000).toDateString());
                         $("#playstationRank").text("Top " + Math.ceil(json.Response.playstation.leaderboardPosition / parseInt($("#player-count").text()) * 100) + "%");
                         $("#playstationBNGLink").attr("href", "https://bungie.net/en/Profile/" + json.Response.playstation.membershipType + "/" + json.Response.playstation.membershipId);
-                        $("#playstationDNKLink").attr("href", "https://dinklebot.net/" + json.Response.playstation.membershipType + "/" + json.Response.playstation.displayName.toLowerCase());
-                        $("#playstationDDBLink").attr("href", "https://destinydb.com/guardians/playstation/" + json.Response.playstation.membershipId + "-" + json.Response.playstation.displayName.toLowerCase());
+                        $("#playstationDNKLink").attr("href", "http://dinklebot.net/" + json.Response.playstation.membershipType + "/" + json.Response.playstation.displayName.toLowerCase());
+                        $("#playstationDSTLink").attr("href", "https://destinystatus.com/psn/" + json.Response.playstation.displayName.toLowerCase());
+                        $("#playstationDDBLink").attr("href", "http://destinydb.com/profile/" + json.Response.playstation.displayName.toLowerCase() + "/psn");
                         $("#playstationDTCLink").attr("href", "https://destinytracker.com/destiny/player/ps/" + json.Response.playstation.displayName.toLowerCase());
                         $("#playstationGGGLink").attr("href", "https://guardian.gg/en/profile/" + json.Response.playstation.membershipType + "/" + json.Response.playstation.displayName.toLowerCase());
                         $("#playstationDTRLink").attr("href", "https://my.destinytrialsreport.com/ps/" + json.Response.playstation.displayName.toLowerCase());
@@ -144,8 +170,9 @@ $("document").ready(function () {
                         $("#xboxPlayed").html("Last played " + new Date(json.Response.xbox.lastPlayed * 1000).toDateString());
                         $("#xboxRank").text("Top " + Math.ceil(json.Response.xbox.leaderboardPosition / parseInt($("#player-count").text()) * 100) + "%");
                         $("#xboxBNGLink").attr("href", "https://bungie.net/en/Profile/" + json.Response.xbox.membershipType + "/" + json.Response.xbox.membershipId);
-                        $("#xboxDNKLink").attr("href", "https://dinklebot.net/" + json.Response.xbox.membershipType + "/" + json.Response.xbox.displayName.toLowerCase());
-                        $("#xboxDDBLink").attr("href", "https://destinydb.com/guardians/xbox/" + json.Response.xbox.membershipId + "-" + json.Response.xbox.displayName.toLowerCase());
+                        $("#xboxDNKLink").attr("href", "http://dinklebot.net/" + json.Response.xbox.membershipType + "/" + json.Response.xbox.displayName.toLowerCase());
+                        $("#xboxDSTLink").attr("href", "https://destinystatus.com/xbl/" + json.Response.xbox.displayName.toLowerCase());
+                        $("#xboxDDBLink").attr("href", "http://destinydb.com/profile/" + json.Response.xbox.displayName.toLowerCase() + "/xbox");
                         $("#xboxDTCLink").attr("href", "https://destinytracker.com/destiny/player/xb/" + json.Response.xbox.displayName.toLowerCase());
                         $("#xboxGGGLink").attr("href", "https://guardian.gg/en/profile/" + json.Response.xbox.membershipType + "/" + json.Response.xbox.displayName.toLowerCase());
                         $("#xboxDTRLink").attr("href", "https://my.destinytrialsreport.com/xb/" + json.Response.xbox.displayName.toLowerCase());
@@ -153,59 +180,22 @@ $("document").ready(function () {
                     	resetXbox();
                     }
                     if (json.Response.newEntry == true) {
-                    	leaderboard();
+                        ga('send', 'event', 'Search', 'New User', platform + '/' + json.Response.displayName);
+                    	leaderboard(1);
+                    } else {
+                        ga('send', 'event', 'Search', 'Existing user', platform + '/' + json.Response.displayName);
                     }
                     $("#panels").removeClass("hide");
                     scrollTo("#panels");
+                } else {
+                    ga('send', 'event', 'Search', 'Invalid user', platform + '/' + user);
                 }
-
-            	var easter_egg = new Konami(function() {
-            		var m_names = new Array("January", "February", "March", 
-            				"April", "May", "June", "July", "August", "September", 
-            				"October", "November", "December");
-            		var d = new Date();
-            		var diff = d.getTime() - new Date("Sep 9 2014").getTime();
-            		var curr_date = d.getDate();
-            		var curr_month = d.getMonth();
-            		var curr_year = d.getFullYear();
-            		var sup = "";
-            		if (curr_date == 1 || curr_date == 21 || curr_date ==31)
-            		   {
-            		   sup = "st";
-            		   }
-            		else if (curr_date == 2 || curr_date == 22)
-            		   {
-            		   sup = "nd";
-            		   }
-            		else if (curr_date == 3 || curr_date == 23)
-            		   {
-            		   sup = "rd";
-            		   }
-            		else
-            		   {
-            		   sup = "th";
-            		   }
-            		var elem = '<div id="modal1" class="modal"><div class="modal-content"> \
-            <h4>Your time in proportions...</h4> \
-            <p>Destiny launched September 9th 2014.</p> \
-            <p>Today is '+m_names[curr_month]+" "+curr_date+sup+" "+curr_year+'.</p> \
-            <p>It means that the game launched '+getTime(Math.floor(diff/1000))+' ago.</p> \
-            <p>It also means that you have spent '+Math.round(json.Response.totalTimePlayed / (diff/1000) * 100)+'% of your time on Destiny since launch.</p> \
-            <h3>Wow!</h3> \
-            </div><div class="modal-footer"><a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">OK</a></div></div>';
-            		$('body').append(elem);
-            		$('#modal1').openModal({
-            		      complete: function() {
-            		    	  $('#modal1').remove();
-            		      }
-            		    });
-            	});
             });
         }
         
     }
 
-	leaderboard(function () {
+	leaderboard(1, function () {
 	    var params = cleanArray(window.location.pathname.split('/'));
 	    
 	    if (params.length > 0) {

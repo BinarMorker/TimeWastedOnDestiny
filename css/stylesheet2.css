@@ -64,6 +64,15 @@ footer.page-footer {
 	padding-right: 1.5em;
 }
 
+.btn-invis {
+    margin: -0.5rem;
+    height: 2.5rem;
+    width: 2.5rem;
+    line-height: 2.5rem;
+    font-size: 1.5rem;
+    color: #343434;
+}
+
 .btn-block {
     text-decoration: none;
     color: #fff;

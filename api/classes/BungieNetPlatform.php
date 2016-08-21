@@ -48,6 +48,20 @@ class BungieNetPlatform {
 				);
 			}
 
+			if (isset($result->Response->destinyAccountErrors)) {
+				foreach ($result->Response->destinyAccountErrors as $error) {
+					if (in_array(
+						$error->errorCode,
+						BungieNetPlatformError::getErrors()
+					)) {
+						throw new BungieNetPlatformException(
+							$error->message,
+							$error->errorCode
+						);
+					}
+				}
+			}
+
 			return $result->Response;
 		} catch (ExternalURIRequestException $exception) {
 			if (Config::get("debug")) {
