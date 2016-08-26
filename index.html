@@ -34,47 +34,47 @@
               </h1>
             </div>
           </a>
-          <div id="choice" class="row">
+          <div class="row" data-bind="visible: platform() == 0">
             <div class="col s12 m6">
-              <button type="button" id="choice-playstation" class="btn-large-block waves-effect waves-light indigo darken-4"><i class="zmdi zmdi-playstation zmdi-hc-lg"></i> Playstation</button>
+              <button type="button" class="btn-large-block waves-effect waves-light indigo darken-4" data-bind="click: function() { platform(2); }"><i class="zmdi zmdi-playstation zmdi-hc-lg"></i> Playstation</button>
             </div>
             <div class="col s12 m6">
-              <button type="button" id="choice-xbox" class="btn-large-block waves-effect waves-light green darken-4"><i class="zmdi zmdi-xbox zmdi-hc-lg"></i> Xbox</button>
+              <button type="button" class="btn-large-block waves-effect waves-light green darken-4" data-bind="click: function() { platform(1); }"><i class="zmdi zmdi-xbox zmdi-hc-lg"></i> Xbox</button>
             </div>
           </div>
-          <nav id="input-playstation" class="hide">
+          <nav data-bind="visible: platform() == 2">
             <div class="nav-wrapper indigo darken-4">
-              <form id="form-playstation">
+              <form>
                 <div class="input-field">
-                  <input id="search-playstation" type="search" required>
+                  <input id="search-playstation" data-bind="value: username" type="search" required>
                   <label for="search-playstation"><i class="zmdi zmdi-search"></i></label>
                   <i class="zmdi zmdi-close"></i>
                 </div>
                 <div class="row">
                   <div class="col s12 m6">
-                    <button type="button" class="return-button transluscent btn-large-block waves-effect waves-light">Return</button>
+                    <button type="button" class="return-button transluscent btn-large-block waves-effect waves-light" data-bind="click: function() { platform(0); }">Return</button>
                   </div>
                   <div class="col s12 m6">
-                    <button type="submit" class="btn-large-block orange darken-1 waves-effect waves-light">Search</button>
+                    <button type="submit" class="btn-large-block orange darken-1 waves-effect waves-light" data-bind="click: searchPlayer">Search</button>
                   </div>
                 </div>
               </form>
             </div>
           </nav>
-          <nav id="input-xbox" class="hide">
+          <nav data-bind="visible: platform() == 1">
             <div class="nav-wrapper green darken-4">
-              <form id="form-xbox">
+              <form>
                 <div class="input-field">
-                  <input id="search-xbox" type="search" required>
+                  <input id="search-xbox" data-bind="value: username" type="search" required>
                   <label for="search-xbox"><i class="zmdi zmdi-search"></i></label>
                   <i class="zmdi zmdi-close"></i>
                 </div>
                 <div class="row">
                   <div class="col s12 m6">
-                    <button type="button" class="return-button transluscent btn-large-block waves-effect waves-light">Return</button>
+                    <button type="button" class="return-button transluscent btn-large-block waves-effect waves-light" data-bind="click: function() { platform(0); }">Return</button>
                   </div>
                   <div class="col s12 m6">
-                    <button type="submit" class="btn-large-block orange darken-1 waves-effect waves-light">Search</button>
+                    <button type="submit" class="btn-large-block orange darken-1 waves-effect waves-light" data-bind="click: searchPlayer">Search</button>
                   </div>
                 </div>
               </form>
@@ -82,118 +82,183 @@
           </nav>
         </div>
         <div class="col s12 l6">
-          <div class="collection" id="leaderboard">
+          <div class="collection" id="leaderboard" data-bind="with: leaderboard">
+            <span class="collection-header">Leaderboard</span>
+            <!-- ko foreach: leaderboard -->
+            <a href="#" class="collection-item row black-text" data-bind="click: function() { $root.platform(membershipType); $root.username(displayName); $root.searchPlayer(); }, css: { 'orange lighten-2 white-text': $root.isActivePlayer($data) }">
+              <span class="col s2" data-bind="text: rank"></span>
+              <span class="col s7">
+                <i class="zmdi zmdi-hc-lg" data-bind="css: { 'zmdi-playstation': membershipType == 2, 'zmdi-xbox': membershipType == 1 }"></i> <span data-bind="text: displayName"></span>
+              </span>
+              <span class="col s3 right-align" data-bind="hours: timePlayed"></span>
+            </a>
+            <!-- /ko -->
+            <span class="collection-footer">
+              <a href='#' class='btn-invis left' data-bind='click: $parent.previousPage, visible: parseInt(page) > 1'><i class='zmdi zmdi-chevron-left zmdi-hc-lg'></i></a>
+                Page: <span data-bind="text: page"></span>, Players: <span data-bind="text: totalPlayers"></span>
+              <a href='#' class='btn-invis right' data-bind='click: $parent.nextPage, visible: (parseInt(page) * 10) < parseInt(totalPlayers)'><i class='zmdi zmdi-chevron-right zmdi-hc-lg'></i></a>
+            </span>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container row">
+      <div class="col s12">
+        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6332373031553935" data-ad-slot="7124654099" data-ad-format="auto"></ins>
+        <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+      </div>
+    </div>
+  </div>
+
+  <div class="container section center" data-bind="visible: loading">
+    <div class='preloader-wrapper big active'>
+      <div class='spinner-layer spinner-blue-only'>
+        <div class='circle-clipper left'>
+          <div class='circle'></div>
+        </div>
+        <div class='gap-patch'>
+          <div class='circle'></div>
+        </div>
+        <div class='circle-clipper right'>
+          <div class='circle'></div>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="container section center" id="loading"></div>
-
-  <div class="section hide" id="panels">
-    <div class="container">
+  <div class="section" id="playerCards" data-bind="visible: !loading()">
+    <div class="container" data-bind="with: player">
       <div class="row">
         <div class="col s12 l6">
           <div class="card small grey lighten-4">
             <div class="card-image orange darken-2" style="position; relative;">
-              <span class="card-title" id="displayName"></span>
+              <span class="card-title activator" data-bind="text: displayName"></span>
               <div class="fixed-action-btn horizontal click-to-toggle right" style="position: absolute; right: 20px; top: 5px;">
                 <a class="btn-block red waves-effect waves-light z-depth-1" style="position: relative; top: 10px;">
                   <i class="zmdi zmdi-share zmdi-hc-lg"></i>
                 </a>
                 <ul>
-                  <li><a id="shareGPlus" href="" onclick="ga('send', 'event', 'Social', 'Share on Google+');" class="social btn-floating red darken-2"><i class="zmdi zmdi-google-plus"></i></a></li>
-                  <li><a id="shareTwitter" href="" onclick="ga('send', 'event', 'Social', 'Share on Twitter');" class="social btn-floating light-blue lighten-2"><i class="zmdi zmdi-twitter"></i></a></li>
-                  <li><a id="shareFacebook" href="" onclick="ga('send', 'event', 'Social', 'Share on Facebook');" class="social btn-floating indigo darken-1"><i class="zmdi zmdi-facebook"></i></a></li>
+                  <li><a onclick="ga('send', 'event', 'Social', 'Share on Google+');" class="social btn-floating red darken-2" data-bind="click: function() { $root.share('https://plus.google.com/share?url='+$root.getNewUrl()); }"><i class="zmdi zmdi-google-plus"></i></a></li>
+                  <li><a onclick="ga('send', 'event', 'Social', 'Share on Twitter');" class="social btn-floating light-blue lighten-2" data-bind="click: function() { $root.share('https://twitter.com/home?status=Check out my time spent on Destiny %23wastedondestiny '+$root.getNewUrl()); }"><i class="zmdi zmdi-twitter"></i></a></li>
+                  <li><a onclick="ga('send', 'event', 'Social', 'Share on Facebook');" class="social btn-floating indigo darken-1" data-bind="click: function() { $root.share('https://www.facebook.com/sharer/sharer.php?u='+$root.getNewUrl()); }"><i class="zmdi zmdi-facebook"></i></a></li>
                 </ul>
               </div>
             </div>
             <div class="card-content black-text">
-              <h3 class="truncate"><span id="totalTime"></span> <small class="red-text text-lighten-1" id="totalWasted"></small></h3>
-              <p id="formatTime"></p>
-              <p id="characters"></p>
+              <h3 class="truncate"><span data-bind="hours: totalTimePlayed"></span> <small class="red-text text-lighten-1" data-bind="hours: totalTimeWasted, format: '-? deleted'"></small></h3>
+              <p data-bind="time: totalTimePlayed"></p>
+              <p>
+                <span data-bind="text: (playstation != null ? playstation.characters.filter(function(item) { return !item.deleted; }).length : 0) + (xbox != null ? xbox.characters.filter(function(item) { return !item.deleted; }).length : 0)"></span>
+                <span> active and </span>
+                <span data-bind="text: (playstation != null ? playstation.characters.filter(function(item) { return item.deleted; }).length : 0) + (xbox != null ? xbox.characters.filter(function(item) { return item.deleted; }).length : 0)"></span>
+                <span> deleted characters.</span>
+              </p>
+              <br/>
+              <a class="btn light-blue lighten-2 activator">See character breakdown</a>
+            </div>
+            <div class="card-reveal" style="z-index: 999">
+              <span class="card-title grey-text text-darken-4">Characters<i class="zmdi zmdi-close zmdi-hc-lg right"></i></span>
+              <table>
+                <tbody data-bind="foreach: $root.allCharacters()">
+                  <tr data-bind="css: { 'red-text': deleted }">
+                    <td><i class="zmdi zmdi-hc-lg" data-bind="css: { 'zmdi-playstation': membershipType == 2, 'zmdi-xbox': membershipType == 1 }"></i> <span data-bind="text: (!deleted ? light + ' ' + characterClass + ' ' + race : 'Deleted')">335 Titan Human Awoken</span></td>
+                    <td data-bind="hours: timePlayed" class="right-align">1632h</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
         <div class="col s12 l6">
-          <div class="card indigo darken-4" id="yesPlaystation">
+          <!-- ko if: playstation -->
+          <div class="card indigo darken-4" data-bind="with: playstation">
             <div class="card-content white-text">
-              <img class="hide-on-small-only profile-image left" id="playstationIcon" src="" />
+              <img class="hide-on-small-only profile-image left" data-bind="attr: { src: 'https://www.bungie.net'+iconPath }" />
               <div>
-                <span class="card-title"><i class="zmdi zmdi-playstation zmdi-hc-lg"></i> <span id="playstationName"></span></span>
-                <span class="right" id="playstationRank"></span>
-                <h5><span id="playstationTime"></span> <small class="orange-text text-lighten-1" id="playstationWasted"></small></h5>
-                <span id="playstationPlayed"></span>
+                <span class="card-title"><i class="zmdi zmdi-playstation zmdi-hc-lg"></i> <span data-bind="text: displayName"></span></span>
+                <span class="right" data-bind="text: 'Top '+Math.ceil((leaderboardPosition / $root.leaderboard().totalPlayers) * 100)+'%'"></span>
+                <h5><span data-bind="hours: timePlayed"></span> <small class="orange-text text-lighten-1" data-bind="hours: timeWasted, format: '-? deleted'"></small></h5>
+                <span data-bind="text: 'Last played '+new Date(lastPlayed * 1000).toDateString()"></span>
               </div>
             </div>
             <div class="card-action">
-              <a class="white-text btn-link-block dropdown-button" data-activates="dropdown-playstation" href="#">View profile <i class="zmdi zmdi-chevron-down zmdi-hc-lg"></i></a>
+              <a class="white-text dropdown-button" data-activates="dropdown-playstation" data-constrainwidth="false" href="#">View profile <i class="zmdi zmdi-caret-down zmdi-hc-lg"></i></a>
+              <a class="white-text" href="#" data-bind="click: function(){ $root.loadLeaderboard(Math.floor(leaderboardPosition / 10) + 1); $root.scrollTo('#leaderboard'); }">View rank</i></a>
               <ul id='dropdown-playstation' class='dropdown-content'>
-                <li><a target="_blank" href="" onclick="ga('send', 'event', 'Playstation Profile', 'Bungie.net');" id="playstationBNGLink">Bungie.net</a></li>
-                <li><a target="_blank" href="" onclick="ga('send', 'event', 'Playstation Profile', 'DestinyTracker.com');" id="playstationDTCLink">DestinyTracker.com</a></li>
-                <li><a target="_blank" href="" onclick="ga('send', 'event', 'Playstation Profile', 'DestinyDB.com');" id="playstationDDBLink">DestinyDB.com</a></li>
-                <li><a target="_blank" href="" onclick="ga('send', 'event', 'Playstation Profile', 'Dinklebot.net');" id="playstationDNKLink">Dinklebot.net</a></li>
-                <li><a target="_blank" href="" onclick="ga('send', 'event', 'Playstation Profile', 'DestinyStatus.com');" id="playstationDSTLink">DestinyStatus.com</a></li>
-                <li><a target="_blank" href="" onclick="ga('send', 'event', 'Playstation Profile', 'Guardian.gg');" id="playstationGGGLink">Guardian.gg</a></li>
-                <li><a target="_blank" href="" onclick="ga('send', 'event', 'Playstation Profile', 'DestinyTrialsReport.com');" id="playstationDTRLink">DestinyTrialsReport.com</a></li>
+                <li><a target="_blank" onclick="ga('send', 'event', 'Playstation Profile', 'Bungie.net');" data-bind="attr: { href: 'https://bungie.net/en/Profile/'+membershipType+'/'+membershipId }">Bungie.net</a></li>
+                <li><a target="_blank" onclick="ga('send', 'event', 'Playstation Profile', 'DestinyTracker.com');" data-bind="attr: { href: 'https://destinytracker.com/destiny/player/ps/'+displayName.toLowerCase() }">DestinyTracker.com</a></li>
+                <li><a target="_blank" onclick="ga('send', 'event', 'Playstation Profile', 'DestinyDB.com');" data-bind="attr: { href: 'http://destinydb.com/profile/'+displayName.toLowerCase()+'/psn' }">DestinyDB.com</a></li>
+                <li><a target="_blank" onclick="ga('send', 'event', 'Playstation Profile', 'Dinklebot.net');" data-bind="attr: { href: 'http://dinklebot.net/'+membershipType+'/'+displayName.toLowerCase() }">Dinklebot.net</a></li>
+                <li><a target="_blank" onclick="ga('send', 'event', 'Playstation Profile', 'DestinyStatus.com');" data-bind="attr: { href: 'https://destinystatus.com/psn/'+displayName.toLowerCase() }">DestinyStatus.com</a></li>
+                <li><a target="_blank" onclick="ga('send', 'event', 'Playstation Profile', 'Guardian.gg');" data-bind="attr: { href: 'https://guardian.gg/en/profile/'+membershipType+'/'+displayName.toLowerCase() }">Guardian.gg</a></li>
+                <li><a target="_blank" onclick="ga('send', 'event', 'Playstation Profile', 'DestinyTrialsReport.com');" data-bind="attr: { href: 'https://my.destinytrialsreport.com/ps/'+displayName.toLowerCase() }">DestinyTrialsReport.com</a></li>
               </ul>
             </div>
           </div>
-          <div class="card grey lighten-4 hide" id="noPlaystation">
+          <!-- /ko -->
+          <!-- ko ifnot: playstation -->
+          <div class="card grey lighten-4">
             <div class="card-content grey-text">
-              <span class="flow-text"><i class="zmdi zmdi-playstation zmdi-hc-lg"></i> Play Destiny on Playstation 3 or Playstation 4 and link your profile on Bungie.net to see your stats appear.</span>
+              <span class="flow-text"><i class="zmdi zmdi-playstation zmdi-hc-lg"></i> Play Destiny on Playstation 4 and link your profile on Bungie.net to see your stats appear.</span>
             </div>
           </div>
-          <div class="card green darken-4" id="yesXbox">
+          <!-- /ko -->
+          <!-- ko if: xbox -->
+          <div class="card green darken-4" data-bind="with: xbox">
             <div class="card-content white-text">
-              <img class="hide-on-small-only profile-image left" id="xboxIcon" src="" />
+              <img class="hide-on-small-only profile-image left" data-bind="attr: { src: 'https://www.bungie.net'+iconPath }" />
               <div>
-                <span class="card-title"><i class="zmdi zmdi-xbox zmdi-hc-lg"></i> <span id="xboxName"></span></span>
-                <span class="right" id="xboxRank"></span>
-                <h5><span id="xboxTime"></span> <small class="orange-text text-lighten-1" id="xboxWasted"></small></h5>
-                <span id="xboxPlayed"></span>
+                <span class="card-title"><i class="zmdi zmdi-xbox zmdi-hc-lg"></i> <span data-bind="text: displayName"></span></span>
+                <span class="right" data-bind="text: 'Top '+Math.ceil((leaderboardPosition / $root.leaderboard().totalPlayers) * 100)+'%'"></span>
+                <h5><span data-bind="hours: timePlayed"></span> <small class="orange-text text-lighten-1" data-bind="hours: timeWasted, format: '-? deleted'"></small></h5>
+                <span data-bind="text: 'Last played '+new Date(lastPlayed * 1000).toDateString()"></span>
               </div>
             </div>
             <div class="card-action">
-              <a class="white-text btn-link-block dropdown-button" data-activates="dropdown-xbox" href="#">View profile <i class="zmdi zmdi-chevron-down zmdi-hc-lg"></i></a>
+              <a class="white-text dropdown-button" data-activates="dropdown-xbox" data-constrainwidth="false" href="#">View profile <i class="zmdi zmdi-caret-down zmdi-hc-lg"></i></a>
+              <a class="white-text" href="#" data-bind="click: function(){ $root.loadLeaderboard(Math.floor(leaderboardPosition / 10) + 1); $root.scrollTo('#leaderboard'); }">View rank</i></a>
               <ul id='dropdown-xbox' class='dropdown-content'>
-                <li><a target="_blank" href="" onclick="ga('send', 'event', 'Xbox Profile', 'Bungie.net');" id="xboxBNGLink">Bungie.net</a></li>
-                <li><a target="_blank" href="" onclick="ga('send', 'event', 'Xbox Profile', 'DestinyTracker.com');" id="xboxDTCLink">DestinyTracker.com</a></li>
-                <li><a target="_blank" href="" onclick="ga('send', 'event', 'Xbox Profile', 'DestinyDB.com');" id="xboxDDBLink">DestinyDB.com</a></li>
-                <li><a target="_blank" href="" onclick="ga('send', 'event', 'Xbox Profile', 'Dinklebot.net');" id="xboxDNKLink">Dinklebot.net</a></li>
-                <li><a target="_blank" href="" onclick="ga('send', 'event', 'Xbox Profile', 'DestinyStatus.com');" id="xboxDSTLink">DestinyStatus.com</a></li>
-                <li><a target="_blank" href="" onclick="ga('send', 'event', 'Xbox Profile', 'Guardian.gg');" id="xboxGGGLink">Guardian.gg</a></li>
-                <li><a target="_blank" href="" onclick="ga('send', 'event', 'Xbox Profile', 'DestinyTrialsReport.com');" id="xboxDTRLink">DestinyTrialsReport.com</a></li>
+                <li><a target="_blank" onclick="ga('send', 'event', 'Xbox Profile', 'Bungie.net');" data-bind="attr: { href: 'https://bungie.net/en/Profile/'+membershipType+'/'+membershipId }">Bungie.net</a></li>
+                <li><a target="_blank" onclick="ga('send', 'event', 'Xbox Profile', 'DestinyTracker.com');" data-bind="attr: { href: 'https://destinytracker.com/destiny/player/xb/'+displayName.toLowerCase() }">DestinyTracker.com</a></li>
+                <li><a target="_blank" onclick="ga('send', 'event', 'Xbox Profile', 'DestinyDB.com');" data-bind="attr: { href: 'http://destinydb.com/profile/'+displayName.toLowerCase()+'/xbl' }">DestinyDB.com</a></li>
+                <li><a target="_blank" onclick="ga('send', 'event', 'Xbox Profile', 'Dinklebot.net');" data-bind="attr: { href: 'http://dinklebot.net/'+membershipType+'/'+displayName.toLowerCase() }">Dinklebot.net</a></li>
+                <li><a target="_blank" onclick="ga('send', 'event', 'Xbox Profile', 'DestinyStatus.com');" data-bind="attr: { href: 'https://destinystatus.com/xbox/'+displayName.toLowerCase() }">DestinyStatus.com</a></li>
+                <li><a target="_blank" onclick="ga('send', 'event', 'Xbox Profile', 'Guardian.gg');" data-bind="attr: { href: 'https://guardian.gg/en/profile/'+membershipType+'/'+displayName.toLowerCase() }">Guardian.gg</a></li>
+                <li><a target="_blank" onclick="ga('send', 'event', 'Xbox Profile', 'DestinyTrialsReport.com');" data-bind="attr: { href: 'https://my.destinytrialsreport.com/xb/'+displayName.toLowerCase() }">DestinyTrialsReport.com</a></li>
               </ul>
             </div>
           </div>
-          <div class="card grey lighten-4 hide" id="noXbox">
+          <!-- /ko -->
+          <!-- ko ifnot: xbox -->
+          <div class="card grey lighten-4">
             <div class="card-content grey-text">
-              <span class="flow-text"><i class="zmdi zmdi-xbox zmdi-hc-lg"></i> Play Destiny on Xbox 360 or Xbox One and link your profile on Bungie.net to see your stats appear.</span>
+              <span class="flow-text"><i class="zmdi zmdi-xbox zmdi-hc-lg"></i> Play Destiny on Xbox One and link your profile on Bungie.net to see your stats appear.</span>
             </div>
           </div>
+          <!-- /ko -->
         </div>
       </div>
     </div>
   </div>
 
-  <div class="section">
-    <div class="container row">
-      <div class="col s12 m6">
-        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6332373031553935" data-ad-slot="7124654099" data-ad-format="auto"></ins>
-        <script>
-          (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
-      <div class="col s12 m6">
-        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6332373031553935" data-ad-slot="7124654099" data-ad-format="auto"></ins>
-        <script>
-          (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
+  <div class="section container row">
+    <div class="col s12 m6">
+      <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6332373031553935" data-ad-slot="7124654099" data-ad-format="auto"></ins>
+      <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+    <div class="col s12 m6">
+      <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6332373031553935" data-ad-slot="7124654099" data-ad-format="auto"></ins>
+      <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
     </div>
   </div>
 
@@ -237,8 +302,8 @@
     </div>
   </footer>
 
-  <div class="fixed-action-btn hide" id="returnToTopElem" style="bottom: 35px; right: 35px;">
-    <a id="returnToTop" class="btn-floating btn-large red">
+  <div class="fixed-action-btn hide" id="returnToTop" style="bottom: 35px; right: 35px;">
+    <a data-bind="click: function() { scrollTo('#index-banner'); }" href="#" class="btn-floating btn-large red">
       <i class="zmdi zmdi-chevron-up zmdi-lg"></i>
     </a>
   </div>
@@ -246,8 +311,15 @@
   <!--  Scripts-->
   <script src="https://code.jquery.com/jquery-2.2.2.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.0/knockout-min.js"></script>
   <script src="/js/konami.js"></script>
-  <script src="/js/init.js"></script>
+  <!--<script src="/js/init.js"></script>-->
+  <script src="/js/viewmodel.js"></script>
+  <script>
+    var vm = new ViewModel();
+    ko.applyBindings(vm);
+    vm.load();
+  </script>
   <script>
     (function(i, s, o, g, r, a, m) {
       i['GoogleAnalyticsObject'] = r;

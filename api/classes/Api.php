@@ -11,7 +11,7 @@ class Api {
 	 * The current API version
 	 * @var string
 	 */
-	const VERSION = "1.10";
+	const VERSION = "1.11";
 	
 	/**
 	 * The main website's domain name
@@ -145,6 +145,7 @@ class Api {
 				$count++;
 			}
 			
+			$leaderboard['page'] = $page;
 			$leaderboard['totalPlayers'] = Leaderboard::getTotalPlayers();
 				
 			if (empty(self::$warnStatus)) {

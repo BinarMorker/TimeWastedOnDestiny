@@ -58,6 +58,7 @@ $("document").ready(function () {
 	
 	function leaderboard (page, callback) {
         var jsonUrl = "/api?leaderboard&page="+page+"&"+new Date().getTime();
+        var players = [];
 		$("#leaderboard").html("");
         $.getJSON(jsonUrl, function (json) {
         	if (json.Info.Status != "Error") {
@@ -65,7 +66,9 @@ $("document").ready(function () {
         		for (row in json.Response.leaderboard) {
                     var clickEvent = "ga('send', 'event', 'Leaderboard', 'View profile', '"+json.Response.leaderboard[row].membershipType+"/"+json.Response.leaderboard[row].displayName+"');";
             		$("#leaderboard").append('<a href="/'+(json.Response.leaderboard[row].membershipType==1?"xbox":"playstation")+'/'+json.Response.leaderboard[row].displayName.toLowerCase()+'" class="collection-item row" onclick="'+clickEvent+'"><span class="col s2">'+json.Response.leaderboard[row].rank+'</span><span class="col s7"><img style="margin-bottom:-3px" height="18" width="18" src="/img/'+(json.Response.leaderboard[row].membershipType==1?"xbox":"playstation")+'-icon-black.svg" /> '+json.Response.leaderboard[row].displayName+'</span><span class="col s3 right-align">'+getHours(json.Response.leaderboard[row].timePlayed)+'</span></a>');
+                    players.push($("#leaderboard").children().last());
         		}
+            	$("#leaderboard").append('<a id="currentUserPosition" href="#"></a>');
                 var leftDisabled = page == 1;
                 var rightDisabled = json.Response.totalPlayers <= (page * 10);
                 var leftButton = "<a href='#' class='btn-invis left' id='leftLeaderboardButton'><i class='zmdi zmdi-chevron-left zmdi-hc-lg'></i></a>";
@@ -89,7 +92,7 @@ $("document").ready(function () {
                 }
         	}
             if (typeof callback === "function") {
-            	callback();
+            	callback(players);
             }
         });
 	}
@@ -181,10 +184,19 @@ $("document").ready(function () {
                     }
                     if (json.Response.newEntry == true) {
                         ga('send', 'event', 'Search', 'New User', platform + '/' + json.Response.displayName);
-                    	leaderboard(1);
                     } else {
                         ga('send', 'event', 'Search', 'Existing user', platform + '/' + json.Response.displayName);
                     }
+                    leaderboard(1, function(players) {
+                        if (json.Response[(platform==1?"xbox":"playstation")].leaderboardPosition < 11) {
+                            $("#currentUserPosition").remove();
+                            currentEntry = players.filter(function(item) {
+                                return item.attr('data-id') == json.Response[(platform==1?"xbox":"playstation")].membershipId;
+                            });
+                        } else {
+                            $("#currentUserPosition").addClass("collection-item row").html('<span class="col s2">'+json.Response[(platform==1?"xbox":"playstation")].leaderboardPosition+'</span><span class="col s7"><img style="margin-bottom:-3px" height="18" width="18" src="/img/'+(platform==1?"xbox":"playstation")+'-icon-black.svg" /> '+json.Response[(platform==1?"xbox":"playstation")].displayName+'</span><span class="col s3 right-align">'+getHours(json.Response[(platform==1?"xbox":"playstation")].timePlayed)+'</span>');
+                        }
+                    });
                     $("#panels").removeClass("hide");
                     scrollTo("#panels");
                 } else {

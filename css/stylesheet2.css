@@ -12,6 +12,14 @@ footer.page-footer {
 	margin-top: 0px;
 }
 
+.row {
+    margin-bottom: 0;
+}
+
+td, th {
+    padding: 5px;
+}
+
 .collection .collection-item {
 	padding: 5px 20px;
 }
@@ -37,7 +45,7 @@ footer.page-footer {
 }
 
 #index-banner {
-    background: url('../img/background.jpg') no-repeat center center fixed;
+    background: black no-repeat center center fixed;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     background-size: cover;
@@ -52,11 +60,11 @@ footer.page-footer {
 }
 
 .card.small {
-	height: 250px;
+	height: 300px;
 }
 
 .card.small .card-image {
-	height: 30%;
+	height: 75px;
 }
 
 .profile-image {

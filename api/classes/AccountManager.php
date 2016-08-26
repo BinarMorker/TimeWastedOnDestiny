@@ -67,7 +67,7 @@ class AccountManager {
 				);
 			}
 		}
-		
+
 		try {
 			$bungieAccountRequest = BungieNetPlatform::getBungieAccount(
 				$playerRequest[0]->membershipType, 
@@ -76,6 +76,30 @@ class AccountManager {
 			if (Config::get('debug')) $this->apiQueries[] = $bungieAccountRequest;
 		} catch (Exception $exception) {
 			throw ApiException::copy($exception);
+		}
+
+		$exclusion = Exclusions::getDestinyAccount(
+			$playerRequest[0]->membershipType, 
+			$playerRequest[0]->membershipId
+		);
+		
+		if ($exclusion != null) {
+			try {
+				$extraBungieAccountRequest = BungieNetPlatform::getBungieAccount(
+					$playerRequest[0]->membershipType == 1 ? 2 : 1, 
+					$playerRequest[0]->membershipType == 1 ? $exclusion->playstation : $exclusion->xbox
+				);
+				$bungieAccountRequest->destinyAccounts = array_merge(array_filter($bungieAccountRequest->destinyAccounts, function($item) use ($playerRequest) {
+					return $item->userInfo->membershipType == $playerRequest[0]->membershipType;
+				}), array_filter($extraBungieAccountRequest->destinyAccounts, function($item) use ($playerRequest) {
+					return $item->userInfo->membershipType != $playerRequest[0]->membershipType;
+				}));
+				$bungieAccountRequest->bungieNetUser = new stdClass();
+				$bungieAccountRequest->bungieNetUser->displayName = $exclusion->displayName;
+				if (Config::get('debug')) $this->apiQueries[] = $bungieAccountRequest;
+			} catch (Exception $exception) {
+				throw ApiException::copy($exception);
+			}
 		}
 
 		if (count($bungieAccountRequest->destinyAccounts) > 0) {
@@ -126,6 +150,8 @@ class AccountManager {
 		$data['totalTimeWasted'] = 0;
 		$data['lastPlayed'] = 0;
 		$data['newEntry'] = false;
+		$data['xbox'] = null;
+		$data['playstation'] = null;
 		
 		foreach ($this->destinyAccounts as $destinyAccount) {
 			if (Leaderboard::isNew(
@@ -147,7 +173,7 @@ class AccountManager {
 				throw ApiException::copy($exception);
 			}
 			
-			$currentData->characters = new stdClass();
+			/*$currentData->characters = new stdClass();
 			$currentData->characters->total = count($accountStats->characters);
 			$currentData->characters->deleted = 0;
 			
@@ -155,6 +181,14 @@ class AccountManager {
 				if ($character->deleted) {
 					$currentData->characters->deleted++;
 				}
+			}*/
+
+			foreach ($accountStats->characters as $character) {
+				$currentCharacter = new stdClass();
+				$currentCharacter->characterId = $character->characterId;
+				$currentCharacter->deleted = $character->deleted;
+				$currentCharacter->timePlayed = $character->merged->allTime->secondsPlayed->basic->value;
+				$currentData->characters[] = $currentCharacter;
 			}
 
 			if (isset($accountStats->mergedAllCharacters->
@@ -180,6 +214,18 @@ class AccountManager {
 			$currentData->lastPlayed = 0;
 			
 			foreach ($destinyAccount->characters as $character) {
+				foreach ($currentData->characters as $key => $currentChar) {
+					if ($currentChar->characterId == $character->characterId) {
+						$gender = $character->gender->genderName;
+						$characterClass = $character->characterClass->{'className'.$gender};
+						$race = $character->race->{'raceName'.$gender};
+						$currentData->characters[$key]->light = $character->powerLevel;
+						$currentData->characters[$key]->characterClass = $characterClass;
+						$currentData->characters[$key]->race = $race;
+						break;
+					}
+				}
+
 				$dateLastPlayed = date("U", 
 					strtotime($character->dateLastPlayed)
 				);

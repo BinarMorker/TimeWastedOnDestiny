@@ -171,5 +171,58 @@ class BungieNetPlatform {
 			}
 		}
 	}
+
+	/**
+	 * Get all members for a clan
+	 * @param int $platformType The console Id
+	 * @param int $clanId The clan Id
+	 * @param int $page The current page to query
+	 * @param array $params Other parameters link language and definition
+	 * @return The response object
+	 * @throws BungieNetPlatformException
+	 * @link http://destinydevs.github.io/BungieNetPlatform/docs/GroupService/GetMembersOfClan
+	 */
+	public static function getClanMembers(
+		$platformType, 
+		$clanId, 
+		$page, 
+		$params = null
+	) {
+		try {
+			$uri = new ExternalURIRequest(
+				self::BUNGIE_URI.
+				"Group/".
+				$clanId."/".
+				"ClanMembers/?".
+				"platformType=".
+				$membershipId."&".
+				"currentPage=".
+				$page
+			);
+			$uri->addParams($params);
+			$result = json_decode(preg_replace("/\bNaN\b/", "null", $uri->query("GET", Config::get('apiKey'))));
+
+			if (in_array(
+				$result->ErrorCode, 
+				BungieNetPlatformError::getErrors()
+			)) {
+				throw new BungieNetPlatformException(
+					$result->Message, 
+					$result->ErrorCode
+				);
+			}
+
+			return $result->Response;
+		} catch (ExternalURIRequestException $exception) {
+			if (Config::get("debug")) {
+				throw $exception;
+			} else {
+				throw new BungieNetPlatformException(
+					'Could not access stats at this time.', 
+					500
+				);
+			}
+		}
+	}
 	
 }
