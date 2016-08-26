@@ -37,7 +37,7 @@ td, th {
 .collection span.collection-footer {
     background-color: #fff;
     line-height: 1.5rem;
-    padding: 10px 20px;
+    padding: 10px 5px;
     margin: 0;
     display: block;
     font-size: 1rem;
@@ -73,7 +73,7 @@ td, th {
 }
 
 .btn-invis {
-    margin: -0.5rem;
+    margin: -0.5rem 0;
     height: 2.5rem;
     width: 2.5rem;
     line-height: 2.5rem;

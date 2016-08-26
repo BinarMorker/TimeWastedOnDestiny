@@ -7,12 +7,18 @@ function ViewModel() {
     self.player = ko.observable(null);
     self.leaderboard = ko.observable(null);
 
-    self.searchPlayer = function() {
+    self.searchPlayer = function(leaderboard) {
         self.loading(true);
         var jsonUrl = "/api?console=" + self.platform() + "&user=" + self.username();
         var deferred = $.getJSON(jsonUrl, function(json) {
             self.loading(false);
             self.showError(json.Info);
+
+            if (leaderboard == undefined) {
+                ga('send', 'event', 'Search Player', json.Info.Message, self.platform() + ' - ' + self.username());
+            } else {
+                ga('send', 'event', 'Leaderboard', json.Info.Message, self.platform() + ' - ' + self.username());
+            }
 
             if (json.Info.Status != 'Error') {
                 self.player(json.Response);
@@ -41,17 +47,6 @@ function ViewModel() {
         });
         return deferred;
     }
-
-    /*self.shuffle = function(a) {
-        var j, x, i;
-        for (i = a.length; i; i--) {
-            j = Math.floor(Math.random() * i);
-            x = a[i - 1];
-            a[i - 1] = a[j];
-            a[j] = x;
-        }
-        return a;
-    }*/
 
     self.allCharacters = ko.computed(function() {
         var characters = [];
@@ -176,7 +171,16 @@ function ViewModel() {
         });
     }
 
+    self.firstPage = function() {
+        ga('send', 'event', 'Links', 'First Page');
+        var page = self.leaderboard().page;
+        if (page != 1) {
+            self.loadLeaderboard(1);
+        }
+    }
+
     self.previousPage = function() {
+        ga('send', 'event', 'Links', 'Previous Page');
         var page = self.leaderboard().page;
         if (page != 1) {
             self.loadLeaderboard(parseInt(page) - 1);
@@ -184,6 +188,7 @@ function ViewModel() {
     }
 
     self.nextPage = function() {
+        ga('send', 'event', 'Links', 'Next Page');
         var page = self.leaderboard().page;
         if ((page * 10) < self.leaderboard().totalPlayers) {
             self.loadLeaderboard(parseInt(page) + 1);
