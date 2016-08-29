@@ -187,7 +187,7 @@
               <a class="white-text dropdown-button" data-bind="click: function() { ga('send', 'event', 'Links', 'Profile'); }" data-activates="dropdown-playstation" data-constrainwidth="false" href="#">View profile <i class="zmdi zmdi-caret-down zmdi-hc-lg"></i></a>
               <a class="white-text" href="#" data-bind="click: function(){ ga('send', 'event', 'Links', 'View Rank'); $root.loadLeaderboard(Math.floor((leaderboardPosition - 1) / 10) + 1); $root.scrollTo('#leaderboard'); }">View rank</a>
               <!-- ko if: clan -->
-              <a class="white-text activator" href="#" data-bind="click: function(){ ga('send', 'event', 'Links', 'View Clan'); $root.loadClan(2, clan.id, 1); }, text: 'View clan [' + (clan.tag != '' ? clan.tag : clan.name) + ']'"></a>
+              <!--<a class="white-text activator" href="#" data-bind="click: function(){ ga('send', 'event', 'Links', 'View Clan'); $root.loadClan(2, clan.id, 1); }, text: 'View clan [' + (clan.tag != '' ? clan.tag : clan.name) + ']'"></a>-->
               <!-- /ko -->
               <ul id='dropdown-playstation' class='dropdown-content'>
                 <li><a target="_blank" onclick="ga('send', 'event', 'Links', 'Bungie.net');" data-bind="attr: { href: 'https://bungie.net/en/Profile/'+membershipType+'/'+membershipId }">Bungie.net</a></li>
@@ -261,7 +261,7 @@
               <a class="white-text dropdown-button" data-bind="click: function() { ga('send', 'event', 'Links', 'Profile'); }" data-activates="dropdown-xbox" data-constrainwidth="false" href="#">View profile <i class="zmdi zmdi-caret-down zmdi-hc-lg"></i></a>
               <a class="white-text" href="#" data-bind="click: function(){ ga('send', 'event', 'Links', 'View Rank'); $root.loadLeaderboard(Math.floor((leaderboardPosition - 1) / 10) + 1); $root.scrollTo('#leaderboard'); }">View rank</a>
               <!-- ko if: clan -->
-              <a class="white-text activator" href="#" data-bind="click: function(){ ga('send', 'event', 'Links', 'View Clan'); $root.loadClan(1, clan.id, 1); }, text: 'View clan [' + (clan.tag != '' ? clan.tag : clan.name) + ']'"></a>
+              <!--<a class="white-text activator" href="#" data-bind="click: function(){ ga('send', 'event', 'Links', 'View Clan'); $root.loadClan(1, clan.id, 1); }, text: 'View clan [' + (clan.tag != '' ? clan.tag : clan.name) + ']'"></a>-->
               <!-- /ko -->
               <ul id='dropdown-xbox' class='dropdown-content'>
                 <li><a target="_blank" onclick="ga('send', 'event', 'Profile', 'Bungie.net');" data-bind="attr: { href: 'https://bungie.net/en/Profile/'+membershipType+'/'+membershipId }">Bungie.net</a></li>
