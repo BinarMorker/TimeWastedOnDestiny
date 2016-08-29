@@ -2,7 +2,7 @@
 
 /**
  * The response info block definition
- * @author François Allard <binarmorker@gmail.com>
+ * @author FranÃ§ois Allard <binarmorker@gmail.com>
  * @version 1.8
  */
 abstract class ResponseInfo {

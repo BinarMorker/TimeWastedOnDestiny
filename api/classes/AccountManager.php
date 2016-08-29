@@ -2,8 +2,8 @@
 
 /**
  * Manage Destiny accounts and get relevant information
- * @author Fran�ois Allard <binarmorker@gmail.com>
- * @version 1.8
+ * @author François Allard <binarmorker@gmail.com>
+ * @version 1.11
  */
 class AccountManager {
 	
@@ -89,6 +89,7 @@ class AccountManager {
 					$playerRequest[0]->membershipType == 1 ? 2 : 1, 
 					$playerRequest[0]->membershipType == 1 ? $exclusion->playstation : $exclusion->xbox
 				);
+				if (Config::get('debug')) $this->apiQueries[] = $extraBungieAccountRequest;
 				$bungieAccountRequest->destinyAccounts = array_merge(array_filter($bungieAccountRequest->destinyAccounts, function($item) use ($playerRequest) {
 					return $item->userInfo->membershipType == $playerRequest[0]->membershipType;
 				}), array_filter($extraBungieAccountRequest->destinyAccounts, function($item) use ($playerRequest) {
@@ -96,7 +97,6 @@ class AccountManager {
 				}));
 				$bungieAccountRequest->bungieNetUser = new stdClass();
 				$bungieAccountRequest->bungieNetUser->displayName = $exclusion->displayName;
-				if (Config::get('debug')) $this->apiQueries[] = $bungieAccountRequest;
 			} catch (Exception $exception) {
 				throw ApiException::copy($exception);
 			}
@@ -160,7 +160,6 @@ class AccountManager {
 				$data['newEntry'] = true;
 			}
 		
-			$currentData = array();
 			$currentData = $destinyAccount->userInfo;
 			
 			try {
@@ -172,16 +171,21 @@ class AccountManager {
 			} catch (Exception $exception) {
 				throw ApiException::copy($exception);
 			}
-			
-			/*$currentData->characters = new stdClass();
-			$currentData->characters->total = count($accountStats->characters);
-			$currentData->characters->deleted = 0;
-			
-			foreach ($accountStats->characters as $character) {
-				if ($character->deleted) {
-					$currentData->characters->deleted++;
-				}
-			}*/
+
+			$clan = array_filter($this->bungieAccount->clans, function($item) use ($destinyAccount) {
+				return $item->platformType == $destinyAccount->userInfo->membershipType;
+			});
+
+			if (count($clan) > 0) {
+				$clanObj = new stdClass();
+				$clanObj->id = current($clan)->groupId;
+				$clanDetails = $this->bungieAccount->relatedGroups->{$clanObj->id};
+				$clanObj->name = $clanDetails->name;
+				$clanObj->tag = $clanDetails->clanCallsign;
+				$currentData->clan = $clanObj;
+			} else {
+				$currentData->clan = null;
+			}
 
 			foreach ($accountStats->characters as $character) {
 				$currentCharacter = new stdClass();
@@ -261,10 +265,6 @@ class AccountManager {
 		if (Config::get('debug') && $debug) {
 			$data['debug'] = true;
 			$data['apiQueries'] = $this->apiQueries;
-			$data['characters'] = array_map(function($x) {
-				return $x->characterId;
-			}, $accountStats->characters);
-			$data['count'] = count($accountStats->characters);
 		}
 		
 		return $data;

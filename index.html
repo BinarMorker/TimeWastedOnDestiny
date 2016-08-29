@@ -10,13 +10,13 @@
   <meta property="og:description" content="How much time have you wasted on Destiny?" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="http://wastedondestiny.com" />
-  <meta property="og:image" content="http://wastedondestiny.com/img/background.jpg" />
+  <meta property="og:image" content="http://wastedondestiny.com/img/opengraph.jpg" />
   <title>Time Wasted on Destiny</title>
 
   <!-- CSS  -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css" type="text/css" rel="stylesheet" media="screen,projection" />
-  <link href="/css/stylesheet2.css" type="text/css" rel="stylesheet" media="screen,projection" />
+  <link href="/css/stylesheet.css" type="text/css" rel="stylesheet" media="screen,projection" />
 </head>
 
 <body>
@@ -24,13 +24,10 @@
     <div class="container">
       <div class="row">
         <div class="col s12 l6">
-          <a href="/" data-bind="click: function() { ga('send', 'event', 'Links', 'Return to home'); }">
+          <a href="/" onclick="ga('send', 'event', 'Links', 'Return to home');">
             <div class="card-panel transluscent">
               <h1 class="header center header-text white-text">
-                <img class="hide-on-med-and-up responsive-img" src="/img/Logo_White.png" />
-                <img class="hide-on-small-only responsive-img" src="/img/Logo_White_Small.png" />
-                <img class="hide-on-med-and-up" height="60px" width="60px" src="/img/destiny-icon.svg" />
-                <img class="hide-on-small-only responsive-img" src="/img/Destiny_Logo_Horizontal_White.png" />
+                <img class="responsive-img" src="/img/logo.png" />
               </h1>
             </div>
           </a>
@@ -94,10 +91,10 @@
             </a>
             <!-- /ko -->
             <span class="collection-footer">
-              <a href='#' class='btn-invis left' data-bind='click: $parent.firstPage, visible: parseInt(page) > 1'><i class='zmdi zmdi-chevron-left zmdi-hc-lg'></i><i class='zmdi zmdi-chevron-left zmdi-hc-lg'></i></i></a>
-              <a href='#' class='btn-invis left' data-bind='click: $parent.previousPage, visible: parseInt(page) > 1'><i class='zmdi zmdi-chevron-left zmdi-hc-lg'></i></a>
+              <a href='#' class='btn-invis left' data-bind='click: $parent.firstLeaderboardPage, visible: parseInt(page) > 1'><i class='zmdi zmdi-chevron-left zmdi-hc-lg'></i><i class='zmdi zmdi-chevron-left zmdi-hc-lg'></i></i></a>
+              <a href='#' class='btn-invis left' data-bind='click: $parent.previousLeaderboardPage, visible: parseInt(page) > 1'><i class='zmdi zmdi-chevron-left zmdi-hc-lg'></i></a>
                 Page: <span data-bind="text: page"></span>, Players: <span data-bind="text: totalPlayers"></span>
-              <a href='#' class='btn-invis right' data-bind='click: $parent.nextPage, visible: (parseInt(page) * 10) < parseInt(totalPlayers)'><i class='zmdi zmdi-chevron-right zmdi-hc-lg'></i></a>
+              <a href='#' class='btn-invis right' data-bind='click: $parent.nextLeaderboardPage, visible: (parseInt(page) * 10) < parseInt(totalPlayers)'><i class='zmdi zmdi-chevron-right zmdi-hc-lg'></i></a>
             </span>
           </div>
         </div>
@@ -166,8 +163,8 @@
               <table>
                 <tbody data-bind="foreach: $root.allCharacters()">
                   <tr data-bind="css: { 'red-text': deleted }">
-                    <td><i class="zmdi zmdi-hc-lg" data-bind="css: { 'zmdi-playstation': membershipType == 2, 'zmdi-xbox': membershipType == 1 }"></i> <span data-bind="text: (!deleted ? light + ' ' + characterClass + ' ' + race : 'Deleted')">335 Titan Human Awoken</span></td>
-                    <td data-bind="hours: timePlayed" class="right-align">1632h</td>
+                    <td><i class="zmdi zmdi-hc-lg" data-bind="css: { 'zmdi-playstation': membershipType == 2, 'zmdi-xbox': membershipType == 1 }"></i> <span data-bind="text: (!deleted ? light + ' ' + characterClass + ' ' + race : 'Deleted')"></span></td>
+                    <td data-bind="hours: timePlayed" class="right-align"></td>
                   </tr>
                 </tbody>
               </table>
@@ -178,17 +175,20 @@
           <!-- ko if: playstation -->
           <div class="card indigo darken-4" data-bind="with: playstation">
             <div class="card-content white-text">
-              <img class="hide-on-small-only profile-image left" data-bind="attr: { src: 'https://www.bungie.net'+iconPath }" />
+              <img class="hide-on-small-only profile-image left" data-bind="attr: { src: 'https://www.bungie.net' + iconPath }" />
               <div>
                 <span class="card-title"><i class="zmdi zmdi-playstation zmdi-hc-lg"></i> <span data-bind="text: displayName"></span></span>
-                <span class="right" data-bind="text: 'Top '+Math.ceil((leaderboardPosition / $root.leaderboard().totalPlayers) * 100)+'%'"></span>
+                <span class="right" data-bind="text: 'Top ' + Math.ceil((leaderboardPosition / $root.leaderboard().totalPlayers) * 100) + '%'"></span>
                 <h5><span data-bind="hours: timePlayed"></span> <small class="orange-text text-lighten-1" data-bind="hours: timeWasted, format: '-? deleted'"></small></h5>
-                <span data-bind="text: 'Last played '+new Date(lastPlayed * 1000).toDateString()"></span>
+                <span data-bind="text: 'Last played ' + new Date(lastPlayed * 1000).toDateString()"></span>
               </div>
             </div>
             <div class="card-action">
               <a class="white-text dropdown-button" data-bind="click: function() { ga('send', 'event', 'Links', 'Profile'); }" data-activates="dropdown-playstation" data-constrainwidth="false" href="#">View profile <i class="zmdi zmdi-caret-down zmdi-hc-lg"></i></a>
-              <a class="white-text" href="#" data-bind="click: function(){ ga('send', 'event', 'Links', 'View Rank'); $root.loadLeaderboard(Math.floor((leaderboardPosition - 1) / 10) + 1); $root.scrollTo('#leaderboard'); }">View rank</i></a>
+              <a class="white-text" href="#" data-bind="click: function(){ ga('send', 'event', 'Links', 'View Rank'); $root.loadLeaderboard(Math.floor((leaderboardPosition - 1) / 10) + 1); $root.scrollTo('#leaderboard'); }">View rank</a>
+              <!-- ko if: clan -->
+              <a class="white-text activator" href="#" data-bind="click: function(){ ga('send', 'event', 'Links', 'View Clan'); $root.loadClan(2, clan.id, 1); }, text: 'View clan [' + (clan.tag != '' ? clan.tag : clan.name) + ']'"></a>
+              <!-- /ko -->
               <ul id='dropdown-playstation' class='dropdown-content'>
                 <li><a target="_blank" onclick="ga('send', 'event', 'Links', 'Bungie.net');" data-bind="attr: { href: 'https://bungie.net/en/Profile/'+membershipType+'/'+membershipId }">Bungie.net</a></li>
                 <li><a target="_blank" onclick="ga('send', 'event', 'Links', 'DestinyTracker.com');" data-bind="attr: { href: 'https://destinytracker.com/destiny/player/ps/'+displayName.toLowerCase() }">DestinyTracker.com</a></li>
@@ -198,6 +198,44 @@
                 <li><a target="_blank" onclick="ga('send', 'event', 'Links', 'Guardian.gg');" data-bind="attr: { href: 'https://guardian.gg/en/profile/'+membershipType+'/'+displayName.toLowerCase() }">Guardian.gg</a></li>
                 <li><a target="_blank" onclick="ga('send', 'event', 'Links', 'DestinyTrialsReport.com');" data-bind="attr: { href: 'https://my.destinytrialsreport.com/ps/'+displayName.toLowerCase() }">DestinyTrialsReport.com</a></li>
               </ul>
+            </div>
+            <div class="card-reveal collection" style="z-index: 999">
+              <!-- ko with: $root.playstationClan -->
+              <span class="collection-header card-title grey-text text-darken-4" data-bind="html: $parent.clan.name + '<i class=\'zmdi zmdi-close zmdi-hc-lg right\'></i>'"></span>
+              <!-- ko foreach: players -->
+              <a href="#" class="collection-item row black-text" data-bind="click: function() { $root.platform(membershipType); $root.username(displayName); $root.searchPlayer(); }, css: { 'orange lighten-2 white-text': $root.isActivePlayer($data) }">
+                <span class="col s8">
+                  <i class="zmdi zmdi-hc-lg" data-bind="css: { 'zmdi-playstation': membershipType == 2, 'zmdi-xbox': membershipType == 1 }"></i> <span data-bind="text: displayName"></span>
+                </span>
+                <span class="col s4 right-align" data-bind="hours: timePlayed"></span>
+              </a>
+              <!-- /ko -->
+              <span class="collection-footer">
+                <a href='#' class='btn-invis left' data-bind='click: function() { $root.firstClanPage(2, $parent.clan.id); }, visible: parseInt(page) > 1'><i class='zmdi zmdi-chevron-left zmdi-hc-lg'></i><i class='zmdi zmdi-chevron-left zmdi-hc-lg'></i></i></a>
+                <a href='#' class='btn-invis left' data-bind='click: function() { $root.previousClanPage(2, $parent.clan.id); }, visible: parseInt(page) > 1'><i class='zmdi zmdi-chevron-left zmdi-hc-lg'></i></a>
+                  Page: <span data-bind="text: page"></span>, Players: <span data-bind="text: total"></span>
+                <a href='#' class='btn-invis right' data-bind='click: function() { $root.nextClanPage(2, $parent.clan.id); }, visible: (parseInt(page) * 10) < parseInt(total)'><i class='zmdi zmdi-chevron-right zmdi-hc-lg'></i></a>
+              </span>
+              <!-- /ko -->
+              <!-- ko ifnot: $root.playstationClan -->
+              <div class="center section">
+                <br/>
+                <h5>This can take a while...</h5>
+                <div class='preloader-wrapper big active'>
+                  <div class='spinner-layer spinner-blue-only'>
+                    <div class='circle-clipper left'>
+                      <div class='circle'></div>
+                    </div>
+                    <div class='gap-patch'>
+                      <div class='circle'></div>
+                    </div>
+                    <div class='circle-clipper right'>
+                      <div class='circle'></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- /ko -->
             </div>
           </div>
           <!-- /ko -->
@@ -211,17 +249,20 @@
           <!-- ko if: xbox -->
           <div class="card green darken-4" data-bind="with: xbox">
             <div class="card-content white-text">
-              <img class="hide-on-small-only profile-image left" data-bind="attr: { src: 'https://www.bungie.net'+iconPath }" />
+              <img class="hide-on-small-only profile-image left" data-bind="attr: { src: 'https://www.bungie.net' + iconPath }" />
               <div>
                 <span class="card-title"><i class="zmdi zmdi-xbox zmdi-hc-lg"></i> <span data-bind="text: displayName"></span></span>
-                <span class="right" data-bind="text: 'Top '+Math.ceil((leaderboardPosition / $root.leaderboard().totalPlayers) * 100)+'%'"></span>
+                <span class="right" data-bind="text: 'Top ' + Math.ceil((leaderboardPosition / $root.leaderboard().totalPlayers) * 100) + '%'"></span>
                 <h5><span data-bind="hours: timePlayed"></span> <small class="orange-text text-lighten-1" data-bind="hours: timeWasted, format: '-? deleted'"></small></h5>
-                <span data-bind="text: 'Last played '+new Date(lastPlayed * 1000).toDateString()"></span>
+                <span data-bind="text: 'Last played ' + new Date(lastPlayed * 1000).toDateString()"></span>
               </div>
             </div>
             <div class="card-action">
               <a class="white-text dropdown-button" data-bind="click: function() { ga('send', 'event', 'Links', 'Profile'); }" data-activates="dropdown-xbox" data-constrainwidth="false" href="#">View profile <i class="zmdi zmdi-caret-down zmdi-hc-lg"></i></a>
-              <a class="white-text" href="#" data-bind="click: function(){ ga('send', 'event', 'Links', 'View Rank'); $root.loadLeaderboard(Math.floor((leaderboardPosition - 1) / 10) + 1); $root.scrollTo('#leaderboard'); }">View rank</i></a>
+              <a class="white-text" href="#" data-bind="click: function(){ ga('send', 'event', 'Links', 'View Rank'); $root.loadLeaderboard(Math.floor((leaderboardPosition - 1) / 10) + 1); $root.scrollTo('#leaderboard'); }">View rank</a>
+              <!-- ko if: clan -->
+              <a class="white-text activator" href="#" data-bind="click: function(){ ga('send', 'event', 'Links', 'View Clan'); $root.loadClan(1, clan.id, 1); }, text: 'View clan [' + (clan.tag != '' ? clan.tag : clan.name) + ']'"></a>
+              <!-- /ko -->
               <ul id='dropdown-xbox' class='dropdown-content'>
                 <li><a target="_blank" onclick="ga('send', 'event', 'Profile', 'Bungie.net');" data-bind="attr: { href: 'https://bungie.net/en/Profile/'+membershipType+'/'+membershipId }">Bungie.net</a></li>
                 <li><a target="_blank" onclick="ga('send', 'event', 'Profile', 'DestinyTracker.com');" data-bind="attr: { href: 'https://destinytracker.com/destiny/player/xb/'+displayName.toLowerCase() }">DestinyTracker.com</a></li>
@@ -232,6 +273,55 @@
                 <li><a target="_blank" onclick="ga('send', 'event', 'Profile', 'DestinyTrialsReport.com');" data-bind="attr: { href: 'https://my.destinytrialsreport.com/xb/'+displayName.toLowerCase() }">DestinyTrialsReport.com</a></li>
               </ul>
             </div>
+            <div class="card-reveal collection" style="z-index: 999">
+              <!-- ko with: $root.xboxClan -->
+              <span class="collection-header card-title grey-text text-darken-4" data-bind="html: $parent.clan.name + '<i class=\'zmdi zmdi-close zmdi-hc-lg right\'></i>'"></span>
+              <!-- ko foreach: players -->
+              <a href="#" class="collection-item row black-text" data-bind="click: function() { $root.platform(membershipType); $root.username(displayName); $root.searchPlayer(); }, css: { 'orange lighten-2 white-text': $root.isActivePlayer($data) }">
+                <span class="col s8">
+                  <i class="zmdi zmdi-hc-lg" data-bind="css: { 'zmdi-playstation': membershipType == 2, 'zmdi-xbox': membershipType == 1 }"></i> <span data-bind="text: displayName"></span>
+                </span>
+                <span class="col s4 right-align" data-bind="hours: timePlayed"></span>
+              </a>
+              <!-- /ko -->
+              <span class="collection-footer">
+                <a href='#' class='btn-invis left' data-bind='click: function() { $root.firstClanPage(1, $parent.clan.id); }, visible: parseInt(page) > 1'><i class='zmdi zmdi-chevron-left zmdi-hc-lg'></i><i class='zmdi zmdi-chevron-left zmdi-hc-lg'></i></i></a>
+                <a href='#' class='btn-invis left' data-bind='click: function() { $root.previousClanPage(1, $parent.clan.id); }, visible: parseInt(page) > 1'><i class='zmdi zmdi-chevron-left zmdi-hc-lg'></i></a>
+                  Page: <span data-bind="text: page"></span>, Players: <span data-bind="text: total"></span>
+                <a href='#' class='btn-invis right' data-bind='click: function() { $root.nextClanPage(1, $parent.clan.id); }, visible: (parseInt(page) * 10) < parseInt(total)'><i class='zmdi zmdi-chevron-right zmdi-hc-lg'></i></a>
+              </span>
+              <!-- /ko -->
+              <!-- ko ifnot: $root.xboxClan -->
+              <div class="center section">
+                <br/>
+                <h5>This can take a while...</h5>
+                <div class='preloader-wrapper big active'>
+                  <div class='spinner-layer spinner-blue-only'>
+                    <div class='circle-clipper left'>
+                      <div class='circle'></div>
+                    </div>
+                    <div class='gap-patch'>
+                      <div class='circle'></div>
+                    </div>
+                    <div class='circle-clipper right'>
+                      <div class='circle'></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- /ko -->
+            </div>
+            <!--<div class="card-reveal" style="z-index: 999">
+              <span class="card-title grey-text text-darken-4" data-bind="html: clan.name + '<i class=\'zmdi zmdi-close zmdi-hc-lg right\'></i>'"></span>
+              <table data-bind="with: $root.xboxClan">
+                <tbody data-bind="foreach: players">
+                  <tr>
+                    <td><i class="zmdi zmdi-hc-lg" data-bind="css: { 'zmdi-playstation': membershipType == 2, 'zmdi-xbox': membershipType == 1 }"></i> <span data-bind="text: displayName"></span></td>
+                    <td data-bind="hours: timePlayed" class="right-align"></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>-->
           </div>
           <!-- /ko -->
           <!-- ko ifnot: xbox -->
@@ -304,7 +394,7 @@
   </footer>
 
   <div class="fixed-action-btn hide" id="returnToTop" style="bottom: 35px; right: 35px;">
-    <a data-bind="click: function() { scrollTo('#index-banner'); ga('send', 'event', 'Links', 'Return To Top'); }" href="#" class="btn-floating btn-large red">
+    <a data-bind="click: function() { scrollTo('#index-banner'); ga('send', 'event', 'Links', 'Return To Top'); }" href="#" class="btn-floating btn-large grey darken-3">
       <i class="zmdi zmdi-chevron-up zmdi-lg"></i>
     </a>
   </div>
@@ -313,8 +403,6 @@
   <script src="https://code.jquery.com/jquery-2.2.2.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.0/knockout-min.js"></script>
-  <script src="/js/konami.js"></script>
-  <!--<script src="/js/init.js"></script>-->
   <script src="/js/viewmodel.js"></script>
   <script>
     var vm = new ViewModel();

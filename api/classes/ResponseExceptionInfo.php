@@ -2,7 +2,7 @@
 
 /**
  * Exception response info implementation
- * @author François Allard <binarmorker@gmail.com>
+ * @author FranÃ§ois Allard <binarmorker@gmail.com>
  * @version 1.8
  */
 class ResponseExceptionInfo extends ResponseInfo {

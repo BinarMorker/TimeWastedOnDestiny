@@ -2,8 +2,8 @@
 
 /**
  * Route the requests and return the results in JSON
- * @author Fran�ois Allard <binarmorker@gmail.com>
- * @version 1.8
+ * @author François Allard <binarmorker@gmail.com>
+ * @version 2.0.0
  */
 class Api {
 
@@ -11,7 +11,7 @@ class Api {
 	 * The current API version
 	 * @var string
 	 */
-	const VERSION = "1.11";
+	const VERSION = "2.0.0";
 	
 	/**
 	 * The main website's domain name
@@ -27,14 +27,14 @@ class Api {
 
 	/**
 	 * Make the request and dispatch to the right subroutine
-	 * @param string $helpFile The content to show when help is called
 	 */
-	public static function request($helpFile) {
+	public static function request() {
 		Timer::start();
+		$helpFile = file_get_contents('help.html');
 		
 		if($_SERVER['REQUEST_METHOD'] == 'GET') {
 			if (isset($_GET['help'])) {
-				self::displayPlain($helpFile);
+				self::displayHTML($helpFile);
 			} elseif (isset($_GET['version'])) {
 				$response = self::getVersion();
 				self::displayJson($response);
@@ -45,17 +45,25 @@ class Api {
 					$response = self::getLeaderboard(1);
 				}
 				self::displayJson($response);
+			} elseif (isset($_GET['console']) && isset($_GET['clan'])) {
+				if (isset($_GET['page'])) {
+					$response = self::getClan($_GET['console'], $_GET['clan'], $_GET['page']);
+				} else {
+					$response = self::getClan($_GET['console'], $_GET['clan'], 1);
+				}
+				self::displayJson($response);
 			} elseif (isset($_GET['console']) && isset($_GET['user'])) {
-				$response = self::getTimeWasted($_GET['console'], $_GET['user']);
 				self::displayJson(json_decode(Cache::getCachedContent(
 					$_GET['console'].'-'.$_GET['user'], 
-					json_encode($response)
+					function() {
+						$response = self::getTimeWasted($_GET['console'], $_GET['user']);
+						return json_encode($response);
+					}
 				)));
 			} else {
-				self::displayPlain($helpFile);
+				self::displayHTML($helpFile);
 			}
 		}
-		
 	}
 
 	/**
@@ -127,7 +135,39 @@ class Api {
 	}
 
 	/**
+	 * Get a clan's leaderboard
+	 * @param int $id
+	 * @param int $page
+	 * @return The json request string
+	 */
+	private static function getClan($platform, $id, $page) {
+		try {
+			$clan = new ClanManager();
+
+			if (isset($_GET['dbg'])) {
+				$json = new JsonBuilder($clan->getClanLeaderboard($platform, $id, $page, true));
+			} else {
+				$json = new JsonBuilder($clan->getClanLeaderboard($platform, $id, $page));
+			}
+				
+			if (empty(self::$warnStatus)) {
+				$status = new ResponseSuccessInfo();
+			} else {
+				$status = new ResponseWarningInfo(self::$warnStatus);
+			}
+
+			$json->addInfo(new JsonInfoBuilder($status));
+			return $json->get();
+		} catch (ApiException $exception) {
+			$status = new ResponseExceptionInfo($exception);
+			$json = new JsonBuilder(array(), new JsonInfoBuilder($status));
+			return $json->get();
+		}
+	}
+
+	/**
 	 * Get the leaderboard from the database
+	 * @param int $page
 	 * @return The json request string
 	 */
 	private static function getLeaderboard($page) {
@@ -165,11 +205,11 @@ class Api {
 	}
 	
 	/**
-	 * Display the response as plain text
+	 * Display the response as HTML
 	 * @param string $response
 	 */
-	private static function displayPlain($response) {
-		header("Content-Type: text/plain");
+	private static function displayHTML($response) {
+		header("Content-Type: text/html");
 		echo $response;
 	}
 	

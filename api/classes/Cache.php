@@ -2,8 +2,8 @@
 
 /**
  * Simple document caching
- * @author François Allard <binarmorker@gmail.com>
- * @version 1.8
+ * @author FranÃ§ois Allard <binarmorker@gmail.com>
+ * @version 1.11
  */
 class Cache {
 	
@@ -22,7 +22,7 @@ class Cache {
 	 * @param string $content The content to be cached
 	 * @return The cached data
 	 */
-	public static function getCachedContent($string, $content) {
+	public static function getCachedContent($string, $callback) {
 		$cacheFile = $_SERVER['DOCUMENT_ROOT'].'/cache/'.self::hash($string);
 	
 		if (Config::get('shouldCache') === true) {
@@ -30,11 +30,11 @@ class Cache {
 			 && abs(filemtime($cacheFile) - time()) < (60 * 60)) {
 				$data = file_get_contents($cacheFile);
 			} else {
-				$data = $content;
+				$data = $callback();
 				file_put_contents($cacheFile, $data);
 			}
 		} else {
-			$data = $content;
+			$data = $callback();
 		}
 		
 		return $data;

@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Basic exception handler
+ * @author François Allard <binarmorker@gmail.com>
+ * @version 1.11
+ */
 class Exclusions {
     public $displayName = null;
     public $playstation = null;

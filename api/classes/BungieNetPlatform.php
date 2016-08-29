@@ -2,8 +2,8 @@
 
 /**
  * A wrapper of Bungie Net Platform
- * @author Fran�ois Allard <binarmorker@gmail.com>
- * @version 1.8
+ * @author François Allard <binarmorker@gmail.com>
+ * @version 2.0.0
  */
 class BungieNetPlatform {
 	
@@ -193,12 +193,15 @@ class BungieNetPlatform {
 				self::BUNGIE_URI.
 				"Group/".
 				$clanId."/".
-				"ClanMembers/?".
-				"platformType=".
-				$membershipId."&".
-				"currentPage=".
-				$page
+				"ClanMembers/"
 			);
+
+			if (is_null($params)) {
+				$params = array();
+			}
+
+			$params['platformType'] = $platformType;
+			$params['currentPage'] = $page;
 			$uri->addParams($params);
 			$result = json_decode(preg_replace("/\bNaN\b/", "null", $uri->query("GET", Config::get('apiKey'))));
 

@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * A generic API exception
+ * @author François Allard <binarmorker@gmail.com>
+ * @version 1.8
+ */
 class ApiException extends Exception {
 	
 	public static function copy(Exception $exception) {

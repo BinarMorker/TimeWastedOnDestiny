@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Wasted on Destiny API - Help</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+            body {
+                max-width: 900px;
+                margin: 0 auto;
+                font-family: monospace;
+            }
+
+            h1 {
+                text-align: center;
+                font-family: sans;
+            }
+
+            em {
+                display: block;
+                margin-top: 3px;
+            }
+
+            h2 {
+                font-family: sans;
+            }
+
+            h3 {
+                margin: 10px 0 0 0;
+                font-family: sans;
+            }
+
+            dl {
+                margin-top: -2px;
+                margin-left: 20px;
+            }
+
+            dt, span {
+                margin-top: 4px;
+            }
+            
+            dd {
+                margin-left: 20px;
+            }
+
+            span {
+                display: block;
+            }
+
+            div {
+                margin-left: 60px;
+                margin-right: 20px;
+            }
+
+            h2 {
+                margin-left: -40px;
+            }
+
+            blockquote {
+                margin: 0;
+            }
+
+            blockquote.note {
+                border-left: 3px solid #dd5;
+                background-color: #f1f1d0;
+                padding: 5px;
+                padding-left: 20px;
+                font-family: sans;
+                color: #ad920f; 
+            }
+
+            blockquote.note + blockquote.note {
+                margin-top: 10px;
+            }
+
+            blockquote.note strong {
+                font-size: 1.2em;
+            }
+
+            strong {
+                font-family: sans;
+            }
+
+            code, dt {
+                color: #d31e1e;
+
+            }
+
+            .footer {
+                text-align: center;
+                padding: 20px;
+                margin: 0;
+                margin-top: 20px;
+                border-top: 1px groove #ddd;
+            }
+
+            .footer strong {
+                white-space: nowrap;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Wasted on Destiny API - Help</h1>
+        <div>
+            <h2>Show Help</h2>
+            <blockquote>Get the help file (current page)</blockquote>
+            <span><strong>Method :</strong> <code>GET</code></span>
+            <span><strong>URL :</strong> <code>api/?help</code></span>
+            <h3>Parameters</h3>
+            <dl><dt>None</dt></dl>
+        </div>
+        <div>
+            <h2>Show Version</h2>
+            <blockquote>Get this instance's API version and the currently online version</blockquote>
+            <span><strong>Method :</strong> <code>GET</code></span>
+            <span><strong>URL :</strong> <code>api/?version</code></span>
+            <h3>Parameters</h3>
+            <dl>
+                <dt>&fmt <small>(optional)</small></dt>
+                <dd>Format the output to be readable (not for production)</dd>
+            </dl>
+        </div>
+        <div>
+            <h2>Get Time Wasted</h2>
+            <blockquote>Get a player's information for time wasted, all characters included</blockquote>
+            <span><strong>Method :</strong> <code>GET</code></span>
+            <span><strong>URL :</strong> <code>api/?console=[console]&user=[username]</code></span>
+            <h3>Parameters</h3>
+            <dl>
+                <dt>[console]</dt>
+                <dd>1 for Xbox, 2 for Playstation</dd>
+                <dt>[username]</dt>
+                <dd>The player's username</dd>
+                <dt>&fmt <small>(optional)</small></dt>
+                <dd>Format the output to be readable (not for production)</dd>
+            </dl>
+            <blockquote class="note">
+                <strong>Note :</strong> Unique results will only refresh once per hour.
+            </blockquote>
+        </div>
+        <div>
+            <h2>Get Leaderboard</h2>
+            <blockquote>Get the leaderboard</blockquote>
+            <span><strong>Method :</strong> <code>GET</code></span>
+            <span><strong>URL :</strong> <code>api/?leaderboard&page=[page]</code></span>
+            <h3>Parameters</h3>
+            <dl>
+                <dt>[page]</dt>
+                <dd>The leaderboard page</dd>
+                <dt>&fmt <small>(optional)</small></dt>
+                <dd>Format the output to be readable (not for production)</dd>
+            </dl>
+            <blockquote class="note">
+                <strong>Note :</strong> There is only 10 results per page.
+            </blockquote>
+        </div>
+        <div>
+            <h2>Get Clan Times</h2>
+            <blockquote>Get a clan's leaderboard</blockquote>
+            <span><strong>Method :</strong> <code>GET</code></span>
+            <span><strong>URL :</strong> <code>api/?console=[console]&clan=[id]&page=[page]</code></span>
+            <h3>Parameters</h3>
+            <dl>
+                <dt>[console]</dt>
+                <dd>1 for Xbox, 2 for Playstation</dd>
+                <dt>[id]</dt>
+                <dd>The clan identifier</dd>
+                <dt>[page]</dt>
+                <dd>The member page</dd>
+                <dt>&fmt <small>(optional)</small></dt>
+                <dd>Format the output to be readable (not for production)</dd>
+            </dl>
+            <blockquote class="note">
+                <strong>Note :</strong> Unique results will only refresh once per hour.
+            </blockquote>
+            <blockquote class="note">
+                <strong>Note :</strong> There is only 10 results per page.
+            </blockquote>
+        </div>
+        <p class="footer">
+            <strong>Created by François Allard</strong> - <strong>Please give credit if you use this!</strong>
+        </p>
+    </body>
+</html>

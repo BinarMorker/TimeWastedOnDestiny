@@ -1,8 +1,8 @@
 <?php
 
 /**
- * BungieNetPlatform exception
- * @author FranÁois Allard <binarmorker@gmail.com>
+ * A generic BungieNetPlatform exception
+ * @author Fran√ßois Allard <binarmorker@gmail.com>
  * @version 1.8
  */
 class BungieNetPlatformException extends Exception {

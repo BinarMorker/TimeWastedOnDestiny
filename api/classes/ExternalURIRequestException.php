@@ -1,8 +1,8 @@
 <?php
 
 /**
- * ExternalURIRequest exception
- * @author Fran�ois Allard <binarmorker@gmail.com>
+ * A generic ExternalURIRequest exception
+ * @author François Allard <binarmorker@gmail.com>
  * @version 1.8
  */
 class ExternalURIRequestException extends Exception {

@@ -2,8 +2,8 @@
 
 /**
  * List Bungie Net Platform errors
- * @author Fran�ois Allard <binarmorker@gmail.com>
- * @version 1.8
+ * @author François Allard <binarmorker@gmail.com>
+ * @version 1.10
  */
 class BungieNetPlatformError {
 

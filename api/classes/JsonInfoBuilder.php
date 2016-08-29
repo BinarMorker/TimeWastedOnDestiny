@@ -2,7 +2,7 @@
 
 /**
  * JSON builder for information block inside response
- * @author François Allard <binarmorker@gmail.com>
+ * @author FranÃ§ois Allard <binarmorker@gmail.com>
  * @version 1.8
  */
 class JsonInfoBuilder extends JsonBuilder {
