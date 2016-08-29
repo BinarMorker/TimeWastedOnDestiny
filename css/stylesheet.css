@@ -213,6 +213,10 @@ nav .nav-wrapper form, nav .nav-wrapper form .input-field{
     height: 100%;
 }
 
+.card {
+    overflow: visible !important;
+}
+
 @media only screen and (max-width: 600px) {
     .card-action > a {
         display: block; 
