@@ -40,21 +40,48 @@ class Api {
 				self::displayJson($response);
 			} elseif (isset($_GET['leaderboard'])) {
 				if (isset($_GET['page'])) {
-					$response = self::getLeaderboard($_GET['page']);
+					self::displayJson(json_decode(Cache::getCachedContent(
+						'leaderboard-'.$_GET['page'],
+						600, // 10 minutes is 600 seconds
+						function() {
+							$response = self::getLeaderboard($_GET['page']);
+							return json_encode($response);
+						}
+					)));
 				} else {
-					$response = self::getLeaderboard(1);
+					self::displayJson(json_decode(Cache::getCachedContent(
+						'leaderboard-1',
+						600, // 10 minutes is 600 seconds
+						function() {
+							$response = self::getLeaderboard(1);
+							return json_encode($response);
+						}
+					)));
 				}
-				self::displayJson($response);
 			} elseif (isset($_GET['clan'])) {
 				if (isset($_GET['page'])) {
-					$response = self::getClan($_GET['clan'], $_GET['page']);
+					self::displayJson(json_decode(Cache::getCachedContent(
+						$_GET['clan'].'-'.$_GET['page'],
+						7200, // 2 hours is 7200 seconds
+						function() {
+							$response = self::getClan($_GET['clan'], $_GET['page']);
+							return json_encode($response);
+						}
+					)));
 				} else {
-					$response = self::getClan($_GET['clan'], 1);
+					self::displayJson(json_decode(Cache::getCachedContent(
+						$_GET['clan'].'-1',
+						7200, // 2 hours is 7200 seconds
+						function() {
+							$response = self::getClan($_GET['clan'], 1);
+							return json_encode($response);
+						}
+					)));
 				}
-				self::displayJson($response);
 			} elseif (isset($_GET['console']) && isset($_GET['user'])) {
 				self::displayJson(json_decode(Cache::getCachedContent(
 					$_GET['console'].'-'.$_GET['user'], 
+					3600, // 1 hour is 3600 seconds
 					function() {
 						$response = self::getTimeWasted($_GET['console'], $_GET['user']);
 						return json_encode($response);

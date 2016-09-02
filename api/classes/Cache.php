@@ -8,26 +8,18 @@
 class Cache {
 	
 	/**
-	 * Get the hash used for cache files
-	 * @param string $string The string to be hashed
-	 * @return The hashed string
-	 */
-	public static function hash($string) {
-		return md5($string);
-	}
-	
-	/**
 	 * Get the cached content if it is valid and in cache, or cache it
 	 * @param string $string The content id
-	 * @param string $content The content to be cached
+	 * @param int $time The time during which to cache the content
+	 * @param function $content The content to be cached
 	 * @return The cached data
 	 */
-	public static function getCachedContent($string, $callback) {
-		$cacheFile = $_SERVER['DOCUMENT_ROOT'].'/cache/'.self::hash($string);
+	public static function getCachedContent($string, $time, $callback) {
+		$cacheFile = $_SERVER['DOCUMENT_ROOT'].'/cache/'.$string.'.json';
 	
 		if (Config::get('shouldCache') === true) {
 			if (file_exists($cacheFile) 
-			 && abs(filemtime($cacheFile) - time()) < (60 * 60)) {
+			 && abs(filemtime($cacheFile) - time()) < $time) {
 				$data = file_get_contents($cacheFile);
 			} else {
 				$data = $callback();
