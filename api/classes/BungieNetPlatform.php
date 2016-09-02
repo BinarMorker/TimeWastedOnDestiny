@@ -3,7 +3,7 @@
 /**
  * A wrapper of Bungie Net Platform
  * @author François Allard <binarmorker@gmail.com>
- * @version 2.0.0
+ * @version 2.1.0
  */
 class BungieNetPlatform {
 	
@@ -173,8 +173,51 @@ class BungieNetPlatform {
 	}
 
 	/**
+	 * Get details for a clan
+	 * @param int $clanId The clan Id
+	 * @param array $params Other parameters like language and definition
+	 * @return The response object
+	 * @throws BungieNetPlatformException
+	 * @link http://destinydevs.github.io/BungieNetPlatform/docs/GroupService/GetGroup
+	 */
+	public static function getClanDetails(
+		$clanId, 
+		$params = null
+	) {
+		try {
+			$uri = new ExternalURIRequest(
+				self::BUNGIE_URI.
+				"Group/".
+				$clanId
+			);
+			$uri->addParams($params);
+			$result = json_decode(preg_replace("/\bNaN\b/", "null", $uri->query("GET", Config::get('apiKey'))));
+
+			if (in_array(
+				$result->ErrorCode, 
+				BungieNetPlatformError::getErrors()
+			)) {
+				throw new BungieNetPlatformException(
+					$result->Message, 
+					$result->ErrorCode
+				);
+			}
+
+			return $result->Response;
+		} catch (ExternalURIRequestException $exception) {
+			if (Config::get("debug")) {
+				throw $exception;
+			} else {
+				throw new BungieNetPlatformException(
+					'Could not access stats at this time.', 
+					500
+				);
+			}
+		}
+	}
+
+	/**
 	 * Get all members for a clan
-	 * @param int $platformType The console Id
 	 * @param int $clanId The clan Id
 	 * @param int $page The current page to query
 	 * @param array $params Other parameters link language and definition
@@ -183,7 +226,6 @@ class BungieNetPlatform {
 	 * @link http://destinydevs.github.io/BungieNetPlatform/docs/GroupService/GetMembersOfClan
 	 */
 	public static function getClanMembers(
-		$platformType, 
 		$clanId, 
 		$page, 
 		$params = null
@@ -200,7 +242,7 @@ class BungieNetPlatform {
 				$params = array();
 			}
 
-			$params['platformType'] = $platformType;
+			$params['platformType'] = 2; // Works for every platform now
 			$params['currentPage'] = $page;
 			$uri->addParams($params);
 			$result = json_decode(preg_replace("/\bNaN\b/", "null", $uri->query("GET", Config::get('apiKey'))));

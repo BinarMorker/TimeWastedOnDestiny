@@ -3,7 +3,7 @@
 /**
  * Route the requests and return the results in JSON
  * @author François Allard <binarmorker@gmail.com>
- * @version 2.0.0
+ * @version 2.1.0
  */
 class Api {
 
@@ -11,7 +11,7 @@ class Api {
 	 * The current API version
 	 * @var string
 	 */
-	const VERSION = "2.0.0";
+	const VERSION = "2.1.0";
 	
 	/**
 	 * The main website's domain name
@@ -45,11 +45,11 @@ class Api {
 					$response = self::getLeaderboard(1);
 				}
 				self::displayJson($response);
-			} elseif (isset($_GET['console']) && isset($_GET['clan'])) {
+			} elseif (isset($_GET['clan'])) {
 				if (isset($_GET['page'])) {
-					$response = self::getClan($_GET['console'], $_GET['clan'], $_GET['page']);
+					$response = self::getClan($_GET['clan'], $_GET['page']);
 				} else {
-					$response = self::getClan($_GET['console'], $_GET['clan'], 1);
+					$response = self::getClan($_GET['clan'], 1);
 				}
 				self::displayJson($response);
 			} elseif (isset($_GET['console']) && isset($_GET['user'])) {
@@ -140,14 +140,14 @@ class Api {
 	 * @param int $page
 	 * @return The json request string
 	 */
-	private static function getClan($platform, $id, $page) {
+	private static function getClan($id, $page) {
 		try {
 			$clan = new ClanManager();
 
 			if (isset($_GET['dbg'])) {
-				$json = new JsonBuilder($clan->getClanLeaderboard($platform, $id, $page, true));
+				$json = new JsonBuilder($clan->getClanLeaderboard($id, $page, true));
 			} else {
-				$json = new JsonBuilder($clan->getClanLeaderboard($platform, $id, $page));
+				$json = new JsonBuilder($clan->getClanLeaderboard($id, $page));
 			}
 				
 			if (empty(self::$warnStatus)) {

@@ -6,8 +6,7 @@ function ViewModel() {
     self.username = ko.observable("");
     self.player = ko.observable(null);
     self.leaderboard = ko.observable(null);
-    self.xboxClan = ko.observable(null);
-    self.playstationClan = ko.observable(null);
+    self.clan = ko.observable(null);
 
     self.searchPlayer = function(leaderboard) {
         self.loading(true);
@@ -24,8 +23,7 @@ function ViewModel() {
 
             if (json.Info.Status != 'Error') {
                 self.player(json.Response);
-                self.xboxClan(null);
-                self.playstationClan(null);
+                self.reloadImage();
                 self.scrollTo('#playerCards');
                 $('.dropdown-button').dropdown();
                 
@@ -86,16 +84,28 @@ function ViewModel() {
         return deferred;
     }
 
-    self.loadClan = function(platform, id, page) {
-        var jsonUrl = "/api/?console=" + platform + "&clan=" + id + "&page=" + page;
+    self.loadClan = function(id, page) {
+        var jsonUrl = "/api/?clan=" + id + "&page=" + page;
         var deferred = $.getJSON(jsonUrl, function(json) {
             self.loading(false);
             self.showError(json.Info);
+            self.clan(json.Response);
 
-            if (platform == 1) {
-                self.xboxClan(json.Response);
-            } else {
-                self.playstationClan(json.Response);
+            for (var key in self.clan().players) {
+                var otherJsonUrl = "/api/?console=" + self.clan().players[key].membershipType + "&user=" + self.clan().players[key].displayName;
+                $.getJSON(otherJsonUrl, function(json) {
+                    if (json.Info.Status != Error) {
+                        for (var player in self.clan().players) {
+                            if (json.Response.xbox && self.clan().players[player].membershipId == json.Response.xbox.membershipId) {
+                                self.clan().players[player].timePlayed = json.Response.xbox.timePlayed;
+                            } else if (json.Response.playstation && self.clan().players[player].membershipId == json.Response.playstation.membershipId) {
+                                self.clan().players[player].timePlayed = json.Response.playstation.timePlayed;
+                            }
+                        }
+
+                        self.clan.valueHasMutated();
+                    }
+                });
             }
         });
         return deferred;
@@ -153,14 +163,18 @@ function ViewModel() {
         $("html, body").animate({ scrollTop: $(elem).offset().top }, 1000);
     }
 
-    self.load = function() {
+    self.reloadImage = function() {
         function pad(num, size) {
             var s = num+"";
             while (s.length < size) s = "0" + s;
             return s;
         }
 
-	    $('#index-banner').css({'background-image': 'url(/img/background/' +pad(Math.floor(Math.random() * 50), 3) + '.jpg)'});
+        $('body').css({'background-image': 'url(/img/background/' +pad(Math.floor(Math.random() * 50), 3) + '.jpg)'});
+    }
+
+    self.load = function() {
+        self.reloadImage();
         
         $(document).scroll(function() {
             var y = $(this).scrollTop();
@@ -214,51 +228,27 @@ function ViewModel() {
         }
     }
 
-    self.firstClanPage = function(platform, clan) {
+    self.firstClanPage = function() {
         ga('send', 'event', 'Clan', 'First Page');
-
-        if (platform == 1) {
-            var page = self.xboxClan().page;
-            if (page != 1) {
-                self.loadClan(1, clan, 1);
-            }
-        } else {
-            var page = self.playstationClan().page;
-            if (page != 1) {
-                self.loadClan(2, clan, 1);
-            }
+        var page = self.clan().page;
+        if (page != 1) {
+            self.loadClan(self.clan().id, 1);
         }
     }
 
-    self.previousClanPage = function(platform, clan) {
+    self.previousClanPage = function() {
         ga('send', 'event', 'Clan', 'Previous Page');
-
-        if (platform == 1) {
-            var page = self.xboxClan().page;
-            if (page != 1) {
-                self.loadClan(1, clan, parseInt(page) - 1);
-            }
-        } else {
-            var page = self.playstationClan().page;
-            if (page != 1) {
-                self.loadClan(2, clan, parseInt(page) - 1);
-            }
+        var page = self.clan().page;
+        if (page != 1) {
+            self.loadClan(self.clan().id, parseInt(page) - 1);
         }
     }
 
-    self.nextClanPage = function(platform, clan) {
+    self.nextClanPage = function() {
         ga('send', 'event', 'Clan', 'Next Page');
-        
-        if (platform == 1) {
-            var page = self.xboxClan().page;
-            if ((page * 10) < self.xboxClan().total) {
-                self.loadClan(1, clan, parseInt(page) + 1);
-            }
-        } else {
-            var page = self.playstationClan().page;
-            if ((page * 10) < self.playstationClan().total) {
-                self.loadClan(2, clan, parseInt(page) + 1);
-            }
+        var page = self.clan().page;
+        if ((page * 10) < self.clan().total) {
+            self.loadClan(self.clan().id, parseInt(page) + 1);
         }
     }
 

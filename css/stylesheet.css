@@ -2,6 +2,16 @@ body {
     display: flex;
     min-height: 100vh;
     flex-direction: column;
+    -webkit-transition: background 1s ease-in-out;
+    transition: background 1s ease-in-out;
+    background: black no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    -o-background-size: cover;
+    -webkit-transform-style: preserve-3d;
+    -moz-transform-style: preserve-3d;
+    transform-style: preserve-3d;
 }
 
 main {
@@ -54,15 +64,8 @@ td, th {
     text-align: center;
 }
 
-#index-banner {
-    background: black no-repeat center center fixed;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    background-size: cover;
-    -o-background-size: cover;
-    -webkit-transform-style: preserve-3d;
-    -moz-transform-style: preserve-3d;
-    transform-style: preserve-3d;
+.transparent {
+    background: rgba(0, 0, 0, 0);
 }
 
 .transluscent {
@@ -88,6 +91,15 @@ td, th {
     width: 2.5rem;
     line-height: 2.5rem;
     font-size: 1.5rem;
+    color: #343434;
+}
+
+.btn-invis-large {
+    margin: -0.5rem -2rem;
+    height: 3.5rem;
+    width: 3.5rem;
+    line-height: 3.5rem;
+    font-size: 2rem;
     color: #343434;
 }
 
@@ -211,10 +223,6 @@ td, th {
 
 nav .nav-wrapper form, nav .nav-wrapper form .input-field{
     height: 100%;
-}
-
-.card {
-    overflow: visible !important;
 }
 
 @media only screen and (max-width: 600px) {
