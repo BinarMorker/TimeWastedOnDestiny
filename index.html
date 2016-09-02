@@ -205,8 +205,8 @@
               </div>
             </div>
             <div class="card-action">
-              <a class="white-text dropdown-button" onclick="$($(this).closest('.card')).css('overflow', 'auto');" data-bind="click: function() { ga('send', 'event', 'Links', 'Profile'); }" data-activates="dropdown-playstation" data-constrainwidth="false" href="#">View profile <i class="zmdi zmdi-caret-down zmdi-hc-lg"></i></a>
-              <a class="white-text" href="#" data-bind="click: function(){ ga('send', 'event', 'Links', 'View Rank'); $root.loadLeaderboard(Math.floor((leaderboardPosition - 1) / 10) + 1); $root.scrollTo('#leaderboard'); }">View rank</a>
+              <a class="white-text dropdown-button" data-bind="click: function() { ga('send', 'event', 'Links', 'Profile'); }" data-activates="dropdown-playstation" data-constrainwidth="false" href="#">View profile <i class="zmdi zmdi-caret-down zmdi-hc-lg"></i></a>
+              <a class="white-text" href="#" data-bind="click: function(){ ga('send', 'event', 'Links', 'View Rank'); $root.loadLeaderboard(Math.floor((leaderboardPosition - 1) / 10) + 1); $root.clan(null); $root.scrollTo('#leaderboard'); }">View rank</a>
               <!-- ko if: clan -->
               <a class="white-text" href="#" data-bind="click: function(){ ga('send', 'event', 'Links', 'View Clan'); $root.loadClan(clan.id, 1); $root.scrollTo('#leaderboard'); }, text: 'View clan [' + (clan.tag != '' ? clan.tag : clan.name) + ']'"></a>
               <!-- /ko -->
@@ -241,8 +241,8 @@
               </div>
             </div>
             <div class="card-action">
-              <a class="white-text dropdown-button" onclick="$($(this).closest('.card')).css('overflow', 'auto');" data-bind="click: function() { ga('send', 'event', 'Links', 'Profile'); }" data-activates="dropdown-xbox" data-constrainwidth="false" href="#">View profile <i class="zmdi zmdi-caret-down zmdi-hc-lg"></i></a>
-              <a class="white-text" href="#" data-bind="click: function(){ ga('send', 'event', 'Links', 'View Rank'); $root.loadLeaderboard(Math.floor((leaderboardPosition - 1) / 10) + 1); $root.scrollTo('#leaderboard'); }">View rank</a>
+              <a class="white-text dropdown-button" data-bind="click: function() { ga('send', 'event', 'Links', 'Profile'); }" data-activates="dropdown-xbox" data-constrainwidth="false" href="#">View profile <i class="zmdi zmdi-caret-down zmdi-hc-lg"></i></a>
+              <a class="white-text" href="#" data-bind="click: function(){ ga('send', 'event', 'Links', 'View Rank'); $root.loadLeaderboard(Math.floor((leaderboardPosition - 1) / 10) + 1); $root.clan(null); $root.scrollTo('#leaderboard'); }">View rank</a>
               <!-- ko if: clan -->
               <a class="white-text" href="#" data-bind="click: function(){ ga('send', 'event', 'Links', 'View Clan'); $root.loadClan(clan.id, 1); $root.scrollTo('#leaderboard'); }, text: 'View clan [' + (clan.tag != '' ? clan.tag : clan.name) + ']'"></a>
               <!-- /ko -->

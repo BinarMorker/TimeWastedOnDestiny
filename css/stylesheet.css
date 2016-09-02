@@ -188,7 +188,7 @@ td, th {
 }
 
 .card.small .card-content, .card.medium .card-content, .card.large .card-content {
-	overflow: visible;
+	max-height: 100%;
 }
 
 .card.small .card-content h3, .card.medium .card-content h3, .card.large .card-content h3 {
