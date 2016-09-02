@@ -9,9 +9,6 @@ body {
     -moz-background-size: cover;
     background-size: cover;
     -o-background-size: cover;
-    -webkit-transform-style: preserve-3d;
-    -moz-transform-style: preserve-3d;
-    transform-style: preserve-3d;
 }
 
 main {
