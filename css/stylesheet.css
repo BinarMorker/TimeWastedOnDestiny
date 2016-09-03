@@ -161,6 +161,26 @@ td, th {
     -webkit-tap-highlight-color: transparent;
 }
 
+.btn-header {
+	box-shadow: none;
+    background-color: transparent;
+    color: #343434;
+    text-align: center;
+    cursor: pointer;
+	border: none;
+    border-radius: 0;
+    display: inline-block;
+    width: 100%;
+    height: 36px;
+    line-height: 36px;
+    outline: 0;
+    padding: 0 1rem;
+    margin: 0;
+    text-transform: uppercase;
+    vertical-align: middle;
+    -webkit-tap-highlight-color: transparent;
+}
+
 .btn-link-block {
 	box-shadow: none;
     background-color: transparent;
