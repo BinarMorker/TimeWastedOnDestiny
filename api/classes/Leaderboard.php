@@ -33,7 +33,7 @@ class Leaderboard {
 	
 	/**
 	 * Get the leaderboard instance or create it
-	 * @return The instance
+	 * @return static The instance
 	 */
 	private static function getInstance() {
 		if (!isset(self::$instance)) {
@@ -46,7 +46,7 @@ class Leaderboard {
 	/**
 	 * Get the player rank
 	 * @param string $membershipId
-	 * @return The rank or false if an error occurs
+	 * @return mixed The rank or false if an error occurs
 	 */
 	public static function getPlayerRank($membershipId) {
 		$query = 'SELECT * '.
@@ -89,10 +89,11 @@ class Leaderboard {
 		return $statement->fetch() ? false : true;
 	}
 
-	/**
-	 * Get last ten players from the leaderboard
-	 * @return An array of the ten players
-	 */
+    /**
+     * Get last ten players from the leaderboard
+     * @param int $page The page to lookup
+     * @return mixed An array of the ten players, or false on errors
+     */
 	public static function getTopTen($page) {
 		$query = "SELECT * FROM leaderboard ORDER BY `seconds` DESC LIMIT 10 OFFSET ".(($page - 1) * 10).";";
         
@@ -115,26 +116,30 @@ class Leaderboard {
 	 * @return True if the query succeeded
 	 */
 	public static function addPlayer($membershipType, $membershipId, $displayName, $timePlayed) {
-		$query = 'REPLACE INTO leaderboard '.
-				 '(`console`, `id`, `username`, `seconds`) '.
-				 'VALUES (:console, :id, :username, :seconds);';
-                 
-        try {
-            $statement = self::getInstance()->database->prepare($query);
-            return $statement->execute(array(
-                ':console' => $membershipType - 1,
-                ':id' => $membershipId,
-                ':username' => $displayName,
-                ':seconds' => $timePlayed
-            ));
-        } catch (Exception $e) {
+	    if ($timePlayed > 0) {
+            $query = 'REPLACE INTO leaderboard ' .
+                '(`console`, `id`, `username`, `seconds`) ' .
+                'VALUES (:console, :id, :username, :seconds);';
+
+            try {
+                $statement = self::getInstance()->database->prepare($query);
+                return $statement->execute(array(
+                    ':console' => $membershipType - 1,
+                    ':id' => $membershipId,
+                    ':username' => $displayName,
+                    ':seconds' => $timePlayed
+                ));
+            } catch (Exception $e) {
+                return false;
+            }
+        } else {
             return false;
         }
 	}
 
 	/**
 	 * Get the total number of entries in the leaderboard
-	 * @return The number of players
+	 * @return mixed The number of players, or false on errors
 	 */
 	public static function getTotalPlayers() {
 		$query = "SELECT COUNT(*) as `count` FROM leaderboard;";
