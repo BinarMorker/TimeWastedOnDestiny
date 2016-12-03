@@ -11,7 +11,7 @@ function ViewModel() {
     self.searchPlayer = function(leaderboard) {
         self.loading(true);
         var jsonUrl = "/api/?console=" + self.platform() + "&user=" + self.username();
-        var deferred = $.getJSON(jsonUrl, function(json) {
+        return $.getJSON(jsonUrl, function(json) {
             self.loading(false);
             self.showError(json.Info);
 
@@ -47,8 +47,7 @@ function ViewModel() {
                 }
             }
         });
-        return deferred;
-    }
+    };
 
     self.allCharacters = ko.computed(function() {
         var characters = [];
@@ -76,17 +75,16 @@ function ViewModel() {
 
     self.loadLeaderboard = function(page) {
         var jsonUrl = "/api/?leaderboard&page=" + page + "&" + new Date().getTime();
-        var deferred = $.getJSON(jsonUrl, function(json) {
+        return $.getJSON(jsonUrl, function(json) {
             self.loading(false);
             self.showError(json.Info);
             self.leaderboard(json.Response);
         });
-        return deferred;
-    }
+    };
 
     self.loadClan = function(id, page) {
         var jsonUrl = "/api/?clan=" + id + "&page=" + page;
-        var deferred = $.getJSON(jsonUrl, function(json) {
+        return $.getJSON(jsonUrl, function(json) {
             self.loading(false);
             self.showError(json.Info);
             self.clan(json.Response);
@@ -108,12 +106,26 @@ function ViewModel() {
                 });
             }
         });
-        return deferred;
-    }
+    };
 
     self.share = function(href) {
         window.open(href, "_blank", "toolbar=no, scrollbars=no, resizable=yes, top=0, left=0, width=500, height=300");
-    }
+    };
+
+    self.sponsorText = ko.observable({text:"",link:""});
+
+    self.changeSponsorText = function() {
+        var strings = [
+            {text: "See how you can change for hybrid cloud with HDCE",link: "https://www.hdce.ca/en/serveur-vm-dedier/"},
+            {text: "Why is this website accessible? Because of HDCE High Availability Hosting",link: "https://www.hdce.ca/en/serveur-vm-dedier/"},
+            {text: "Tired of asking your colleague's availability? HDCE Cloud Mail got you covered",link: "https://www.hdce.ca/en/services-offerts/courriels-collaboratifs/"},
+            {text: "You can count on us with our Cloud Accounting Solution!",link: "https://www.hdce.ca/en/systeme-comptable-cloud/"},
+            {text: "Tired of having to check your servers each day? HDCE Cloud Monitoring",link: "https://www.hdce.ca/en/services-offerts/telesurveillance-des-infrastructures/"},
+            {text: "Link-File, an exclusivity HDCE, gives you the ability to send Terabytes through emails",link: "https://www.hdce.ca/en/linkfile/"}
+        ];
+        var random = Math.floor(Math.random() * strings.length);
+        self.sponsorText(strings[random]);
+    };
 
     self.getNewUrl = function() {
         var platform = '';
@@ -143,7 +155,7 @@ function ViewModel() {
         }
 
         return window.location.protocol + '//' + window.location.hostname + '/' + platform + '/' + self.username().toLowerCase();
-    }
+    };
 
     self.isActivePlayer = function(entry) {
         if (self.player() != null) {
@@ -157,11 +169,11 @@ function ViewModel() {
         }
 
         return false;
-    }
+    };
 
     self.scrollTo = function(elem) {
         $("html, body").animate({ scrollTop: $(elem).offset().top }, 1000);
-    }
+    };
 
     self.reloadImage = function() {
         function pad(num, size) {
@@ -171,10 +183,11 @@ function ViewModel() {
         }
 
         $('body').css({'background-image': 'url(/img/background/' +pad(Math.floor(Math.random() * 50), 3) + '.jpg)'});
-    }
+    };
 
     self.load = function() {
         self.reloadImage();
+        self.changeSponsorText();
         
         $(document).scroll(function() {
             var y = $(this).scrollTop();
@@ -202,7 +215,7 @@ function ViewModel() {
                 }
             }
         });
-    }
+    };
 
     self.firstLeaderboardPage = function() {
         ga('send', 'event', 'Leaderboard', 'First Page');
@@ -210,7 +223,7 @@ function ViewModel() {
         if (page != 1) {
             self.loadLeaderboard(1);
         }
-    }
+    };
 
     self.previousLeaderboardPage = function() {
         ga('send', 'event', 'Leaderboard', 'Previous Page');
@@ -218,7 +231,7 @@ function ViewModel() {
         if (page != 1) {
             self.loadLeaderboard(parseInt(page) - 1);
         }
-    }
+    };
 
     self.nextLeaderboardPage = function() {
         ga('send', 'event', 'Leaderboard', 'Next Page');
@@ -226,7 +239,7 @@ function ViewModel() {
         if ((page * 10) < self.leaderboard().totalPlayers) {
             self.loadLeaderboard(parseInt(page) + 1);
         }
-    }
+    };
 
     self.firstClanPage = function() {
         ga('send', 'event', 'Clan', 'First Page');
@@ -234,7 +247,7 @@ function ViewModel() {
         if (page != 1) {
             self.loadClan(self.clan().id, 1);
         }
-    }
+    };
 
     self.previousClanPage = function() {
         ga('send', 'event', 'Clan', 'Previous Page');
@@ -242,7 +255,7 @@ function ViewModel() {
         if (page != 1) {
             self.loadClan(self.clan().id, parseInt(page) - 1);
         }
-    }
+    };
 
     self.nextClanPage = function() {
         ga('send', 'event', 'Clan', 'Next Page');
@@ -250,7 +263,7 @@ function ViewModel() {
         if ((page * 10) < self.clan().total) {
             self.loadClan(self.clan().id, parseInt(page) + 1);
         }
-    }
+    };
 
     self.showError = function(json) {
         if (json.Status != "Success") {
@@ -277,7 +290,7 @@ ko.bindingHandlers.hours = {
             $(element).text(hours + "h");
         }
     }
-}
+};
 
 ko.bindingHandlers.time = {
     update: function(element, valueAccessor) {
@@ -344,4 +357,4 @@ ko.bindingHandlers.time = {
 
         $(element).text(years + weeks + days + hours + minutes + seconds);
     }
-}
+};

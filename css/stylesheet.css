@@ -16,7 +16,12 @@ main {
 }
 
 footer.page-footer {
-	margin-top: 0px;
+	margin-top: 0;
+}
+
+footer.page-footer .footer-copyright {
+    min-height: 50px;
+    height: auto;
 }
 
 .row {
@@ -104,7 +109,7 @@ td, th {
     text-decoration: none;
     color: #fff;
     text-align: center;
-    letter-spacing: .5px;
+    letter-spacing: 1px;
     transition: .2s ease-out;
     cursor: pointer;
     border: none;
@@ -125,7 +130,7 @@ td, th {
     text-decoration: none;
     color: #fff;
     text-align: center;
-    letter-spacing: .5px;
+    letter-spacing: 1px;
     transition: .2s ease-out;
     cursor: pointer;
     border: none;
@@ -200,8 +205,24 @@ td, th {
     -webkit-tap-highlight-color: transparent;
 }
 
+.card.horizontal .card-image {
+    width: 150px;
+}
+
+.card.horizontal .card-image img {
+    position: absolute;
+    top: 50%;
+    height: 60px;
+    width: 150px;
+    margin-top: -20%;
+}
+
 .btn-link-block .material-icons {
     line-height: 36px;
+}
+
+.card.small .card-image+.card-content, .card.medium .card-image+.card-content, .card.large .card-image+.card-content {
+    max-height: 100%;
 }
 
 .card.small .card-content, .card.medium .card-content, .card.large .card-content {
