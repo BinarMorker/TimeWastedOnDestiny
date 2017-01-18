@@ -7,6 +7,17 @@ function ViewModel() {
     self.player = ko.observable(null);
     self.leaderboard = ko.observable(null);
     self.clan = ko.observable(null);
+    self.isPopupVisible = ko.computed(function () {
+        var name = "getapp";
+        var value = "; " + document.cookie;
+        var parts = value.split("; " + name + "=");
+
+        if (parts.length == 2) {
+            return parts.pop().split(";").shift() == 'true';
+        }
+
+        return true;
+    });
 
     self.searchPlayer = function(leaderboard) {
         self.loading(true);

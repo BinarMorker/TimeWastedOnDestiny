@@ -20,7 +20,7 @@
 </head>
 
 <body>
-<a class="hide-on-med-and-up white-text btn-header orange darken-3 waves-effect waves-light" onclick="ga('send', 'event', 'Links', 'Android Application');"
+<a class="hide-on-med-and-up white-text btn-header orange darken-3 waves-effect waves-light" style="display: none" data-bind="visible: isPopupVisible" onclick="ga('send', 'event', 'Links', 'Android Application');"
    href="https://play.google.com/store/apps/details?id=com.wastedondestiny.timewastedondestiny"><i class="zmdi zmdi-google-play zmdi-lg"></i> Get the app on Android!</a>
 <div class="section transparent">
     <div class="container">
@@ -336,15 +336,17 @@
             <div class="col l8 s12">
                 <h5 class="white-text">FAQ</h5>
                 <p class="grey-text text-lighten-4">
+                    <strong>I am no longer able to see my time.</strong>
+                    <br/>Bungie's API does not support legacy consoles anymore.</p>
+                <p class="grey-text text-lighten-4">
                     <strong>Do I have to add deleted time to the total time?</strong>
-                    <br/>The total time includes time spent on deleted characters.</p>
+                    <br/>No, the total time includes time spent on deleted characters.</p>
                 <p class="grey-text text-lighten-4">
-                    <strong>This is only about half my time on another website!</strong>
-                    <br/>The time displayed does not include idle time spent in the Tower, Reef, or waiting in orbit.</p>
+                    <strong>This is only about half my time on another website.</strong>
+                    <br/>The time displayed does not include idle time spent in social spaces or waiting in orbit.</p>
                 <p class="grey-text text-lighten-4">
-                    <strong>My username does not work!!!</strong>
-                    <br/>If your username does not work, please <a class="orange-text text-lighten-3" onclick="ga('send', 'event', 'Links', 'Github Issues');" href="https://github.com/BinarMorker/TimeWastedOnDestiny/issues">submit a bug</a>.
-                </p>
+                    <strong>My username does not work!</strong>
+                    <br/>Please <a class="orange-text text-lighten-3" onclick="ga('send', 'event', 'Links', 'Github Issues');" href="https://github.com/BinarMorker/TimeWastedOnDestiny/issues">submit a bug</a>.</p>
                 <p class="grey-text text-lighten-4">
                     <strong>Am I ranked against every player in the world?</strong>
                     <br/>No, you are only ranked against every player whose name has been entered on this website.</p>

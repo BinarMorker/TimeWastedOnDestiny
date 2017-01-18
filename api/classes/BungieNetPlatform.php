@@ -53,7 +53,7 @@ class BungieNetPlatform {
 					if (in_array(
 						$error->errorCode,
 						BungieNetPlatformError::getErrors()
-					)) {
+					) && $error->membershipType == $membershipType) {
 						throw new BungieNetPlatformException(
 							$error->message,
 							$error->errorCode
