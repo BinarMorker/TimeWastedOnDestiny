@@ -39,7 +39,7 @@ class BungieNetPlatformError {
 	
 	/**
 	 * Get all errors in an array
-	 * @return The error array
+	 * @return integer[] The error array
 	 */
 	public static function getErrors() {
 		return array(

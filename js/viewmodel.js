@@ -12,11 +12,17 @@ function ViewModel() {
         var value = "; " + document.cookie;
         var parts = value.split("; " + name + "=");
 
-        if (parts.length == 2) {
-            return parts.pop().split(";").shift() == 'true';
+        if (parts.length === 2) {
+            return parts.pop().split(";").shift() === 'true';
         }
 
         return true;
+    });
+
+    $('.zmdi-close').click(function(e) {
+        var input = $(e.currentTarget).siblings('input');
+        input.val('');
+        input.focus();
     });
 
     self.searchPlayer = function(leaderboard) {
@@ -26,29 +32,29 @@ function ViewModel() {
             self.loading(false);
             self.showError(json.Info);
 
-            if (leaderboard == undefined) {
+            if (leaderboard === undefined) {
                 ga('send', 'event', 'Search Player', json.Info.Message, self.platform() + ' - ' + self.username());
             } else {
                 ga('send', 'event', 'Leaderboard', json.Info.Message, self.platform() + ' - ' + self.username());
             }
 
-            if (json.Info.Status != 'Error') {
+            if (json.Info.Status !== 'Error') {
                 self.player(json.Response);
                 self.reloadImage();
                 self.scrollTo('#playerCards');
                 $('.dropdown-button').dropdown();
                 
-                if (typeof (history.pushState) != "undefined") {
+                if (typeof (history.pushState) !== "undefined") {
                     var obj = { Title: self.player().displayName, Url: self.getNewUrl() };
                     history.pushState(obj, obj.Title, obj.Url);
                 }
             } else {
                 var params = window.location.pathname.split('/').filter(function(item) {
-                    return item != "";
+                    return item !== "";
                 });
 
                 if (params.length > 0) {
-                    if (params[0] == "xbox") {
+                    if (params[0] === "xbox") {
                         self.platform(1);
                         self.username(self.player().xbox.displayName);
                     } else {
@@ -63,15 +69,15 @@ function ViewModel() {
     self.allCharacters = ko.computed(function() {
         var characters = [];
 
-        if (self.player() != null) {
-            if (self.player().playstation != null) {
+        if (self.player() !== null) {
+            if (self.player().playstation !== null) {
                 self.player().playstation.characters.forEach(function(item) {
                     item.membershipType = 2;
                     characters.push(item);
                 });
             }
 
-            if (self.player().xbox != null) {
+            if (self.player().xbox !== null) {
                 self.player().xbox.characters.forEach(function(item) {
                     item.membershipType = 1;
                     characters.push(item);
@@ -101,20 +107,24 @@ function ViewModel() {
             self.clan(json.Response);
 
             for (var key in self.clan().players) {
-                var otherJsonUrl = "/api/?console=" + self.clan().players[key].membershipType + "&user=" + self.clan().players[key].displayName;
-                $.getJSON(otherJsonUrl, function(json) {
-                    if (json.Info.Status != Error) {
-                        for (var player in self.clan().players) {
-                            if (json.Response.xbox && self.clan().players[player].membershipId == json.Response.xbox.membershipId) {
-                                self.clan().players[player].timePlayed = json.Response.xbox.timePlayed;
-                            } else if (json.Response.playstation && self.clan().players[player].membershipId == json.Response.playstation.membershipId) {
-                                self.clan().players[player].timePlayed = json.Response.playstation.timePlayed;
+                if (self.clan().players.hasOwnProperty(key)) {
+                    var otherJsonUrl = "/api/?console=" + self.clan().players[key].membershipType + "&user=" + self.clan().players[key].displayName;
+                    $.getJSON(otherJsonUrl, function (json) {
+                        if (json.Info.Status !== Error) {
+                            for (var player in self.clan().players) {
+                                if (self.clan().players.hasOwnProperty(player)) {
+                                    if (json.Response.xbox && self.clan().players[player].membershipId === json.Response.xbox.membershipId) {
+                                        self.clan().players[player].timePlayed = json.Response.xbox.timePlayed;
+                                    } else if (json.Response.playstation && self.clan().players[player].membershipId === json.Response.playstation.membershipId) {
+                                        self.clan().players[player].timePlayed = json.Response.playstation.timePlayed;
+                                    }
+                                }
                             }
-                        }
 
-                        self.clan.valueHasMutated();
-                    }
-                });
+                            self.clan.valueHasMutated();
+                        }
+                    });
+                }
             }
         });
     };
@@ -141,19 +151,19 @@ function ViewModel() {
     self.getNewUrl = function() {
         var platform = '';
 
-        if (self.player() != null) {
-            if (self.platform() == 1) {
-                if (self.player().xbox != null) {
+        if (self.player() !== null) {
+            if (self.platform() === 1) {
+                if (self.player().xbox !== null) {
                     platform = 'xbox';
-                } else if (self.player().playstation != null) {
+                } else if (self.player().playstation !== null) {
                     platform = 'playstation';
                 } else {
                     return window.location.protocol + '//' + window.location.hostname;
                 }
-            } else if (self.platform() == 2) {
-                if (self.player().playstation != null) {
+            } else if (self.platform() === 2) {
+                if (self.player().playstation !== null) {
                     platform = 'playstation';
-                } else if (self.player().xbox != null) {
+                } else if (self.player().xbox !== null) {
                     platform = 'xbox';
                 } else {
                     return window.location.protocol + '//' + window.location.hostname;
@@ -169,12 +179,12 @@ function ViewModel() {
     };
 
     self.isActivePlayer = function(entry) {
-        if (self.player() != null) {
-            if (self.player().playstation != undefined && self.player().playstation.membershipId == entry.membershipId) {
+        if (self.player() !== null) {
+            if (self.player().playstation !== null && self.player().playstation.membershipId === entry.membershipId) {
                 return true
             }
 
-            if (self.player().xbox != undefined && self.player().xbox.membershipId == entry.membershipId) {
+            if (self.player().xbox !== null && self.player().xbox.membershipId === entry.membershipId) {
                 return true;
             }
         }
@@ -211,11 +221,11 @@ function ViewModel() {
 
         self.loadLeaderboard(1).then(function() {
             var params = window.location.pathname.split('/').filter(function(item) {
-                return item != "";
+                return item !== "";
             });
 
             if (params.length > 0) {
-                if (params[0] == "xbox") {
+                if (params[0] === "xbox") {
                     self.platform(1);
                     self.username(decodeURI(params[1]));
                     self.searchPlayer();
@@ -231,7 +241,7 @@ function ViewModel() {
     self.firstLeaderboardPage = function() {
         ga('send', 'event', 'Leaderboard', 'First Page');
         var page = self.leaderboard().page;
-        if (page != 1) {
+        if (page !== 1) {
             self.loadLeaderboard(1);
         }
     };
@@ -239,7 +249,7 @@ function ViewModel() {
     self.previousLeaderboardPage = function() {
         ga('send', 'event', 'Leaderboard', 'Previous Page');
         var page = self.leaderboard().page;
-        if (page != 1) {
+        if (page !== 1) {
             self.loadLeaderboard(parseInt(page) - 1);
         }
     };
@@ -255,7 +265,7 @@ function ViewModel() {
     self.firstClanPage = function() {
         ga('send', 'event', 'Clan', 'First Page');
         var page = self.clan().page;
-        if (page != 1) {
+        if (page !== 1) {
             self.loadClan(self.clan().id, 1);
         }
     };
@@ -263,7 +273,7 @@ function ViewModel() {
     self.previousClanPage = function() {
         ga('send', 'event', 'Clan', 'Previous Page');
         var page = self.clan().page;
-        if (page != 1) {
+        if (page !== 1) {
             self.loadClan(self.clan().id, parseInt(page) - 1);
         }
     };
@@ -277,9 +287,9 @@ function ViewModel() {
     };
 
     self.showError = function(json) {
-        if (json.Status != "Success") {
+        if (json.Status !== "Success") {
             var weight = "yellow darken-3";
-            if (json.Status == "Error") {
+            if (json.Status === "Error") {
                 weight = "red darken-1";
             }
             var message = json.Message.replace(new RegExp('\r?\n', 'g'), '<br />');

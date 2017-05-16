@@ -24,12 +24,12 @@ class AccountManager {
 	 * @var array
 	 */
 	private $apiQueries = array();
-	
-	/**
-	 * @param int $console
-	 * @param string $username
-	 * @throws BungieNetPlatformException
-	 */
+
+    /**
+     * @param int $console
+     * @param string $username
+     * @throws ApiException
+     */
 	public function __construct($console, $username) {
 		try {
 			$playerRequest = BungieNetPlatform::searchDestinyPlayer(
@@ -131,10 +131,12 @@ class AccountManager {
 		$this->bungieAccount = $bungieAccountRequest;
 	}
 
-	/**
-	 * Get the time spent on Destiny (and many other characters information)
-	 * @return The information array
-	 */
+    /**
+     * Get the time spent on Destiny (and many other characters information)
+     * @param bool $debug
+     * @return array The information array
+     * @throws ApiException
+     */
 	public function getTimeWasted($debug = false) {
 		$data = array();
 		
@@ -249,8 +251,8 @@ class AccountManager {
 				$destinyAccount->userInfo->displayName, 
 				$currentData->timePlayed
 			);
-			$currentData->leaderboardPosition = Leaderboard::getPlayerRank(
-				$destinyAccount->userInfo->membershipId
+			$currentData->percentile = Leaderboard::getPlayerRank(
+                $currentData->timePlayed
 			);
 			
 			if ($destinyAccount->userInfo->membershipType == 1) {

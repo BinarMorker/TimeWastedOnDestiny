@@ -11,17 +11,18 @@ class BungieNetPlatform {
 	 * The Bungie Net Platform's URI
 	 * @var string
 	 */
-	const BUNGIE_URI = "http://www.bungie.net/Platform/";
-	
-	/**
-	 * Get the Bungie account from a Destiny account
-	 * @param int $membershipType The Destiny account console
-	 * @param string $membershipId The Destiny account Id
-	 * @param array $params Other parameters link language and definition
-	 * @return The response object
-	 * @throws BungieNetPlatformException
-	 * @link https://www.bungie.net/platform/user/help/HelpDetail/GET?uri=GetBungieAccount%2f%7bmembershipId%7d%2f%7bmembershipType%7d%2f
-	 */
+	const BUNGIE_URI = "https://www.bungie.net/Platform/";
+
+    /**
+     * Get the Bungie account from a Destiny account
+     * @param int $membershipType The Destiny account console
+     * @param string $membershipId The Destiny account Id
+     * @param array $params Other parameters link language and definition
+     * @return stdClass The response object
+     * @throws BungieNetPlatformException
+     * @throws ExternalURIRequestException
+     * @link https://www.bungie.net/platform/user/help/HelpDetail/GET?uri=GetBungieAccount%2f%7bmembershipId%7d%2f%7bmembershipType%7d%2f
+     */
 	public static function getBungieAccount(
 		$membershipType, 
 		$membershipId, 
@@ -75,15 +76,16 @@ class BungieNetPlatform {
 		}
 	}
 
-	/**
-	 * Get a Destiny account from console credentials
-	 * @param int $membershipType The console identifier
-	 * @param string $displayName The console username
-	 * @param array $params Other parameters link language and definition
-	 * @return The response object
-	 * @throws BungieNetPlatformException
-	 * @link https://www.bungie.net/platform/destiny/help/HelpDetail/GET?uri=SearchDestinyPlayer%2f%7bmembershipType%7d%2f%7bdisplayName%7d%2f
-	 */
+    /**
+     * Get a Destiny account from console credentials
+     * @param int $membershipType The console identifier
+     * @param string $displayName The console username
+     * @param array $params Other parameters link language and definition
+     * @return stdClass The response object
+     * @throws BungieNetPlatformException
+     * @throws ExternalURIRequestException
+     * @link https://www.bungie.net/platform/destiny/help/HelpDetail/GET?uri=SearchDestinyPlayer%2f%7bmembershipType%7d%2f%7bdisplayName%7d%2f
+     */
 	public static function searchDestinyPlayer(
 		$membershipType, 
 		$displayName, 
@@ -123,15 +125,16 @@ class BungieNetPlatform {
 		}
 	}
 
-	/**
-	 * Get all stats for a Destiny account
-	 * @param int $membershipType The Destiny account console
-	 * @param string $membershipId The Destiny account Id
-	 * @param array $params Other parameters link language and definition
-	 * @return The response object
-	 * @throws BungieNetPlatformException
-	 * @link https://www.bungie.net/platform/destiny/help/HelpDetail/GET?uri=Stats%2fAccount%2f%7bmembershipType%7d%2f%7bdestinyMembershipId%7d%2f
-	 */
+    /**
+     * Get all stats for a Destiny account
+     * @param int $membershipType The Destiny account console
+     * @param string $membershipId The Destiny account Id
+     * @param array $params Other parameters link language and definition
+     * @return stdClass The response object
+     * @throws BungieNetPlatformException
+     * @throws ExternalURIRequestException
+     * @link https://www.bungie.net/platform/destiny/help/HelpDetail/GET?uri=Stats%2fAccount%2f%7bmembershipType%7d%2f%7bdestinyMembershipId%7d%2f
+     */
 	public static function getAccountStats(
 		$membershipType, 
 		$membershipId, 
@@ -172,14 +175,15 @@ class BungieNetPlatform {
 		}
 	}
 
-	/**
-	 * Get details for a clan
-	 * @param int $clanId The clan Id
-	 * @param array $params Other parameters like language and definition
-	 * @return The response object
-	 * @throws BungieNetPlatformException
-	 * @link http://destinydevs.github.io/BungieNetPlatform/docs/GroupService/GetGroup
-	 */
+    /**
+     * Get details for a clan
+     * @param int $clanId The clan Id
+     * @param array $params Other parameters like language and definition
+     * @return stdClass The response object
+     * @throws BungieNetPlatformException
+     * @throws ExternalURIRequestException
+     * @link http://destinydevs.github.io/BungieNetPlatform/docs/GroupService/GetGroup
+     */
 	public static function getClanDetails(
 		$clanId, 
 		$params = null
@@ -216,15 +220,16 @@ class BungieNetPlatform {
 		}
 	}
 
-	/**
-	 * Get all members for a clan
-	 * @param int $clanId The clan Id
-	 * @param int $page The current page to query
-	 * @param array $params Other parameters link language and definition
-	 * @return The response object
-	 * @throws BungieNetPlatformException
-	 * @link http://destinydevs.github.io/BungieNetPlatform/docs/GroupService/GetMembersOfClan
-	 */
+    /**
+     * Get all members for a clan
+     * @param int $clanId The clan Id
+     * @param int $page The current page to query
+     * @param array $params Other parameters link language and definition
+     * @return stdClass The response object
+     * @throws BungieNetPlatformException
+     * @throws ExternalURIRequestException
+     * @link http://destinydevs.github.io/BungieNetPlatform/docs/GroupService/GetMembersOfClan
+     */
 	public static function getClanMembers(
 		$clanId, 
 		$page, 

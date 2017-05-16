@@ -35,7 +35,7 @@ class Config {
 	
 	/**
 	 * Get the configuration instance or create it
-	 * @return The instance
+	 * @return self The instance
 	 */
 	private static function getInstance() {
 		if (!isset(self::$instance)) {
@@ -48,7 +48,7 @@ class Config {
 	/**
 	 * Get the configuration value for a given key
 	 * @param string $name The configuration key
-	 * @return The configuration value
+	 * @return mixed The configuration value
 	 * @throws InvalidArgumentException if the key does not exist
 	 */
 	public static function get($name) {

@@ -42,28 +42,82 @@ class Leaderboard {
 		
 		return self::$instance;
 	}
+
+    /**
+     * Get the time played for the player at a determined rank
+     * @param integer $rank
+     * @return mixed The time played
+     */
+    public static function getSecondsAtRank($rank) {
+        $query = 'SELECT seconds '.
+            'FROM leaderboard ORDER BY `seconds` '.
+            "LIMIT 1 OFFSET $rank;";
+        try {
+            $statement = self::getInstance()->database->prepare($query);
+            $statement->execute();
+        } catch (Exception $e) {
+            return false;
+        }
+
+        if ($player = $statement->fetch()) {
+            return intval($player['seconds']);
+        }
+
+        return false;
+    }
+
+    /**
+     * Save the percentiles
+     * @param array $data The percentiles array
+     * @return True if the query succeeded
+     */
+    public static function savePercentiles($data) {
+        $query = 'REPLACE INTO percentiles ' .
+            '(`percentile`, `maximumTime`, `minimumTime`) ' .
+            'VALUES (:percentile, :maximumTime, :minimumTime);';
+
+        try {
+            $previousEntry = null;
+
+            foreach ($data as $index => $entry) {
+                if ($previousEntry !== null) {
+                    $statement = self::getInstance()->database->prepare($query);
+                    $statement->execute(array(
+                        ':percentile' => $index - 1,
+                        ':maximumTime' => $previousEntry,
+                        ':minimumTime' => $entry
+                    ));
+                }
+
+                $previousEntry = $entry;
+            }
+
+            return true;
+        } catch (Exception $e) {
+            return false;
+        }
+    }
 	
 	/**
-	 * Get the player rank
-	 * @param string $membershipId
-	 * @return mixed The rank or false if an error occurs
+	 * Get the player percentile
+	 * @param integer $timePlayed
+	 * @return mixed The percentile
 	 */
-	public static function getPlayerRank($membershipId) {
-		$query = 'SELECT * '.
-				 'FROM (SELECT @rownum:=@rownum+1 `rank`, `id` '.
-				 'FROM leaderboard, (SELECT @rownum:=0) r ORDER BY `seconds` DESC) '.
-				 'AS `ranks` WHERE `id`=:id;';
+	public static function getPlayerRank($timePlayed) {
+		$query = 'SELECT `percentile` '.
+				 'FROM percentiles '.
+				 'WHERE :time BETWEEN `minimumTime` AND `maximumTime`;';
         try {
             $statement = self::getInstance()->database->prepare($query);
             $statement->execute(array(
-                ':id' => $membershipId
+                ':time' => $timePlayed
             ));
         } catch (Exception $e) {
             return false;
         }
 		
 		if ($player = $statement->fetch()) {
-			return $player['rank'];
+			return $player['percentile'];
 		}
 		
 		return false;

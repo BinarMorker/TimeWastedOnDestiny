@@ -11,8 +11,8 @@ class Cache {
 	 * Get the cached content if it is valid and in cache, or cache it
 	 * @param string $string The content id
 	 * @param int $time The time during which to cache the content
-	 * @param function $content The content to be cached
-	 * @return The cached data
+	 * @param callable $callback The content to be cached
+	 * @return string The cached data
 	 */
 	public static function getCachedContent($string, $time, $callback) {
 		$cacheFile = $_SERVER['DOCUMENT_ROOT'].'/cache/'.$string.'.json';

@@ -31,7 +31,7 @@ class Timer {
 
 	/**
 	 * Get the timer instance or create it
-	 * @return The instance
+	 * @return self The instance
 	 */
 	private static function getInstance() {
 		if (!isset(self::$instance)) {
@@ -59,7 +59,7 @@ class Timer {
 
 	/**
 	 * Stop and get time timer value
-	 * @return The time counted from the start
+	 * @return int The time counted from the start
 	 */
 	public static function stop() {
 		if (self::getInstance()->time_running) {

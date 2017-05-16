@@ -7,22 +7,14 @@
     <orderEntry type="module-library">
       <library name="PHP" type="php">
         <CLASSES>
-          <root url="file://$APPLICATION_HOME_DIR$/jre/jre/bin" />
+          <root url="file://$APPLICATION_HOME_DIR$/bin" />
         </CLASSES>
         <SOURCES>
-          <root url="file://$APPLICATION_HOME_DIR$/jre/jre/bin" />
+          <root url="file://$APPLICATION_HOME_DIR$/bin" />
         </SOURCES>
       </library>
     </orderEntry>
-    <orderEntry type="module-library">
-      <library name="PHP Runtime" type="php">
-        <CLASSES>
-          <root url="jar://$APPLICATION_HOME_DIR$/plugins/php/lib/php.jar!/stubs/standard" />
-        </CLASSES>
-        <SOURCES>
-          <root url="jar://$APPLICATION_HOME_DIR$/plugins/php/lib/php.jar!/stubs/standard" />
-        </SOURCES>
-      </library>
-    </orderEntry>
+    <orderEntry type="library" name="materialize" level="application" />
+    <orderEntry type="library" name="jquery-2.2.2" level="application" />
   </component>
 </module>

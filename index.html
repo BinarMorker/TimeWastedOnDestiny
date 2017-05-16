@@ -112,7 +112,7 @@
                     </a>
                     <!-- /ko -->
                     <span class="collection-footer">
-              <a href='#' class='btn-invis left' data-bind='click: $parent.firstLeaderboardPage, visible: parseInt(page) > 1'><i class='zmdi zmdi-chevron-left zmdi-hc-lg'></i><i class='zmdi zmdi-chevron-left zmdi-hc-lg'></i></i></a>
+              <a href='#' class='btn-invis left' data-bind='click: $parent.firstLeaderboardPage, visible: parseInt(page) > 1'><i class='zmdi zmdi-chevron-left zmdi-hc-lg'></i><i class='zmdi zmdi-chevron-left zmdi-hc-lg'></i></a>
               <a href='#' class='btn-invis left' data-bind='click: $parent.previousLeaderboardPage, visible: parseInt(page) > 1'><i class='zmdi zmdi-chevron-left zmdi-hc-lg'></i></a>
                 Page: <span data-bind="text: page"></span>, Players: <span data-bind="text: totalPlayers"></span>
               <a href='#' class='btn-invis right' data-bind='click: $parent.nextLeaderboardPage, visible: (parseInt(page) * 10) < parseInt(totalPlayers)'><i class='zmdi zmdi-chevron-right zmdi-hc-lg'></i></a>
@@ -132,7 +132,7 @@
                     </a>
                     <!-- /ko -->
                     <span class="collection-footer">
-              <a href='#' class='btn-invis left' data-bind='click: $parent.firstClanPage, visible: parseInt(page) > 1'><i class='zmdi zmdi-chevron-left zmdi-hc-lg'></i><i class='zmdi zmdi-chevron-left zmdi-hc-lg'></i></i></a>
+              <a href='#' class='btn-invis left' data-bind='click: $parent.firstClanPage, visible: parseInt(page) > 1'><i class='zmdi zmdi-chevron-left zmdi-hc-lg'></i><i class='zmdi zmdi-chevron-left zmdi-hc-lg'></i></a>
               <a href='#' class='btn-invis left' data-bind='click: $parent.previousClanPage, visible: parseInt(page) > 1'><i class='zmdi zmdi-chevron-left zmdi-hc-lg'></i></a>
                 Page: <span data-bind="text: page"></span>, Players: <span data-bind="text: total"></span>
               <a href='#' class='btn-invis right' data-bind='click: $parent.nextClanPage, visible: (parseInt(page) * 10) < parseInt(total)'><i class='zmdi zmdi-chevron-right zmdi-hc-lg'></i></a>
@@ -154,28 +154,12 @@
     </div>
 </div>
 
-<div class="container section center" data-bind="visible: loading">
-    <div class='preloader-wrapper big active'>
-        <div class='spinner-layer spinner-blue-only'>
-            <div class='circle-clipper left'>
-                <div class='circle'></div>
-            </div>
-            <div class='gap-patch'>
-                <div class='circle'></div>
-            </div>
-            <div class='circle-clipper right'>
-                <div class='circle'></div>
-            </div>
-        </div>
-    </div>
-</div>
-
 <div class="section transluscent" id="playerCards" data-bind="visible: !loading()">
     <div class="container" data-bind="with: player">
         <div class="row">
             <div class="col s12 l6">
                 <div class="card small grey lighten-4">
-                    <div class="card-image orange darken-2" style="position; relative;">
+                    <div class="card-image orange darken-2" style="position: relative;">
                         <span onclick="ga('send', 'event', 'Links', 'Character detail');" class="card-title activator" data-bind="text: displayName"></span>
                         <div class="fixed-action-btn horizontal click-to-toggle right" style="position: absolute; right: 20px; top: 5px;">
                             <a class="btn-block red waves-effect waves-light z-depth-1" style="position: relative; top: 10px;">
@@ -223,10 +207,10 @@
                 <!-- ko if: playstation -->
                 <div class="card indigo darken-4" data-bind="with: playstation">
                     <div class="card-content white-text">
-                        <img class="hide-on-small-only profile-image left" data-bind="attr: { src: 'https://www.bungie.net' + iconPath }"/>
+                        <img src="#" class="hide-on-small-only profile-image left" data-bind="attr: { src: 'https://www.bungie.net' + iconPath }"/>
                         <div>
                             <span class="card-title"><i class="zmdi zmdi-playstation zmdi-hc-lg"></i> <span data-bind="text: displayName"></span></span>
-                            <span class="right" data-bind="text: 'Top ' + Math.ceil((leaderboardPosition / $root.leaderboard().totalPlayers) * 100) + '%'"></span>
+                            <span class="right" data-bind="text: 'Top ' + percentile + '%'"></span>
                             <h5><span data-bind="hours: timePlayed"></span>
                                 <small class="orange-text text-lighten-1" data-bind="hours: timeWasted, format: '-? deleted'"></small>
                             </h5>
@@ -236,8 +220,6 @@
                     <div class="card-action">
                         <a class="white-text dropdown-button" data-bind="click: function() { ga('send', 'event', 'Links', 'Profile'); }" data-activates="dropdown-playstation" data-constrainwidth="false" href="#">View profile <i
                                 class="zmdi zmdi-caret-down zmdi-hc-lg"></i></a>
-                        <a class="white-text" href="#"
-                           data-bind="click: function(){ ga('send', 'event', 'Links', 'View Rank'); $root.loadLeaderboard(Math.floor((leaderboardPosition - 1) / 10) + 1); $root.clan(null); $root.scrollTo('#leaderboard'); }">View rank</a>
                         <!-- ko if: clan -->
                         <a class="white-text" href="#"
                            data-bind="click: function(){ ga('send', 'event', 'Links', 'View Clan'); $root.loadClan(clan.id, 1); $root.scrollTo('#leaderboard'); }, text: 'View clan [' + (clan.tag != '' ? clan.tag : clan.name) + ']'"></a>
@@ -266,10 +248,10 @@
                 <!-- ko if: xbox -->
                 <div class="card green darken-4" data-bind="with: xbox">
                     <div class="card-content white-text">
-                        <img class="hide-on-small-only profile-image left" data-bind="attr: { src: 'https://www.bungie.net' + iconPath }"/>
+                        <img src="#" class="hide-on-small-only profile-image left" data-bind="attr: { src: 'https://www.bungie.net' + iconPath }"/>
                         <div>
                             <span class="card-title"><i class="zmdi zmdi-xbox zmdi-hc-lg"></i> <span data-bind="text: displayName"></span></span>
-                            <span class="right" data-bind="text: 'Top ' + Math.ceil((leaderboardPosition / $root.leaderboard().totalPlayers) * 100) + '%'"></span>
+                            <span class="right" data-bind="text: 'Top ' + percentile + '%'"></span>
                             <h5><span data-bind="hours: timePlayed"></span>
                                 <small class="orange-text text-lighten-1" data-bind="hours: timeWasted, format: '-? deleted'"></small>
                             </h5>
@@ -279,8 +261,6 @@
                     <div class="card-action">
                         <a class="white-text dropdown-button" data-bind="click: function() { ga('send', 'event', 'Links', 'Profile'); }" data-activates="dropdown-xbox" data-constrainwidth="false" href="#">View profile <i
                                 class="zmdi zmdi-caret-down zmdi-hc-lg"></i></a>
-                        <a class="white-text" href="#"
-                           data-bind="click: function(){ ga('send', 'event', 'Links', 'View Rank'); $root.loadLeaderboard(Math.floor((leaderboardPosition - 1) / 10) + 1); $root.clan(null); $root.scrollTo('#leaderboard'); }">View rank</a>
                         <!-- ko if: clan -->
                         <a class="white-text" href="#"
                            data-bind="click: function(){ ga('send', 'event', 'Links', 'View Clan'); $root.loadClan(clan.id, 1); $root.scrollTo('#leaderboard'); }, text: 'View clan [' + (clan.tag != '' ? clan.tag : clan.name) + ']'"></a>
@@ -386,6 +366,24 @@
     <a data-bind="click: function() { scrollTo('#index-banner'); ga('send', 'event', 'Links', 'Return To Top'); }" href="#" class="btn-floating btn-large grey darken-3">
         <i class="zmdi zmdi-chevron-up zmdi-lg"></i>
     </a>
+</div>
+
+<div class="loading" data-bind="visible: loading">
+    <div class="loading-inner">
+        <div class='preloader-wrapper big active'>
+            <div class='spinner-layer spinner-blue-only'>
+                <div class='circle-clipper left'>
+                    <div class='circle'></div>
+                </div>
+                <div class='gap-patch'>
+                    <div class='circle'></div>
+                </div>
+                <div class='circle-clipper right'>
+                    <div class='circle'></div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!--  Scripts-->

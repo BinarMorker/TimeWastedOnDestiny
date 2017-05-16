@@ -11,7 +11,7 @@ class Api {
 	 * The current API version
 	 * @var string
 	 */
-	const VERSION = "2.1.0";
+	const VERSION = "2.2.0";
 	
 	/**
 	 * The main website's domain name
@@ -38,6 +38,9 @@ class Api {
 			} elseif (isset($_GET['version'])) {
 				$response = self::getVersion();
 				self::displayJson($response);
+            } elseif (isset($_GET['calculatePercentiles'])) {
+                $response = self::calculatePercentiles();
+                self::displayJson($response);
 			} elseif (isset($_GET['leaderboard'])) {
 				if (isset($_GET['page'])) {
 					self::displayJson(json_decode(Cache::getCachedContent(
@@ -103,7 +106,7 @@ class Api {
 	
 	/**
 	 * Get the API's current and online version
-	 * @return The json request string
+	 * @return array The json request
 	 */
 	private static function getVersion() {
 		$data = array();
@@ -120,30 +123,59 @@ class Api {
 			}
 			
 			$data['onlineVersion'] = $version;
-			$json = new JsonBuilder($data);
+			$json = new JsonResponseBuilder($data);
 			$json->addInfo(new JsonInfoBuilder(new ResponseSuccessInfo()));
 			return $json->get();
 		} catch (ExternalURIRequestException $exception) {
 			$data['onlineVersion'] = self::VERSION;
 			$status = new ResponseExceptionInfo($exception);
-			$json = new JsonBuilder($data, new JsonInfoBuilder($status));
+			$json = new JsonResponseBuilder($data, new JsonInfoBuilder($status));
 			return $json->get();
 		}
 	}
+
+    /**
+     * Calculate all stats percentiles
+     * @return array The json request
+     */
+    private static function calculatePercentiles() {
+        $data = array();
+
+        try {
+            $total = Leaderboard::getTotalPlayers();
+
+            for ($i = 1; $i < 100; $i++) {
+                $rank = ceil(((100 - $i) / 100) * $total);
+                $data[$i] = Leaderboard::getSecondsAtRank($rank);
+            }
+
+            $data[1] = PHP_INT_MAX;
+            $data[100] = 0;
+            Leaderboard::savePercentiles($data);
+            $json = new JsonResponseBuilder($data);
+            $json->addInfo(new JsonInfoBuilder(new ResponseSuccessInfo()));
+            return $json->get();
+        } catch (ExternalURIRequestException $exception) {
+            $data['onlineVersion'] = self::VERSION;
+            $status = new ResponseExceptionInfo($exception);
+            $json = new JsonResponseBuilder($data, new JsonInfoBuilder($status));
+            return $json->get();
+        }
+    }
 
 	/**
 	 * Get the time spent on Destiny (and all the user stuff too)
 	 * @param int $console
 	 * @param string $username
-	 * @return The json request string
+	 * @return array The json request
 	 */
 	private static function getTimeWasted($console, $username) {
 		try {
 			$account = new AccountManager($console, $username);
 			if (isset($_GET['dbg'])) {
-				$json = new JsonBuilder($account->getTimeWasted(true));
+				$json = new JsonResponseBuilder($account->getTimeWasted(true));
 			} else {
-				$json = new JsonBuilder($account->getTimeWasted());
+				$json = new JsonResponseBuilder($account->getTimeWasted());
 			}
 				
 			if (empty(self::$warnStatus)) {
@@ -156,7 +188,7 @@ class Api {
 			return $json->get();
 		} catch (ApiException $exception) {
 			$status = new ResponseExceptionInfo($exception);
-			$json = new JsonBuilder(array(), new JsonInfoBuilder($status));
+			$json = new JsonResponseBuilder(array(), new JsonInfoBuilder($status));
 			return $json->get();
 		}
 	}
@@ -165,16 +197,16 @@ class Api {
 	 * Get a clan's leaderboard
 	 * @param int $id
 	 * @param int $page
-	 * @return The json request string
+	 * @return array The json request
 	 */
 	private static function getClan($id, $page) {
 		try {
 			$clan = new ClanManager();
 
 			if (isset($_GET['dbg'])) {
-				$json = new JsonBuilder($clan->getClanLeaderboard($id, $page, true));
+				$json = new JsonResponseBuilder($clan->getClanLeaderboard($id, $page, true));
 			} else {
-				$json = new JsonBuilder($clan->getClanLeaderboard($id, $page));
+				$json = new JsonResponseBuilder($clan->getClanLeaderboard($id, $page));
 			}
 				
 			if (empty(self::$warnStatus)) {
@@ -187,7 +219,7 @@ class Api {
 			return $json->get();
 		} catch (ApiException $exception) {
 			$status = new ResponseExceptionInfo($exception);
-			$json = new JsonBuilder(array(), new JsonInfoBuilder($status));
+			$json = new JsonResponseBuilder(array(), new JsonInfoBuilder($status));
 			return $json->get();
 		}
 	}
@@ -195,7 +227,7 @@ class Api {
 	/**
 	 * Get the leaderboard from the database
 	 * @param int $page
-	 * @return The json request string
+	 * @return array The json request
 	 */
 	private static function getLeaderboard($page) {
 		try {
@@ -221,12 +253,12 @@ class Api {
 				$status = new ResponseWarningInfo(self::$warnStatus);
 			}
 				
-			$json = new JsonBuilder($leaderboard);
+			$json = new JsonResponseBuilder($leaderboard);
 			$json->addInfo(new JsonInfoBuilder($status));
 			return $json->get();
 		} catch (ApiException $exception) {
 			$status = new ResponseExceptionInfo($exception);
-			$json = new JsonBuilder(array(), new JsonInfoBuilder($status));
+			$json = new JsonResponseBuilder(array(), new JsonInfoBuilder($status));
 			return $json->get();
 		}
 	}
@@ -242,7 +274,7 @@ class Api {
 	
 	/**
 	 * Display the response as formatted or unformatted json
-	 * @param string $response
+	 * @param array|stdClass $response
 	 */
 	private static function displayJson($response) {
 		if (isset($_GET['fmt'])) {
