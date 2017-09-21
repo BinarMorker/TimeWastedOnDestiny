@@ -1,0 +1,6 @@
+{
+    "require": {
+        "youmy001/apine-framework": "1.2.x-dev",
+        "guzzlehttp/guzzle": "^6.3"
+    }
+}

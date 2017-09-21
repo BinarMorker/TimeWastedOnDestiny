@@ -1,0 +1,26 @@
+{
+  "name": "wod2",
+  "authors": [
+    "François Allard <binarmorker@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.0",
+    "knockout": "^3.4.2",
+    "masonry": "^4.2.0",
+    "uikit": "3.0.0-beta.30",
+    "requirejs": "^2.3.5",
+    "requirejs-plugins": "^1.0.3"
+  }
+}

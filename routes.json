@@ -1,0 +1,30 @@
+{
+	"/": {
+		"GET": {
+			"args": false,
+			"controller": "index",
+			"action": "index"
+		}
+	},
+	"/search": {
+		"GET": {
+			"args": false,
+			"controller": "index",
+			"action": "redirect"
+		}
+	},
+	"/search/": {
+		"GET": {
+			"args": false,
+			"controller": "index",
+			"action": "redirect"
+		}
+	},
+	"/search/([a-zA-Z0-9-_,]+)": {
+		"GET": {
+			"args": true,
+			"controller": "index",
+			"action": "index"
+		}
+	}
+}
