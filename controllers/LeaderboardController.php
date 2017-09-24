@@ -17,14 +17,14 @@ class LeaderboardController implements APIActionsInterface {
         $results = $database->select("SELECT * FROM `wod_leaderboard` ORDER BY `seconds` DESC LIMIT $count OFFSET $offset");
         $players = [];
 
-        foreach ($results as $result) {
+        /*foreach ($results as $result) {
             $player = new Player();
             $player->setId($result['id']);
             $player->setConsole(intval($result['console']) == 0 ? 1 : 2);
             $player->setUsername($result['username']);
             $player->setSeconds($result['seconds']);
             $players[] = $player;
-        }
+        }*/
 
         return $players;
     }

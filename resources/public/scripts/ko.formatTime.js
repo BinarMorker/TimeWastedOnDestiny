@@ -30,6 +30,8 @@ define(['knockout'], function(ko) {
                         (minutes ? (minutes + 'm ') : '') +
                         (seconds ? (seconds + 's') : '');
                 }
+            } else {
+                value = '0h';
             }
 
             $(element).text(value);

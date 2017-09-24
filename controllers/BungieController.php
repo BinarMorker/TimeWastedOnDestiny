@@ -2,420 +2,388 @@
 
 namespace Apine\Controllers\User;
 
-use Apine\Application\Config;
 use Apine\Exception\GenericException;
+use Apine\Modules\BungieNetPlatform\Destiny2\BungieMembershipType;
+use Apine\Modules\BungieNetPlatform\Destiny2\DestinyComponentType;
+use Apine\Modules\WOD\Account;
+use Apine\Modules\WOD\ApiResponse;
+use Apine\Modules\WOD\BungieNetUser;
+use Apine\Modules\WOD\Character;
+use Apine\Modules\WOD\DestinyClassType;
+use Apine\Modules\WOD\DestinyGameVersion;
+use Apine\Modules\WOD\DestinyGenderType;
+use Apine\Modules\WOD\DestinyRaceType;
+use Apine\Modules\WOD\Membership;
+use Apine\Modules\WOD\Request\Destiny;
+use Apine\Modules\WOD\Request\Destiny2;
 use Apine\MVC\Controller;
 use Apine\MVC\JSONView;
-use Exception;
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Psr7\Request;
-use SQLite3;
-use ZipArchive;
+use DateTime;
 
 class BungieController extends Controller {
 
-    const BASEPATH = "https://www.bungie.net/Platform";
-    const BASED1PATH = "https://www.bungie.net/d1/Platform";
-    const BUNGIENET = "https://www.bungie.net";
+    /**
+     * @param $membershipType
+     * @param $membershipId
+     * @return array
+     */
+    private function getMembershipsById($membershipType, $membershipId) {
+        $getMembershipsByIdRequest = new Destiny2\GetMembershipsByIdRequest($membershipType, $membershipId);
+        $getMembershipsByIdResponse = $getMembershipsByIdRequest->getResponse();
+        $code = $getMembershipsByIdResponse->errorCode;
+        $message = $getMembershipsByIdResponse->message;
+        $response = new Membership();
 
-    private static function getDefinition(SQLite3 $db, $tables, &$definitions, $bungieName, $localName) {
-        if (isset($tables[$bungieName])) {
-            $result = $db->query("SELECT `id`, `json` FROM $bungieName");
+        if (!is_null($getMembershipsByIdResponse->response->bungieNetUser)) {
+            $response->bungieNetUser = new BungieNetUser();
+            $response->bungieNetUser->membershipId = $getMembershipsByIdResponse->response->bungieNetUser->membershipId;
+            $response->bungieNetUser->displayName = $getMembershipsByIdResponse->response->bungieNetUser->displayName;
+        }
 
-            $definitions[$localName] = [];
+        if (!is_null($getMembershipsByIdResponse->response->destinyMemberships)) {
+            foreach($getMembershipsByIdResponse->response->destinyMemberships as $membership) {
 
-            while($row = $result->fetchArray()) {
-                $key = is_numeric($row['id']) ? sprintf('%u', $row['id'] & 0xFFFFFFFF) : $row['id'];
-                $definitions[$localName][$key] = json_decode($row['json'], true);
+                switch ($membership->membershipType) {
+                    case BungieMembershipType::TigerXbox:
+                        $getProfileRequest = new Destiny\GetAccountRequest($membership->membershipType, $membership->membershipId);
+                        $getProfileResponse = $getProfileRequest->getResponse();
+
+                        if (!is_null($getProfileResponse->response)) {
+                            $account = new Account();
+                            $account->dateLastPlayed = $getProfileResponse->response->data->dateLastPlayed;
+                            $account->membershipId = $membership->membershipId;
+                            $account->membershipType = $membership->membershipType;
+                            $account->gameVersion = DestinyGameVersion::Destiny;
+                            $account->displayName = $membership->displayName;
+                            $response->destinyAccounts[] = $account;
+                        }
+
+                        $getProfileRequest = new Destiny2\GetProfileRequest($membership->membershipType, $membership->membershipId, [ DestinyComponentType::Profiles ]);
+                        $getProfileResponse = $getProfileRequest->getResponse();
+
+                        if (!is_null($getProfileResponse->response)) {
+                            $account = new Account();
+                            $account->dateLastPlayed = $getProfileResponse->response->profile->data->dateLastPlayed;
+                            $account->membershipId = $membership->membershipId;
+                            $account->membershipType = $membership->membershipType;
+                            $account->gameVersion = DestinyGameVersion::Destiny2;
+                            $account->displayName = $membership->displayName;
+                            $response->destinyAccounts[] = $account;
+                        }
+
+                        break;
+                    case BungieMembershipType::TigerPsn:
+                        $getProfileRequest = new Destiny\GetAccountRequest($membership->membershipType, $membership->membershipId);
+                        $getProfileResponse = $getProfileRequest->getResponse();
+
+                        if (!is_null($getProfileResponse->response)) {
+                            $account = new Account();
+                            $account->dateLastPlayed = $getProfileResponse->response->data->dateLastPlayed;
+                            $account->membershipId = $membership->membershipId;
+                            $account->membershipType = $membership->membershipType;
+                            $account->gameVersion = DestinyGameVersion::Destiny;
+                            $account->displayName = $membership->displayName;
+                            $response->destinyAccounts[] = $account;
+                        }
+
+                        $getProfileRequest = new Destiny2\GetProfileRequest($membership->membershipType, $membership->membershipId, [ DestinyComponentType::Profiles ]);
+                        $getProfileResponse = $getProfileRequest->getResponse();
+
+                        if (!is_null($getProfileResponse->response)) {
+                            $account = new Account();
+                            $account->dateLastPlayed = $getProfileResponse->response->profile->data->dateLastPlayed;
+                            $account->membershipId = $membership->membershipId;
+                            $account->membershipType = $membership->membershipType;
+                            $account->gameVersion = DestinyGameVersion::Destiny2;
+                            $account->displayName = $membership->displayName;
+                            $response->destinyAccounts[] = $account;
+                        }
+
+                        break;
+                    case BungieMembershipType::TigerBlizzard:
+                        $getProfileRequest = new Destiny2\GetProfileRequest($membership->membershipType, $membership->membershipId, [ DestinyComponentType::Profiles ]);
+                        $getProfileResponse = $getProfileRequest->getResponse();
+
+                        if (!is_null($getProfileResponse->response)) {
+                            $account = new Account();
+                            $account->dateLastPlayed = $getProfileResponse->response->profile->data->dateLastPlayed;
+                            $account->membershipId = $membership->membershipId;
+                            $account->membershipType = $membership->membershipType;
+                            $account->gameVersion = DestinyGameVersion::Destiny2;
+                            $account->displayName = $membership->displayName;
+                            $response->destinyAccounts[] = $account;
+                        }
+
+                        break;
+                }
             }
         }
+
+        return [$response, $code, $message];
     }
 
-    public static function fetchDefinitions($params) {
-        //throw new GenericException('Forbidden', 403); // Private
+    /**
+     * @param $membershipType
+     * @param $membershipId
+     * @return array
+     */
+    private function getDestinyAccountCharacters($membershipType, $membershipId) {
+        $getHistoricalStatsForAccountRequest = new Destiny\GetHistoricalStatsForAccountRequest($membershipType, $membershipId);
+        $getHistoricalStatsForAccountResponse = $getHistoricalStatsForAccountRequest->getResponse();
+        $code = $getHistoricalStatsForAccountResponse->errorCode;
+        $message = $getHistoricalStatsForAccountResponse->message;
+        $response = [];
 
-        $view = new JSONView();
-        $apiKey = Config::get('wod', 'api_key');
-        $version = isset($params['version']) ? $params['version'] : 2;
-        $headers = [
-            'X-API-Key' => $apiKey
-        ];
+        $getProfileRequest = new Destiny\GetAccountRequest($membershipType, $membershipId);
+        $getProfileResponse = $getProfileRequest->getResponse();
 
-        if ($params['gameVersion'] == 1) {
-            $url = join('/', [$version == "2" ? self::BASEPATH : self::BASED1PATH, "Destiny/Manifest"]);
-        } else {
-            $url = join('/', [$version == "2" ? self::BASEPATH : self::BASED1PATH, "Destiny2/Manifest"]);
+        if ($getProfileResponse->errorCode != 1) {
+            $code = $getProfileResponse->errorCode;
+            $message = $getProfileResponse->message;
         }
 
-        $client = new Client();
-        $request = new Request('GET', $url, $headers);
-        $response = $client->send($request);
-        $content = json_decode($response->getBody()->getContents(), true);
-        $manifestFile = $content['Response']['mobileWorldContentPaths']['en'];
-        $manifestFilePath = 'manifests/' . pathinfo($manifestFile, PATHINFO_BASENAME);
+        if (!is_null($getHistoricalStatsForAccountResponse->response)) {
+            foreach ($getHistoricalStatsForAccountResponse->response->characters as $characterStats) {
+                $character = new Character();
+                $character->characterId = $characterStats->characterId;
+                $character->deleted = $characterStats->deleted;
+                $character->timePlayed = $characterStats->merged->allTime['secondsPlayed']->basic->value;
+                foreach ($getProfileResponse->response->data->characters as $characterData) {
+                    if ($characterData->characterBase->characterId == $character->characterId) {
+                        $character->backgroundPath = $characterData->backgroundPath;
+                        $character->emblemPath = $characterData->emblemPath;
 
-        if (!file_exists(dirname($manifestFilePath))) {
-            mkdir(dirname($manifestFilePath), 0777, true);
-        }
+                        switch ($characterData->characterBase->classType) {
+                            case DestinyClassType::Titan:
+                                $character->charClass = "Titan";
+                                break;
+                            case DestinyClassType::Hunter:
+                                $character->charClass = "Hunter";
+                                break;
+                            case DestinyClassType::Warlock:
+                                $character->charClass = "Warlock";
+                                break;
+                        }
 
-        $request = new Request('GET', self::BUNGIENET . $manifestFile, $headers);
-        $response = $client->send($request);
-        $view->set_response_code($response->getStatusCode());
-        file_put_contents($manifestFilePath.'.zip', $response->getBody());
-        $zip = new ZipArchive();
+                        switch ($characterData->characterBase->raceHash) {
+                            case "3887404748":
+                                $character->race = "Human";
+                                break;
+                            case "2803282938":
+                                $character->race = "Awoken";
+                                break;
+                            case "898834093":
+                                $character->race = "Exo";
+                                break;
+                        }
 
-        if ($zip->open($manifestFilePath.'.zip') === TRUE) {
-            $zip->extractTo('manifests');
-            $zip->close();
-            unlink($manifestFilePath.'.zip');
-        }
+                        switch ($characterData->characterBase->genderType) {
+                            case DestinyGenderType::Male:
+                                $character->gender = "Male";
+                                break;
+                            case DestinyGenderType::Female:
+                                $character->gender = "Female";
+                                break;
+                        }
 
-        $definitions = [];
-
-        if ($db = new SQLite3($manifestFilePath)) {
-            $tables = [];
-            $result = $db->query("SELECT `name` FROM sqlite_master WHERE type='table'");
-
-            while($row = $result->fetchArray()) {
-                $table = [];
-                $result2 = $db->query("PRAGMA table_info(".$row['name'].")");
-
-                while($row2 = $result2->fetchArray()) {
-                    $table[] = $row2[1];
+                        $character->level = $characterData->characterBase->powerLevel;
+                    }
                 }
 
-                $tables[$row['name']] = $table;
+                $response[] = $character;
             }
-
-            self::getDefinition($db, $tables, $definitions, 'DestinyClassDefinition', 'Classes');
-            self::getDefinition($db, $tables, $definitions, 'DestinyGenderDefinition', 'Genders');
-            self::getDefinition($db, $tables, $definitions, 'DestinyRaceDefinition', 'Races');
         }
 
-        $cacheFilePath = 'manifests/' . pathinfo("manifest_D$version.json", PATHINFO_BASENAME);
-        file_put_contents($cacheFilePath, json_encode($definitions));
+        return [$response, $code, $message];
+    }
 
-        $view->set_json_file($definitions);
+    /**
+     * @param $membershipType
+     * @param $membershipId
+     * @return array
+     */
+    private function getDestiny2AccountCharacters($membershipType, $membershipId) {
 
+        $getProfileRequest = new Destiny2\GetProfileRequest($membershipType, $membershipId, [ DestinyComponentType::Characters ]);
+        $getProfileResponse = $getProfileRequest->getResponse();
+        $code = $getProfileResponse->errorCode;
+        $message = $getProfileResponse->message;
+        $response = [];
+
+        /*$getHistoricalStatsForAccountRequest = new Destiny2\GetHistoricalStatsForAccountRequest($membershipType, $membershipId);
+        $getHistoricalStatsForAccountResponse = $getHistoricalStatsForAccountRequest->getResponse();
+
+        if ($getHistoricalStatsForAccountResponse->errorCode != 1) {
+            $code = $getHistoricalStatsForAccountResponse->errorCode;
+            $message = $getHistoricalStatsForAccountResponse->message;
+        }*/
+
+        if (!is_null($getProfileResponse->response)) {
+            foreach ($getProfileResponse->response->characters->data as $characterData) {
+                $character = new Character();
+                $character->characterId = $characterData->characterId;
+                $character->backgroundPath = $characterData->emblemBackgroundPath;
+                $character->emblemPath = $characterData->emblemPath;
+
+                switch ($characterData->classType) {
+                    case DestinyClassType::Titan:
+                        $character->charClass = "Titan";
+                        break;
+                    case DestinyClassType::Hunter:
+                        $character->charClass = "Hunter";
+                        break;
+                    case DestinyClassType::Warlock:
+                        $character->charClass = "Warlock";
+                        break;
+                }
+
+                switch ($characterData->raceType) {
+                    case DestinyRaceType::Human:
+                        $character->race = "Human";
+                        break;
+                    case DestinyRaceType::Awoken:
+                        $character->race = "Awoken";
+                        break;
+                    case DestinyRaceType::Exo:
+                        $character->race = "Exo";
+                        break;
+                }
+
+                switch ($characterData->genderType) {
+                    case DestinyGenderType::Male:
+                        $character->gender = "Male";
+                        break;
+                    case DestinyGenderType::Female:
+                        $character->gender = "Female";
+                        break;
+                }
+
+                $character->level = $characterData->light;
+
+                $getHistoricalStatsRequest = new Destiny2\GetHistoricalStatsRequest($membershipType, $membershipId, $character->characterId);
+                $getHistoricalStatsResponse = $getHistoricalStatsRequest->getResponse();
+
+                if ($getHistoricalStatsResponse->errorCode != 1) {
+                    $code = $getHistoricalStatsResponse->errorCode;
+                    $message = $getHistoricalStatsResponse->message;
+                }
+
+                $character->deleted = false; // Can't get this data anymore because GetHistoricalStatsForAccount is broken
+                $timePvE = !is_null($getHistoricalStatsResponse->response['allPvE']->allTime) ? $getHistoricalStatsResponse->response['allPvE']->allTime['secondsPlayed']->basic->value : 0;
+                $timePvP = !is_null($getHistoricalStatsResponse->response['allPvP']->allTime) ? $getHistoricalStatsResponse->response['allPvP']->allTime['secondsPlayed']->basic->value : 0;
+                $character->timePlayed = $timePvE + $timePvP;
+
+                $response[] = $character;
+            }
+        }
+
+        return [$response, $code, $message];
+    }
+
+    /**
+     * /bungie/fetchAccount?membershipType=[]&membershipId=[]
+     *
+     * @param $params
+     * @return JSONView
+     */
+    public function getMembership($params) {
+        $start = microtime(true);
+        $now = new DateTime();
+        $response = new ApiResponse();
+        $response->queryTime = $now;
+        $view = new JSONView();
+        list($response->response, $response->code, $response->message) = $this->getMembershipsById($params['membershipType'], $params['membershipId']);
+        $response->executionMilliseconds = (microtime(true) - $start) * 1000;
+        $view->set_json_file($response);
         return $view;
     }
 
-    public static function bungieProxy($params) {
-        throw new GenericException('Forbidden', 403); // Private
-
-        $view = new JSONView();
-
-        $response = self::request($params['uri'], $params['method'], $params['service'], $params['version'], isset($params['params']) ? $params['params'] : [], isset($params['query']) ? $params['query'] : [], isset($params['headers']) ? $params['headers'] : []);
-
-        $view->set_response_code($response->getStatusCode());
-        $content = json_decode($response->getBody()->getContents(), true);
-        $view->set_json_file($content);
-
-        return $view;
-    }
-
-    public function fetchAccount($params) {
-        $view = new JSONView();
-
-        try {
-            $response = self::request("GetMembershipsById/%s/%s", "GET", "User", 2, [
-                $params['membershipId'],
-                $params['membershipType']
-            ]);
-
-            $view->set_response_code($response->getStatusCode());
-            $allAccounts = json_decode($response->getBody()->getContents(), true);
-            $view->set_json_file($allAccounts);
-
-            if (isset($allAccounts['Response']['destinyMemberships'])) {
-                $memberships = $allAccounts['Response']['destinyMemberships'];
-                $allAccounts['Response']['destinyMemberships'] = [];
-
-                $xblAccount = array_values(array_filter($memberships, function($data) {
-                    return $data['membershipType'] == 1;
-                }));
-
-                if (count($xblAccount) > 0) {
-                    $xblAccount[0]['gameVersion'] = 1;
-                    $allAccounts['Response']['destinyMemberships'][] = $xblAccount[0];
-                    $xblAccount[0]['gameVersion'] = 2;
-                    $allAccounts['Response']['destinyMemberships'][] = $xblAccount[0];
-                }
-
-                $psnAccount = array_values(array_filter($memberships, function($data) {
-                    return $data['membershipType'] == 2;
-                }));
-
-                if (count($psnAccount) > 0) {
-                    $psnAccount[0]['gameVersion'] = 1;
-                    $allAccounts['Response']['destinyMemberships'][] = $psnAccount[0];
-                    $psnAccount[0]['gameVersion'] = 2;
-                    $allAccounts['Response']['destinyMemberships'][] = $psnAccount[0];
-                }
-
-                $bliAccount = array_values(array_filter($memberships, function($data) {
-                    return $data['membershipType'] == 4;
-                }));
-
-                if (count($bliAccount) > 0) {
-                    $bliAccount[0]['gameVersion'] = 2;
-                    $allAccounts['Response']['destinyMemberships'][] = $bliAccount[0];
-                }
-
-                $view->set_json_file($allAccounts);
-                return $view;
-            }
-        } catch (Exception $e) {
-        }
-
-        $view->set_response_code(400);
-        return $view;
-    }
-
+    /**
+     * /bungie/fetchAccounts?membershipType=[]&displayName=[]
+     *
+     * @param $params
+     * @return JSONView
+     */
     public function fetchAccounts($params) {
+        $start = microtime(true);
+        $now = new DateTime();
+        $response = new ApiResponse();
+        $response->queryTime = $now;
         $view = new JSONView();
 
-        try {
-            $response = self::request("SearchDestinyPlayer/%s/%s", "GET", "Destiny", 2, [
-                $params['membershipType'],
-                $params['displayName']
-            ]);
+        $searchDestinyPlayerRequest = new Destiny2\SearchDestinyPlayerRequest($params['membershipType'], $params['displayName']);
+        $searchDestinyPlayerResponse = $searchDestinyPlayerRequest->getResponse();
+        $response->code = $searchDestinyPlayerResponse->errorCode;
+        $response->message = $searchDestinyPlayerResponse->message;
+        $response->response = new Membership();
 
-            $view->set_response_code($response->getStatusCode());
-            $foundPlayers = json_decode($response->getBody()->getContents(), true);
+        foreach ($searchDestinyPlayerResponse->response as $destinyPlayer) {
+            list($membership, $code, $message) = $this->getMembershipsById($destinyPlayer->membershipType, $destinyPlayer->membershipId);
 
-            foreach ($foundPlayers['Response'] as $foundPlayer) {
-                try {
-                    $response = self::request("GetMembershipsById/%s/%s", "GET", "User", 2, [
-                        $foundPlayer['membershipId'],
-                        $foundPlayer['membershipType']
-                    ]);
+            if ($code != 1) {
+                $response->code = $code;
+                $response->message = $message;
+            }
 
-                    $view->set_response_code($response->getStatusCode());
-                    $allAccounts = json_decode($response->getBody()->getContents(), true);
-                    $view->set_json_file($allAccounts);
-
-                    if (isset($allAccounts['Response']['destinyMemberships'])) {
-                        $memberships = $allAccounts['Response']['destinyMemberships'];
-                        $allAccounts['Response']['destinyMemberships'] = [];
-
-                        $xblAccount = array_values(array_filter($memberships, function($data) {
-                            return $data['membershipType'] == 1;
-                        }));
-
-                        if (count($xblAccount) > 0) {
-                            $xblAccount[0]['gameVersion'] = 1;
-                            $allAccounts['Response']['destinyMemberships'][] = $xblAccount[0];
-                            $xblAccount[0]['gameVersion'] = 2;
-                            $allAccounts['Response']['destinyMemberships'][] = $xblAccount[0];
-                        }
-
-                        $psnAccount = array_values(array_filter($memberships, function($data) {
-                            return $data['membershipType'] == 2;
-                        }));
-
-                        if (count($psnAccount) > 0) {
-                            $psnAccount[0]['gameVersion'] = 1;
-                            $allAccounts['Response']['destinyMemberships'][] = $psnAccount[0];
-                            $psnAccount[0]['gameVersion'] = 2;
-                            $allAccounts['Response']['destinyMemberships'][] = $psnAccount[0];
-                        }
-
-                        $bliAccount = array_values(array_filter($memberships, function($data) {
-                            return $data['membershipType'] == 4;
-                        }));
-
-                        if (count($bliAccount) > 0) {
-                            $bliAccount[0]['gameVersion'] = 2;
-                            $allAccounts['Response']['destinyMemberships'][] = $bliAccount[0];
-                        }
-
-                        $view->set_json_file($allAccounts);
-                        return $view;
-                    }
-                } catch (Exception $e) {
+            if (!is_null($membership)) {
+                if (is_null($response->response->bungieNetUser)) {
+                    $response->response->bungieNetUser = $membership->bungieNetUser;
                 }
-            }
 
-            $view->set_json_file($foundPlayers);
+                if (!is_null($membership->destinyAccounts)) {
+                    foreach ($membership->destinyAccounts as $newMembership) {
+                        $found = false;
 
-            if (isset($foundPlayers['Response']) && !is_array($foundPlayers['Response'])) {
-                return $view;
-            }
-        } catch (Exception $e) {
-        }
+                        if (!is_null($response->response->destinyAccounts)) {
+                            foreach ($response->response->destinyAccounts as $existingMembership) {
+                                if ($existingMembership->membershipId == $newMembership->membershipId && $existingMembership->gameVersion == $newMembership->gameVersion) {
+                                    $found = true;
+                                }
+                            }
+                        }
 
-        $view->set_response_code(400);
-        return $view;
-    }
-
-    public function fetchStats($params) {
-        $view = new JSONView();
-
-        try {
-            if ($params['version'] == 1) {
-                $response = self::request("Stats/Account/%s/%s", "GET", "Destiny", 2, [
-                    $params['membershipType'],
-                    $params['membershipId']
-                ]);
-            } else {
-                $response = self::request("%s/Account/%s/Stats", "GET", "Destiny2", 2, [
-                    $params['membershipType'],
-                    $params['membershipId']
-                ]);
-            }
-
-            $view->set_response_code($response->getStatusCode());
-            $stats = json_decode($response->getBody()->getContents(), true);
-            $view->set_json_file($stats);
-
-            if (isset($stats['Response'])) {
-                return $view;
-            }
-        } catch (Exception $e) {
-        }
-
-        $view->set_response_code(400);
-        return $view;
-    }
-
-    public function fetchCharacterStats($params) {
-        $view = new JSONView();
-
-        try {
-            if ($params['version'] == 1) {
-                $response = self::request("Stats/Account/%s/%s", "GET", "Destiny", 2, [
-                    $params['membershipType'],
-                    $params['membershipId']
-                ]);
-
-                $view->set_response_code($response->getStatusCode());
-                $stats = json_decode($response->getBody()->getContents(), true);
-                $view->set_json_file($stats);
-            } else {
-                $characters = self::request("%s/Profile/%s", "GET", "Destiny2", 2, [
-                    $params['membershipType'],
-                    $params['membershipId']
-                ], [
-                    "components" => 200
-                ]);
-
-                $view->set_response_code($characters->getStatusCode());
-                $charactersStats = json_decode($characters->getBody()->getContents(), true);
-
-                if (isset($charactersStats['Response'])) {
-                    $overallStats = $charactersStats;
-                    $overallStats["Response"] = [
-                        "stats" => []
-                    ];
-
-                    foreach ($charactersStats['Response']['characters']['data'] as $character) {
-                        $characterStats = self::request("%s/Account/%s/Character/{%s}/Stats", "GET", "Destiny2", 2, [
-                            $params['membershipType'],
-                            $params['membershipId'],
-                            $character['characterId']
-                        ]);
-
-                        $view->set_response_code($characterStats->getStatusCode());
-                        $stats = json_decode($characterStats->getBody()->getContents(), true);
-
-                        if (isset($stats["Response"])) {
-                            $overallStats["Response"]["stats"][] = $stats["Response"];
+                        if (!$found) {
+                            $response->response->destinyAccounts[] = $newMembership;
                         }
                     }
-
-                    $view->set_json_file($overallStats);
                 }
             }
-
-            if (isset($stats['Response'])) {
-                return $view;
-            }
-        } catch (Exception $e) {
         }
 
-        $view->set_response_code(400);
+        $response->executionMilliseconds = (microtime(true) - $start) * 1000;
+        $view->set_json_file($response);
         return $view;
     }
 
+    /**
+     * /bungie/fetchCharacters?membershipType=[]&membershipId=[]&gameVersion=[]
+     *
+     * @param $params
+     * @return JSONView
+     * @throws GenericException
+     */
     public function fetchCharacters($params) {
+        $start = microtime(true);
+        $now = new DateTime();
+        $response = new ApiResponse();
+        $response->queryTime = $now;
         $view = new JSONView();
 
-        try {
-            if ($params['gameVersion'] == 1) {
-                $response = self::request("%s/Account/%s", "GET", "Destiny", 2, [
-                    $params['membershipType'],
-                    $params['membershipId']
-                ]);
-            } else {
-                $response = self::request("%s/Profile/%s", "GET", "Destiny2", 2, [
-                    $params['membershipType'],
-                    $params['membershipId']
-                ], [
-                    'components' => '100,200'
-                ]);
-            }
-
-            $view->set_response_code($response->getStatusCode());
-            $stats = json_decode($response->getBody()->getContents(), true);
-            $view->set_json_file($stats);
-
-            if (isset($stats['Response'])) {
-                return $view;
-            }
-        } catch (Exception $e) {
+        if (!isset($params['gameVersion'])) {
+            throw new GenericException("Missing parameter: gameVersion", 400);
         }
 
-        $view->set_response_code(400);
+        switch (intval($params['gameVersion'])) {
+            case DestinyGameVersion::Destiny:
+                list($response->response, $response->code, $response->message) = $this->getDestinyAccountCharacters($params['membershipType'], $params['membershipId']);
+                break;
+            case DestinyGameVersion::Destiny2:
+                list($response->response, $response->code, $response->message) = $this->getDestiny2AccountCharacters($params['membershipType'], $params['membershipId']);
+                break;
+        }
+
+        $response->executionMilliseconds = (microtime(true) - $start) * 1000;
+        $view->set_json_file($response);
         return $view;
-    }
-
-    public static function request($a_uri, $a_method, $a_service, $a_version = 1, $a_params = [], $a_query = [], $a_headers = []) {
-        if (!isset($a_uri) || !isset($a_method) || !isset($a_service)) {
-            throw new GenericException('Bad arguments', 401);
-        }
-
-        $uri = $a_uri;
-        $method = $a_method;
-        $service = $a_service;
-        $parameters = isset($a_params) ? $a_params : [];
-        $queryString = isset($a_query) ? $a_query : null;
-        $additionalHeaders = isset($a_headers) ? $a_headers : null;
-        $version = isset($a_version) && $a_version == "2" ? self::BASEPATH : self::BASED1PATH;
-        $apiKey = Config::get('wod', 'api_key');
-
-        $headers = [];
-
-        if (isset($additionalHeaders) && !empty($additionalHeaders) && is_array($additionalHeaders)) {
-            $headers = $additionalHeaders;
-        }
-
-        $headers['X-API-Key'] = $apiKey;
-
-        $url = vsprintf(join('/', [$version, $service, $uri]), $parameters);
-        $processedQueryString = [];
-
-        if (isset($queryString) && !empty($queryString) && is_array($queryString)) {
-            foreach ($queryString as $key => $value) {
-                if ($value) {
-                    $processedQueryString[] = join('=', [$key, $value]);
-                } else {
-                    $processedQueryString[] = $key;
-                }
-            }
-
-            $urlQueryString = join('&', $processedQueryString);
-            $url = join('?', [$url, $urlQueryString]);
-        }
-
-        $client = new Client();
-        $request = new Request($method, $url, $headers);
-
-        try {
-            return $client->send($request);
-        } catch (ClientException $exception) {
-            return $exception->getResponse()->getBody();
-        }
     }
 }

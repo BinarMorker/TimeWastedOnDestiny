@@ -4,13 +4,13 @@ define(['knockout'], function(ko) {
 
         self.characterId = data.characterId;
         self.deleted = data.deleted;
-        self.seconds = ko.observable(data.merged.allTime.secondsPlayed.basic.value).extend({deferred: true});
-        self.race = "";
-        self.gender = "";
-        self.charClass = "";
-        self.level = 0;
-        self.emblemPath = ko.observable(null);
-        self.backgroundPath = ko.observable(null);
+        self.timePlayed = ko.observable(data.timePlayed);
+        self.race = data.race;
+        self.gender = data.gender;
+        self.charClass = data.charClass;
+        self.level = data.level;
+        self.emblemPath = data.emblemPath;
+        self.backgroundPath = data.backgroundPath;
     };
 
     return Character;

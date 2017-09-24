@@ -120,7 +120,7 @@ define([
         self.fetchAccount = function (membershipType, membershipId) {
             self.statsVisible(true);
 
-            Request('/bungie/fetchAccount', {
+            Request('/bungie/getMembership', {
                 membershipType: membershipType,
                 membershipId: membershipId
             }, function(response) {
@@ -139,7 +139,7 @@ define([
                         membershipType: -1,
                         displayName: input.trim()
                     }, function (response) {
-                        if (response.ErrorCode === 1 && !Array.isArray(response.Response)) {
+                        if (response.code === 1 && !Array.isArray(response.response)) {
                             self.populateAccounts(response);
                         } else {
                             self.input("");
@@ -147,7 +147,7 @@ define([
                         }
                     }, function (response) {
                         self.input("");
-                        UIkit.notification((response.Message || 'No account found.'), {status: 'danger'});
+                        UIkit.notification((response.message || 'No account found.'), {status: 'danger'});
                     });
                 });
             }
@@ -156,13 +156,13 @@ define([
         self.populateAccounts = function (response) {
             self.input("");
 
-            if (response.hasOwnProperty('Response') && response.Response.hasOwnProperty('destinyMemberships')) {
-                response.Response.destinyMemberships.forEach(function (item) {
+            if (response.hasOwnProperty('response') && response.response.hasOwnProperty('destinyAccounts')) {
+                response.response.destinyAccounts.forEach(function (item) {
                     var account = new Account(item);
 
-                    if (response.Response.hasOwnProperty('bungieNetUser')) {
-                        account.bungieNetDisplayName(response.Response.bungieNetUser.displayName);
-                        account.bungieNetMembershipId(response.Response.bungieNetUser.membershipId);
+                    if (response.response.hasOwnProperty('bungieNetUser')) {
+                        account.bungieNetDisplayName(response.response.bungieNetUser.displayName);
+                        account.bungieNetMembershipId(response.response.bungieNetUser.membershipId);
                     }
 
                     var exisitingAccount = self.accounts().filter(function (item) {
@@ -186,101 +186,22 @@ define([
                             });
                         });
 
-                        self.fetchStats(account);
+                        self.fetchCharacters(account);
                     }
                 });
             }
         };
 
-        self.fetchStats = function (account) {
-            Request('/bungie/fetchCharacterStats', {
-                membershipType: account.membershipType,
-                membershipId: account.membershipId,
-                version: account.gameVersion
-            }, function (response) {
-                if (response.ErrorCode === 1) {
-                    self.populateStats(response, account);
-                } else {
-                    account.message(response.Message);
-                    account.loading(false);
-                    self.accounts.valueHasMutated();
-                    setTimeout(function () {
-                        self.removeAccount(account);
-                    }, 5000);
-                }
-            }, function (response) {
-                account.message(response.Message);
-                account.loading(false);
-                self.accounts.valueHasMutated();
-                setTimeout(function () {
-                    self.removeAccount(account);
-                }, 5000);
-            });
-        };
-
-        /*self.fetchStats = function (account) {
-            Request('/bungie/fetchStats', {
-                membershipType: account.membershipType,
-                membershipId: account.membershipId,
-                version: account.gameVersion
-            }, function (response) {
-                if (response.ErrorCode === 1) {
-                    self.populateStats(response, account);
-                } else {
-                    account.message(response.Message);
-                    account.loading(false);
-                    self.accounts.valueHasMutated();
-                    setTimeout(function () {
-                        self.removeAccount(account);
-                    }, 5000);
-                }
-            }, function (response) {
-                account.message(response.Message);
-                account.loading(false);
-                self.accounts.valueHasMutated();
-                setTimeout(function () {
-                    self.removeAccount(account);
-                }, 5000);
-            });
-        };*/
-
-        self.populateStats = function (response, account) {
-            if (response.hasOwnProperty('Response')) {
-                var characters = [];
-
-                response.Response.characters.forEach(function (item) {
-                    var character = new Character(item);
-
-                    if (character.deleted) {
-                        account.timeWasted(account.timeWasted() + character.seconds());
-                    }
-
-                    account.timePlayed(account.timePlayed() + character.seconds());
-                    characters.push(character);
-                });
-
-                if (characters.length > 0) {
-                    characters.sort(function(left, right) {
-                        return right.seconds() - left.seconds();
-                    });
-                    self.fetchCharacters(account, characters);
-                } else {
-                    account.loading(false);
-                    self.accounts.valueHasMutated();
-                }
-            }
-        };
-
-        self.fetchCharacters = function (account, characters) {
+        self.fetchCharacters = function (account) {
             Request('/bungie/fetchCharacters', {
                 membershipType: account.membershipType,
                 membershipId: account.membershipId,
                 gameVersion: account.gameVersion
             }, function (response) {
-                if (response.ErrorCode === 1) {
-                    self.populateCharacters(response, account, characters);
+                if (response.code === 1) {
+                    self.populateCharacters(response, account);
                 } else {
-                    account.message(response.Message);
+                    account.message(response.message);
                     account.loading(false);
                     self.accounts.valueHasMutated();
                     setTimeout(function() {
@@ -288,7 +209,7 @@ define([
                     }, 5000);
                 }
             }, function(response) {
-                account.message(response.Message);
+                account.message(response.message);
                 account.loading(false);
                 self.accounts.valueHasMutated();
                 setTimeout(function() {
@@ -297,21 +218,18 @@ define([
             });
         };
 
-        self.populateCharacters = function (response, account, characters) {
-            if (response.hasOwnProperty('Response')) {
-                var Manifest = account.gameVersion === 1 ? ManifestD1 : ManifestD2;
-                var data = {};
+        self.populateCharacters = function (response, account) {
+            if (response.hasOwnProperty('response')) {
+                response.response.forEach(function (item) {
+                    var character = new Character(item);
 
-                if (account.gameVersion === 1) {
-                    data = response.Response.data;
-                } else {
-                    data = response.Response.profile.data;
-                }
+                    if (character.deleted) {
+                        account.timeWasted(account.timeWasted() + character.timePlayed());
+                    }
 
-                account.lastPlayed(data.dateLastPlayed);
+                    account.timePlayed(account.timePlayed() + character.timePlayed());
 
-                characters.forEach(function (character) {
-                    var characterData = {};
+                    /*var characterData = {};
                     var genderType = "";
 
                     if (account.gameVersion === 1) {
@@ -344,7 +262,7 @@ define([
                             character.emblemPath(characterData[0].emblemPath);
                             character.backgroundPath(characterData[0].emblemBackgroundPath);
                         }
-                    }
+                    }*/
 
                     account.characters.push(character);
                 });

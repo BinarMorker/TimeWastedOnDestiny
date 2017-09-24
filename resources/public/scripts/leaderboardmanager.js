@@ -3,10 +3,10 @@ define(['request'], function(Request) {
         var self = this;
 
         self.GetPage = function (page, count, success, error, always) {
-            Request('/api/leaderboard', {
+            /*Request('/api/leaderboard', {
                 count: count,
                 page: page
-            }, success, error, always);
+            }, success, error, always);*/
         };
     };
 

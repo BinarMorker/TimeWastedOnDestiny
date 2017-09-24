@@ -26,10 +26,8 @@ define(['knockout'], function(ko) {
         self.characters = ko.observableArray([]);
         self.timePlayed = ko.observable(0).extend({deferred: true});
         self.timeWasted = ko.observable(0).extend({deferred: true});
-        self.lastPlayed = ko.observable("");
-        self.formattedLastPlayed = ko.computed(function () {
-            return (new Date(self.lastPlayed())).toLocaleDateString();
-        });
+        self.lastPlayed = data.dateLastPlayed.date;
+        self.formattedLastPlayed = (new Date(data.dateLastPlayed.date)).toLocaleDateString();
         self.loading = ko.observable(true);
         self.message = ko.observable(null);
         self.visible = ko.observable(false);

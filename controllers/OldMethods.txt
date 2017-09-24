@@ -1,0 +1,96 @@
+
+    private static function getDefinition(SQLite3 $db, $tables, &$definitions, $bungieName, $localName) {
+        if (isset($tables[$bungieName])) {
+            $result = $db->query("SELECT `id`, `json` FROM $bungieName");
+
+            $definitions[$localName] = [];
+
+            while($row = $result->fetchArray()) {
+                $key = is_numeric($row['id']) ? sprintf('%u', $row['id'] & 0xFFFFFFFF) : $row['id'];
+                $definitions[$localName][$key] = json_decode($row['json'], true);
+            }
+        }
+    }
+
+    public static function fetchDefinitions($params) {
+        //throw new GenericException('Forbidden', 403); // Private
+
+        $view = new JSONView();
+        $apiKey = Config::get('wod', 'api_key');
+        $version = isset($params['version']) ? $params['version'] : 2;
+        $headers = [
+            'X-API-Key' => $apiKey
+        ];
+
+        if ($params['gameVersion'] == 1) {
+            $url = join('/', [$version == "2" ? BungieUrlHelper::BungieNetPlatform : BungieUrlHelper::BungieNetPlatformD1, "Destiny/Manifest"]);
+        } else {
+            $url = join('/', [$version == "2" ? BungieUrlHelper::BungieNetPlatform : BungieUrlHelper::BungieNetPlatformD1, "Destiny2/Manifest"]);
+        }
+
+        $client = new Client();
+        $request = new Request('GET', $url, $headers);
+        $response = $client->send($request);
+        $content = json_decode($response->getBody()->getContents(), true);
+        $manifestFile = $content['Response']['mobileWorldContentPaths']['en'];
+        $manifestFilePath = 'manifests/' . pathinfo($manifestFile, PATHINFO_BASENAME);
+
+        if (!file_exists(dirname($manifestFilePath))) {
+            mkdir(dirname($manifestFilePath), 0777, true);
+        }
+
+        $request = new Request('GET', BungieUrlHelper::BungieDotNet . $manifestFile, $headers);
+        $response = $client->send($request);
+        $view->set_response_code($response->getStatusCode());
+        file_put_contents($manifestFilePath.'.zip', $response->getBody());
+        $zip = new ZipArchive();
+
+        if ($zip->open($manifestFilePath.'.zip') === TRUE) {
+            $zip->extractTo('manifests');
+            $zip->close();
+            unlink($manifestFilePath.'.zip');
+        }
+
+        $definitions = [];
+
+        if ($db = new SQLite3($manifestFilePath)) {
+            $tables = [];
+            $result = $db->query("SELECT `name` FROM sqlite_master WHERE type='table'");
+
+            while($row = $result->fetchArray()) {
+                $table = [];
+                $result2 = $db->query("PRAGMA table_info(".$row['name'].")");
+
+                while($row2 = $result2->fetchArray()) {
+                    $table[] = $row2[1];
+                }
+
+                $tables[$row['name']] = $table;
+            }
+
+            self::getDefinition($db, $tables, $definitions, 'DestinyClassDefinition', 'Classes');
+            self::getDefinition($db, $tables, $definitions, 'DestinyGenderDefinition', 'Genders');
+            self::getDefinition($db, $tables, $definitions, 'DestinyRaceDefinition', 'Races');
+        }
+
+        $cacheFilePath = 'manifests/' . pathinfo("manifest_D$version.json", PATHINFO_BASENAME);
+        file_put_contents($cacheFilePath, json_encode($definitions));
+
+        $view->set_json_file($definitions);
+
+        return $view;
+    }
+
+    public static function bungieProxy($params) {
+        throw new GenericException('Forbidden', 403); // Private
+
+        $view = new JSONView();
+
+        $response = self::request($params['uri'], $params['method'], $params['service'], $params['version'], isset($params['params']) ? $params['params'] : [], isset($params['query']) ? $params['query'] : [], isset($params['headers']) ? $params['headers'] : []);
+
+        $view->set_response_code($response->getStatusCode());
+        $content = json_decode($response->getBody()->getContents(), true);
+        $view->set_json_file($content);
+
+        return $view;
+    }

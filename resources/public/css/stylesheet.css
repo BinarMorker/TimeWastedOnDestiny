@@ -36,10 +36,20 @@ body {
     background: #333 !important;
 }
 
+.uk-navbar-inverse .uk-navbar-center:only-child, .uk-navbar-inverse .uk-navbar-left, .uk-navbar-inverse .uk-navbar-right {
+    flex: none;
+    -webkit-flex: none;
+    -ms-flex: none;
+}
+
 @media screen and (max-width: 400px) {
     .uk-navbar-inverse {
         flex-direction: column;
     }
+}
+
+[class*=uk-dropdown-bottom] {
+    margin-top: 0;
 }
 
 .uk-close {
