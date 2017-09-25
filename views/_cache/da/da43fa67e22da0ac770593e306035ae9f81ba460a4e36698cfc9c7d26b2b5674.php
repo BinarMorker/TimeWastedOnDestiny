@@ -98,6 +98,15 @@ class __TwigTemplate_e75cbbf5d7c0e926d30bcc1e293f4e4d294ddf116685eabc7731ddb9fb6
                     (adsbygoogle = window.adsbygoogle || []).push({});
                 </script>
             </div>
+
+            <div class=\"uk-container uk-container-large uk-margin-small-bottom uk-text-center\">
+                <span>Made with <i uk-icon=\"icon: heart\"></i> by <a href=\"#\" data-bind=\"click: function() { fetchAccount(-1, 664856) }\">";
+        // line 63
+        echo twig_escape_filter($this->env, call_user_func_array($this->env->getFunction('config')->getCallable(), array("application", "author")), "html", null, true);
+        echo "</a></span>
+                <span> | </span>
+                <a href=\"#about-modal\" uk-toggle>About</a>
+            </div>
         </div>
 
         <div id=\"adBottomMobile\" style=\"height: 90px\">
@@ -128,7 +137,7 @@ class __TwigTemplate_e75cbbf5d7c0e926d30bcc1e293f4e4d294ddf116685eabc7731ddb9fb6
                         </ul>
                     </div>
                     <a href=\"";
-        // line 90
+        // line 96
         echo twig_escape_filter($this->env, call_user_func_array($this->env->getFilter('path')->getCallable(), array("")), "html", null, true);
         echo "\" class=\"uk-navbar-item uk-logo\"><img src=\"";
         echo twig_escape_filter($this->env, call_user_func_array($this->env->getFilter('resource')->getCallable(), array("resources/public/assets/logo.svg")), "html", null, true);
@@ -143,7 +152,7 @@ class __TwigTemplate_e75cbbf5d7c0e926d30bcc1e293f4e4d294ddf116685eabc7731ddb9fb6
                         </div>
                         <a class=\"uk-navbar-toggle\" uk-icon=\"icon: plus-circle\" data-bind=\"click: fetchAccounts, attr: { 'uk-icon': accounts().length > 0 ? 'icon: plus-circle' : 'icon: search' }\" href=\"#\"></a>
                         ";
-        // line 101
+        // line 107
         echo "                    </ul>
                 </div>
             </nav>
@@ -153,7 +162,7 @@ class __TwigTemplate_e75cbbf5d7c0e926d30bcc1e293f4e4d294ddf116685eabc7731ddb9fb6
             <div class=\"uk-child-width-1-1@s uk-child-width-1-3@m uk-margin-large-bottom\" uk-grid id=\"grid\">
                 <!-- ko foreach: accounts -->
                 ";
-        // line 158
+        // line 164
         echo "                <!-- ko if: \$data.constructor.name == \"Account\" -->
                 <div class=\"uk-grid-selector\" data-bind=\"fadeVisible: visible, css: { 'smallCard': !\$root.detailedView() }\">
                     <div class=\"uk-card uk-box-shadow-small\">
@@ -172,6 +181,11 @@ class __TwigTemplate_e75cbbf5d7c0e926d30bcc1e293f4e4d294ddf116685eabc7731ddb9fb6
                             </div>
                         </div>
                         <!-- ko ifnot: message -->
+                        <!-- ko if: gameVersion == 2 -->
+                        <div class=\"uk-alert uk-alert-danger uk-margin-remove-vertical\">
+                            <p>Deleted characters are currently not fetched. This is due to a bug on Bungie's side and should be resolved soon.</p>
+                        </div>
+                        <!-- /ko -->
                         <div class=\"uk-card-body uk-card-default\">
                             <!-- ko ifnot: \$root.detailedView -->
                             <h3 class=\"uk-margin-remove-vertical\">Played: <strong data-bind=\"formatTime: timePlayed\"></strong></h3>
@@ -182,7 +196,7 @@ class __TwigTemplate_e75cbbf5d7c0e926d30bcc1e293f4e4d294ddf116685eabc7731ddb9fb6
                                 <!-- ko if: bungieNetMembershipId -->
                                 <a href=\"#\" class=\"bungieAccountPill\" data-bind=\"click: function() { \$root.fetchAccount(-1, bungieNetMembershipId()) }\">
                                     <img src=\"";
-        // line 185
+        // line 196
         echo twig_escape_filter($this->env, call_user_func_array($this->env->getFilter('resource')->getCallable(), array("resources/public/assets/BungieLogo.png")), "html", null, true);
         echo "\"><span data-bind=\"text: bungieNetDisplayName\"></span>
                                 </a>
@@ -192,18 +206,13 @@ class __TwigTemplate_e75cbbf5d7c0e926d30bcc1e293f4e4d294ddf116685eabc7731ddb9fb6
                             </div>
                             <!-- ko foreach: characters -->
                             <!-- ko ifnot: deleted -->
-                            <div data-bind=\"style: { 'background-image': 'url(\\'https://bungie.net' + backgroundPath + '\\')' }\" class=\"emblem uk-grid-collapse\" uk-grid>
-                                <!-- ko if: \$parent.gameVersion == 1 -->
-                                <img data-bind=\"attr: { src: 'https://www.bungie.net' + emblemPath }\" class=\"uk-width-auto imgHolder\">
-                                <!-- /ko -->
-                                <!-- ko if: \$parent.gameVersion == 2 -->
-                                <div class=\"uk-width-auto imgHolder\"></div>
-                                <!-- /ko -->
+                            <div class=\"uk-grid-collapse emblem\" uk-grid>
+                                <img data-bind=\"attr: { src: 'https://www.bungie.net' + emblemPath }\" class=\"uk-width-auto emblemIcon\">
                                 <div class=\"uk-width-expand\">
                                     <strong class=\"characterName\" data-bind=\"text: race + ' ' + charClass\"></strong>
                                     <span class=\"timePlayed\" data-bind=\"formatTime: timePlayed\"></span>
                                     ";
-        // line 204
+        // line 210
         echo "                                </div>
                                 <div class=\"uk-width-auto infoRight\">
                                     <i class=\"powerLevel\" data-bind=\"text: level, css: { 'd1': \$parent.gameVersion == 1, 'd2': \$parent.gameVersion == 2 }\"></i>
@@ -211,11 +220,11 @@ class __TwigTemplate_e75cbbf5d7c0e926d30bcc1e293f4e4d294ddf116685eabc7731ddb9fb6
                             </div>
                             <!-- /ko -->
                             <!-- ko if: deleted -->
-                            <div class=\"uk-grid-collapse deletedChar\" uk-grid>
-                                <span uk-icon=\"icon: trash; ratio: 2\" class=\"uk-width-auto deletedIcon\"></span>
+                            <div class=\"uk-grid-collapse emblem\" uk-grid>
+                                <span uk-icon=\"icon: trash; ratio: 2\" class=\"uk-width-auto emblemIcon\"></span>
                                 <div class=\"uk-width-expand\">
                                     <strong class=\"characterName\">Deleted</strong>
-                                    <span class=\"timePlayed\" data-bind=\"formatTime: timePlayed\"></span>
+                                    <span class=\"timeWasted\" data-bind=\"formatTime: timePlayed\"></span>
                                 </div>
                             </div>
                             <!-- /ko -->
@@ -243,7 +252,7 @@ class __TwigTemplate_e75cbbf5d7c0e926d30bcc1e293f4e4d294ddf116685eabc7731ddb9fb6
 
         <div class=\"uk-container uk-container-large uk-margin-small-bottom\">
             <span>Made with <i uk-icon=\"icon: heart\"></i> by <a href=\"#\" data-bind=\"click: function() { fetchAccount(-1, 664856) }\">";
-        // line 242
+        // line 248
         echo twig_escape_filter($this->env, call_user_func_array($this->env->getFunction('config')->getCallable(), array("application", "author")), "html", null, true);
         echo "</a></span>
             <span> | </span>
@@ -257,24 +266,53 @@ class __TwigTemplate_e75cbbf5d7c0e926d30bcc1e293f4e4d294ddf116685eabc7731ddb9fb6
         <div class=\"uk-modal-dialog uk-modal-body\">
             <button class=\"uk-modal-close-default\" type=\"button\" uk-close></button>
             <h2 class=\"uk-modal-title\">About</h2>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            <p>Time Wasted on Destiny is a website that tells you how much time you've poured into the Destiny series.
+                On top of this, it is the only website that tells you just how much time you've spent on deleted characters, which you could consider wasted time.</p>
+            <h2 class=\"uk-modal-title\">How to use</h2>
+            <p>Using Time Wasted on Destiny is very simple. First, enter your Playstation Network ID, Xbox Live Gamertag, Blizzard ID or Bungie.net Username into the search box.
+                You can add more than one username by separating them with a comma (,). You can then share that page with your friends and brag!</p>
+            <h2 class=\"uk-modal-title\">FAQ</h2>
+            <dl class=\"uk-description-list uk-description-list-divider\">
+                <dt>What activities count in the time played?</dt>
+                <dd>Only the time you spend shooting at stuff (not in orbit, loading or in social spaces) is counted towards your time played (and wasted).</dd>
+                <dt>Why is my username not working?</dt>
+                <dd>Make sure you typed your Playstation Network ID, Xbox Live Gamertag, Blizzard ID or Bungie.net Username correctly. If you still experience problems, please submit an issue <a href=\"https://github.com/BinarMorker/TimeWastedOnDestiny/issues\">here</a>.</dd>
+                <dt>Why is another player showing up when I'm searching for my username?</dt>
+                <dd>It is possible that another player uses the same name as you on another platform. If you simply don't see your account there, make sure you typed your username correctly.</dd>
+            </dl>
+            <h2 class=\"uk-modal-title\">Disclaimer</h2>
+            <p>Time Wasted on Destiny is not affiliated with <a href=\"https://bungie.net\">Bungie</a>.
+                Destiny is a registered trademark of Bungie and Activision.</p>
+            <h2 class=\"uk-modal-title\">Bottom line</h2>
+            <p>Thank you very much for using my website. If you like it, please help me afford the server costs by <a href=\"#\">donating</a>!
+                Here are some of the people without whom this website would not exist:</p>
+            <ul>
+                <li><a href=\"#\" data-bind=\"click: function() { fetchAccount(-1, 9341839) }\">Tommy Teasdale for helping me find ideas and crush bugs</a></li>
+                <li><a href=\"https://bungie-net.github.io/\">Bungie who made their API accessible</a></li>
+                <li><a href=\"https://www.reddit.com/r/DestinyTheGame/\">/r/DestinyTheGame for supporting and sharing my project</a></li>
+                <li><a href=\"http://destinydevs.github.io/BungieNetPlatform/\">lowlines for his awesome documentation</a></li>
+            </ul>
         </div>
     </div>
 
+    <div data-bind=\"visible: loading\" class=\"uk-loading uk-flex\">
+        <div class=\"uk-align-center\" uk-spinner></div>
+    </div>
+
     <script src=\"";
-        // line 258
+        // line 293
         echo twig_escape_filter($this->env, call_user_func_array($this->env->getFilter('resource')->getCallable(), array("bower_components/jquery/dist/jquery.js")), "html", null, true);
         echo "\"></script>
     <script src=\"";
-        // line 259
+        // line 294
         echo twig_escape_filter($this->env, call_user_func_array($this->env->getFilter('resource')->getCallable(), array("bower_components/uikit/dist/js/uikit.js")), "html", null, true);
         echo "\"></script>
     <script src=\"";
-        // line 260
+        // line 295
         echo twig_escape_filter($this->env, call_user_func_array($this->env->getFilter('resource')->getCallable(), array("bower_components/uikit/dist/js/uikit-icons.js")), "html", null, true);
         echo "\"></script>
     <script src=\"";
-        // line 261
+        // line 296
         echo twig_escape_filter($this->env, call_user_func_array($this->env->getFilter('resource')->getCallable(), array("bower_components/requirejs/require.js")), "html", null, true);
         echo "\" data-main=\"";
         echo twig_escape_filter($this->env, call_user_func_array($this->env->getFilter('resource')->getCallable(), array("resources/public/scripts/application.js")), "html", null, true);
@@ -310,7 +348,7 @@ class __TwigTemplate_e75cbbf5d7c0e926d30bcc1e293f4e4d294ddf116685eabc7731ddb9fb6
             'ko.fadevisible'
         ], function(ko, Application) {
             ko.applyBindings(new Application('";
-        // line 292
+        // line 327
         echo twig_escape_filter($this->env, ((array_key_exists("search", $context)) ? (_twig_default_filter(($context["search"] ?? null))) : ("")), "html", null, true);
         echo "'));
         });
@@ -346,7 +384,7 @@ class __TwigTemplate_e75cbbf5d7c0e926d30bcc1e293f4e4d294ddf116685eabc7731ddb9fb6
 
     public function getDebugInfo()
     {
-        return array (  314 => 292,  278 => 261,  274 => 260,  270 => 259,  266 => 258,  247 => 242,  207 => 204,  186 => 185,  157 => 158,  147 => 101,  132 => 90,  88 => 48,  73 => 26,  59 => 15,  55 => 14,  51 => 13,  47 => 12,  43 => 11,  38 => 9,  34 => 8,  30 => 7,  22 => 2,  19 => 1,);
+        return array (  352 => 327,  316 => 296,  312 => 295,  308 => 294,  304 => 293,  256 => 248,  216 => 210,  200 => 196,  166 => 164,  156 => 107,  141 => 96,  105 => 63,  88 => 48,  73 => 26,  59 => 15,  55 => 14,  51 => 13,  47 => 12,  43 => 11,  38 => 9,  34 => 8,  30 => 7,  22 => 2,  19 => 1,);
     }
 
     /** @deprecated since 1.27 (to be removed in 2.0). Use getSourceContext() instead */
@@ -418,6 +456,12 @@ class __TwigTemplate_e75cbbf5d7c0e926d30bcc1e293f4e4d294ddf116685eabc7731ddb9fb6
                 <script>
                     (adsbygoogle = window.adsbygoogle || []).push({});
                 </script>
+            </div>
+
+            <div class=\"uk-container uk-container-large uk-margin-small-bottom uk-text-center\">
+                <span>Made with <i uk-icon=\"icon: heart\"></i> by <a href=\"#\" data-bind=\"click: function() { fetchAccount(-1, 664856) }\">{{ config('application', 'author') }}</a></span>
+                <span> | </span>
+                <a href=\"#about-modal\" uk-toggle>About</a>
             </div>
         </div>
 
@@ -534,6 +578,11 @@ class __TwigTemplate_e75cbbf5d7c0e926d30bcc1e293f4e4d294ddf116685eabc7731ddb9fb6
                             </div>
                         </div>
                         <!-- ko ifnot: message -->
+                        <!-- ko if: gameVersion == 2 -->
+                        <div class=\"uk-alert uk-alert-danger uk-margin-remove-vertical\">
+                            <p>Deleted characters are currently not fetched. This is due to a bug on Bungie's side and should be resolved soon.</p>
+                        </div>
+                        <!-- /ko -->
                         <div class=\"uk-card-body uk-card-default\">
                             <!-- ko ifnot: \$root.detailedView -->
                             <h3 class=\"uk-margin-remove-vertical\">Played: <strong data-bind=\"formatTime: timePlayed\"></strong></h3>
@@ -551,13 +600,8 @@ class __TwigTemplate_e75cbbf5d7c0e926d30bcc1e293f4e4d294ddf116685eabc7731ddb9fb6
                             </div>
                             <!-- ko foreach: characters -->
                             <!-- ko ifnot: deleted -->
-                            <div data-bind=\"style: { 'background-image': 'url(\\'https://bungie.net' + backgroundPath + '\\')' }\" class=\"emblem uk-grid-collapse\" uk-grid>
-                                <!-- ko if: \$parent.gameVersion == 1 -->
-                                <img data-bind=\"attr: { src: 'https://www.bungie.net' + emblemPath }\" class=\"uk-width-auto imgHolder\">
-                                <!-- /ko -->
-                                <!-- ko if: \$parent.gameVersion == 2 -->
-                                <div class=\"uk-width-auto imgHolder\"></div>
-                                <!-- /ko -->
+                            <div class=\"uk-grid-collapse emblem\" uk-grid>
+                                <img data-bind=\"attr: { src: 'https://www.bungie.net' + emblemPath }\" class=\"uk-width-auto emblemIcon\">
                                 <div class=\"uk-width-expand\">
                                     <strong class=\"characterName\" data-bind=\"text: race + ' ' + charClass\"></strong>
                                     <span class=\"timePlayed\" data-bind=\"formatTime: timePlayed\"></span>
@@ -569,11 +613,11 @@ class __TwigTemplate_e75cbbf5d7c0e926d30bcc1e293f4e4d294ddf116685eabc7731ddb9fb6
                             </div>
                             <!-- /ko -->
                             <!-- ko if: deleted -->
-                            <div class=\"uk-grid-collapse deletedChar\" uk-grid>
-                                <span uk-icon=\"icon: trash; ratio: 2\" class=\"uk-width-auto deletedIcon\"></span>
+                            <div class=\"uk-grid-collapse emblem\" uk-grid>
+                                <span uk-icon=\"icon: trash; ratio: 2\" class=\"uk-width-auto emblemIcon\"></span>
                                 <div class=\"uk-width-expand\">
                                     <strong class=\"characterName\">Deleted</strong>
-                                    <span class=\"timePlayed\" data-bind=\"formatTime: timePlayed\"></span>
+                                    <span class=\"timeWasted\" data-bind=\"formatTime: timePlayed\"></span>
                                 </div>
                             </div>
                             <!-- /ko -->
@@ -612,8 +656,37 @@ class __TwigTemplate_e75cbbf5d7c0e926d30bcc1e293f4e4d294ddf116685eabc7731ddb9fb6
         <div class=\"uk-modal-dialog uk-modal-body\">
             <button class=\"uk-modal-close-default\" type=\"button\" uk-close></button>
             <h2 class=\"uk-modal-title\">About</h2>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            <p>Time Wasted on Destiny is a website that tells you how much time you've poured into the Destiny series.
+                On top of this, it is the only website that tells you just how much time you've spent on deleted characters, which you could consider wasted time.</p>
+            <h2 class=\"uk-modal-title\">How to use</h2>
+            <p>Using Time Wasted on Destiny is very simple. First, enter your Playstation Network ID, Xbox Live Gamertag, Blizzard ID or Bungie.net Username into the search box.
+                You can add more than one username by separating them with a comma (,). You can then share that page with your friends and brag!</p>
+            <h2 class=\"uk-modal-title\">FAQ</h2>
+            <dl class=\"uk-description-list uk-description-list-divider\">
+                <dt>What activities count in the time played?</dt>
+                <dd>Only the time you spend shooting at stuff (not in orbit, loading or in social spaces) is counted towards your time played (and wasted).</dd>
+                <dt>Why is my username not working?</dt>
+                <dd>Make sure you typed your Playstation Network ID, Xbox Live Gamertag, Blizzard ID or Bungie.net Username correctly. If you still experience problems, please submit an issue <a href=\"https://github.com/BinarMorker/TimeWastedOnDestiny/issues\">here</a>.</dd>
+                <dt>Why is another player showing up when I'm searching for my username?</dt>
+                <dd>It is possible that another player uses the same name as you on another platform. If you simply don't see your account there, make sure you typed your username correctly.</dd>
+            </dl>
+            <h2 class=\"uk-modal-title\">Disclaimer</h2>
+            <p>Time Wasted on Destiny is not affiliated with <a href=\"https://bungie.net\">Bungie</a>.
+                Destiny is a registered trademark of Bungie and Activision.</p>
+            <h2 class=\"uk-modal-title\">Bottom line</h2>
+            <p>Thank you very much for using my website. If you like it, please help me afford the server costs by <a href=\"#\">donating</a>!
+                Here are some of the people without whom this website would not exist:</p>
+            <ul>
+                <li><a href=\"#\" data-bind=\"click: function() { fetchAccount(-1, 9341839) }\">Tommy Teasdale for helping me find ideas and crush bugs</a></li>
+                <li><a href=\"https://bungie-net.github.io/\">Bungie who made their API accessible</a></li>
+                <li><a href=\"https://www.reddit.com/r/DestinyTheGame/\">/r/DestinyTheGame for supporting and sharing my project</a></li>
+                <li><a href=\"http://destinydevs.github.io/BungieNetPlatform/\">lowlines for his awesome documentation</a></li>
+            </ul>
         </div>
+    </div>
+
+    <div data-bind=\"visible: loading\" class=\"uk-loading uk-flex\">
+        <div class=\"uk-align-center\" uk-spinner></div>
     </div>
 
     <script src=\"{{ 'bower_components/jquery/dist/jquery.js'|resource }}\"></script>

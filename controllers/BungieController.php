@@ -28,98 +28,107 @@ class BungieController extends Controller {
      * @return array
      */
     private function getMembershipsById($membershipType, $membershipId) {
+        $endpointCalls = [];
         $getMembershipsByIdRequest = new Destiny2\GetMembershipsByIdRequest($membershipType, $membershipId);
         $getMembershipsByIdResponse = $getMembershipsByIdRequest->getResponse();
+        $endpointCalls[] = $getMembershipsByIdRequest->getInfo();
         $code = $getMembershipsByIdResponse->errorCode;
         $message = $getMembershipsByIdResponse->message;
         $response = new Membership();
 
-        if (!is_null($getMembershipsByIdResponse->response->bungieNetUser)) {
-            $response->bungieNetUser = new BungieNetUser();
-            $response->bungieNetUser->membershipId = $getMembershipsByIdResponse->response->bungieNetUser->membershipId;
-            $response->bungieNetUser->displayName = $getMembershipsByIdResponse->response->bungieNetUser->displayName;
-        }
+        if (!is_null($getMembershipsByIdResponse->response)) {
+            if (!is_null($getMembershipsByIdResponse->response->bungieNetUser)) {
+                $response->bungieNetUser = new BungieNetUser();
+                $response->bungieNetUser->membershipId = $getMembershipsByIdResponse->response->bungieNetUser->membershipId;
+                $response->bungieNetUser->displayName = $getMembershipsByIdResponse->response->bungieNetUser->displayName;
+            }
 
-        if (!is_null($getMembershipsByIdResponse->response->destinyMemberships)) {
-            foreach($getMembershipsByIdResponse->response->destinyMemberships as $membership) {
+            if (!is_null($getMembershipsByIdResponse->response->destinyMemberships)) {
+                foreach ($getMembershipsByIdResponse->response->destinyMemberships as $membership) {
 
-                switch ($membership->membershipType) {
-                    case BungieMembershipType::TigerXbox:
-                        $getProfileRequest = new Destiny\GetAccountRequest($membership->membershipType, $membership->membershipId);
-                        $getProfileResponse = $getProfileRequest->getResponse();
+                    switch ($membership->membershipType) {
+                        case BungieMembershipType::TigerXbox:
+                            $getProfileRequest = new Destiny\GetAccountRequest($membership->membershipType, $membership->membershipId);
+                            $getProfileResponse = $getProfileRequest->getResponse();
+                            $endpointCalls[] = $getProfileRequest->getInfo();
 
-                        if (!is_null($getProfileResponse->response)) {
-                            $account = new Account();
-                            $account->dateLastPlayed = $getProfileResponse->response->data->dateLastPlayed;
-                            $account->membershipId = $membership->membershipId;
-                            $account->membershipType = $membership->membershipType;
-                            $account->gameVersion = DestinyGameVersion::Destiny;
-                            $account->displayName = $membership->displayName;
-                            $response->destinyAccounts[] = $account;
-                        }
+                            if (!is_null($getProfileResponse->response)) {
+                                $account = new Account();
+                                $account->dateLastPlayed = $getProfileResponse->response->data->dateLastPlayed;
+                                $account->membershipId = $membership->membershipId;
+                                $account->membershipType = $membership->membershipType;
+                                $account->gameVersion = DestinyGameVersion::Destiny;
+                                $account->displayName = $membership->displayName;
+                                $response->destinyAccounts[] = $account;
+                            }
 
-                        $getProfileRequest = new Destiny2\GetProfileRequest($membership->membershipType, $membership->membershipId, [ DestinyComponentType::Profiles ]);
-                        $getProfileResponse = $getProfileRequest->getResponse();
+                            $getProfileRequest = new Destiny2\GetProfileRequest($membership->membershipType, $membership->membershipId, [DestinyComponentType::Profiles]);
+                            $getProfileResponse = $getProfileRequest->getResponse();
+                            $endpointCalls[] = $getProfileRequest->getInfo();
 
-                        if (!is_null($getProfileResponse->response)) {
-                            $account = new Account();
-                            $account->dateLastPlayed = $getProfileResponse->response->profile->data->dateLastPlayed;
-                            $account->membershipId = $membership->membershipId;
-                            $account->membershipType = $membership->membershipType;
-                            $account->gameVersion = DestinyGameVersion::Destiny2;
-                            $account->displayName = $membership->displayName;
-                            $response->destinyAccounts[] = $account;
-                        }
+                            if (!is_null($getProfileResponse->response)) {
+                                $account = new Account();
+                                $account->dateLastPlayed = $getProfileResponse->response->profile->data->dateLastPlayed;
+                                $account->membershipId = $membership->membershipId;
+                                $account->membershipType = $membership->membershipType;
+                                $account->gameVersion = DestinyGameVersion::Destiny2;
+                                $account->displayName = $membership->displayName;
+                                $response->destinyAccounts[] = $account;
+                            }
 
-                        break;
-                    case BungieMembershipType::TigerPsn:
-                        $getProfileRequest = new Destiny\GetAccountRequest($membership->membershipType, $membership->membershipId);
-                        $getProfileResponse = $getProfileRequest->getResponse();
+                            break;
+                        case BungieMembershipType::TigerPsn:
+                            $getProfileRequest = new Destiny\GetAccountRequest($membership->membershipType, $membership->membershipId);
+                            $getProfileResponse = $getProfileRequest->getResponse();
+                            $endpointCalls[] = $getProfileRequest->getInfo();
 
-                        if (!is_null($getProfileResponse->response)) {
-                            $account = new Account();
-                            $account->dateLastPlayed = $getProfileResponse->response->data->dateLastPlayed;
-                            $account->membershipId = $membership->membershipId;
-                            $account->membershipType = $membership->membershipType;
-                            $account->gameVersion = DestinyGameVersion::Destiny;
-                            $account->displayName = $membership->displayName;
-                            $response->destinyAccounts[] = $account;
-                        }
+                            if (!is_null($getProfileResponse->response)) {
+                                $account = new Account();
+                                $account->dateLastPlayed = $getProfileResponse->response->data->dateLastPlayed;
+                                $account->membershipId = $membership->membershipId;
+                                $account->membershipType = $membership->membershipType;
+                                $account->gameVersion = DestinyGameVersion::Destiny;
+                                $account->displayName = $membership->displayName;
+                                $response->destinyAccounts[] = $account;
+                            }
 
-                        $getProfileRequest = new Destiny2\GetProfileRequest($membership->membershipType, $membership->membershipId, [ DestinyComponentType::Profiles ]);
-                        $getProfileResponse = $getProfileRequest->getResponse();
+                            $getProfileRequest = new Destiny2\GetProfileRequest($membership->membershipType, $membership->membershipId, [DestinyComponentType::Profiles]);
+                            $getProfileResponse = $getProfileRequest->getResponse();
+                            $endpointCalls[] = $getProfileRequest->getInfo();
 
-                        if (!is_null($getProfileResponse->response)) {
-                            $account = new Account();
-                            $account->dateLastPlayed = $getProfileResponse->response->profile->data->dateLastPlayed;
-                            $account->membershipId = $membership->membershipId;
-                            $account->membershipType = $membership->membershipType;
-                            $account->gameVersion = DestinyGameVersion::Destiny2;
-                            $account->displayName = $membership->displayName;
-                            $response->destinyAccounts[] = $account;
-                        }
+                            if (!is_null($getProfileResponse->response)) {
+                                $account = new Account();
+                                $account->dateLastPlayed = $getProfileResponse->response->profile->data->dateLastPlayed;
+                                $account->membershipId = $membership->membershipId;
+                                $account->membershipType = $membership->membershipType;
+                                $account->gameVersion = DestinyGameVersion::Destiny2;
+                                $account->displayName = $membership->displayName;
+                                $response->destinyAccounts[] = $account;
+                            }
 
-                        break;
-                    case BungieMembershipType::TigerBlizzard:
-                        $getProfileRequest = new Destiny2\GetProfileRequest($membership->membershipType, $membership->membershipId, [ DestinyComponentType::Profiles ]);
-                        $getProfileResponse = $getProfileRequest->getResponse();
+                            break;
+                        case BungieMembershipType::TigerBlizzard:
+                            $getProfileRequest = new Destiny2\GetProfileRequest($membership->membershipType, $membership->membershipId, [DestinyComponentType::Profiles]);
+                            $getProfileResponse = $getProfileRequest->getResponse();
+                            $endpointCalls[] = $getProfileRequest->getInfo();
 
-                        if (!is_null($getProfileResponse->response)) {
-                            $account = new Account();
-                            $account->dateLastPlayed = $getProfileResponse->response->profile->data->dateLastPlayed;
-                            $account->membershipId = $membership->membershipId;
-                            $account->membershipType = $membership->membershipType;
-                            $account->gameVersion = DestinyGameVersion::Destiny2;
-                            $account->displayName = $membership->displayName;
-                            $response->destinyAccounts[] = $account;
-                        }
+                            if (!is_null($getProfileResponse->response)) {
+                                $account = new Account();
+                                $account->dateLastPlayed = $getProfileResponse->response->profile->data->dateLastPlayed;
+                                $account->membershipId = $membership->membershipId;
+                                $account->membershipType = $membership->membershipType;
+                                $account->gameVersion = DestinyGameVersion::Destiny2;
+                                $account->displayName = $membership->displayName;
+                                $response->destinyAccounts[] = $account;
+                            }
 
-                        break;
+                            break;
+                    }
                 }
             }
         }
 
-        return [$response, $code, $message];
+        return [$response, $code, $message, $endpointCalls];
     }
 
     /**
@@ -128,14 +137,17 @@ class BungieController extends Controller {
      * @return array
      */
     private function getDestinyAccountCharacters($membershipType, $membershipId) {
+        $endpointCalls = [];
         $getHistoricalStatsForAccountRequest = new Destiny\GetHistoricalStatsForAccountRequest($membershipType, $membershipId);
         $getHistoricalStatsForAccountResponse = $getHistoricalStatsForAccountRequest->getResponse();
+        $endpointCalls[] = $getHistoricalStatsForAccountRequest->getInfo();
         $code = $getHistoricalStatsForAccountResponse->errorCode;
         $message = $getHistoricalStatsForAccountResponse->message;
         $response = [];
 
         $getProfileRequest = new Destiny\GetAccountRequest($membershipType, $membershipId);
         $getProfileResponse = $getProfileRequest->getResponse();
+        $endpointCalls[] = $getProfileRequest->getInfo();
 
         if ($getProfileResponse->errorCode != 1) {
             $code = $getProfileResponse->errorCode;
@@ -194,7 +206,7 @@ class BungieController extends Controller {
             }
         }
 
-        return [$response, $code, $message];
+        return [$response, $code, $message, $endpointCalls];
     }
 
     /**
@@ -203,15 +215,17 @@ class BungieController extends Controller {
      * @return array
      */
     private function getDestiny2AccountCharacters($membershipType, $membershipId) {
-
+        $endpointCalls = [];
         $getProfileRequest = new Destiny2\GetProfileRequest($membershipType, $membershipId, [ DestinyComponentType::Characters ]);
         $getProfileResponse = $getProfileRequest->getResponse();
+        $endpointCalls[] = $getProfileRequest->getInfo();
         $code = $getProfileResponse->errorCode;
         $message = $getProfileResponse->message;
         $response = [];
 
         /*$getHistoricalStatsForAccountRequest = new Destiny2\GetHistoricalStatsForAccountRequest($membershipType, $membershipId);
         $getHistoricalStatsForAccountResponse = $getHistoricalStatsForAccountRequest->getResponse();
+        $endpointCalls[] = $getHistoricalStatsForAccountRequest->getInfo();
 
         if ($getHistoricalStatsForAccountResponse->errorCode != 1) {
             $code = $getHistoricalStatsForAccountResponse->errorCode;
@@ -262,6 +276,7 @@ class BungieController extends Controller {
 
                 $getHistoricalStatsRequest = new Destiny2\GetHistoricalStatsRequest($membershipType, $membershipId, $character->characterId);
                 $getHistoricalStatsResponse = $getHistoricalStatsRequest->getResponse();
+                $endpointCalls[] = $getHistoricalStatsRequest->getInfo();
 
                 if ($getHistoricalStatsResponse->errorCode != 1) {
                     $code = $getHistoricalStatsResponse->errorCode;
@@ -277,7 +292,7 @@ class BungieController extends Controller {
             }
         }
 
-        return [$response, $code, $message];
+        return [$response, $code, $message, $endpointCalls];
     }
 
     /**
@@ -292,7 +307,12 @@ class BungieController extends Controller {
         $response = new ApiResponse();
         $response->queryTime = $now;
         $view = new JSONView();
-        list($response->response, $response->code, $response->message) = $this->getMembershipsById($params['membershipType'], $params['membershipId']);
+        list($response->response, $response->code, $response->message, $response->endpointCalls) = $this->getMembershipsById($params['membershipType'], $params['membershipId']);
+
+        if (!isset($params['debug'])) {
+            unset($response->endpointCalls);
+        }
+
         $response->executionMilliseconds = (microtime(true) - $start) * 1000;
         $view->set_json_file($response);
         return $view;
@@ -313,41 +333,52 @@ class BungieController extends Controller {
 
         $searchDestinyPlayerRequest = new Destiny2\SearchDestinyPlayerRequest($params['membershipType'], $params['displayName']);
         $searchDestinyPlayerResponse = $searchDestinyPlayerRequest->getResponse();
+        $response->endpointCalls[] = $searchDestinyPlayerRequest->getInfo();
         $response->code = $searchDestinyPlayerResponse->errorCode;
         $response->message = $searchDestinyPlayerResponse->message;
         $response->response = new Membership();
 
-        foreach ($searchDestinyPlayerResponse->response as $destinyPlayer) {
-            list($membership, $code, $message) = $this->getMembershipsById($destinyPlayer->membershipType, $destinyPlayer->membershipId);
+        if (!is_null($searchDestinyPlayerResponse->response)) {
+            foreach ($searchDestinyPlayerResponse->response as $destinyPlayer) {
+                list($membership, $code, $message, $endpointCalls) = $this->getMembershipsById($destinyPlayer->membershipType, $destinyPlayer->membershipId);
 
-            if ($code != 1) {
-                $response->code = $code;
-                $response->message = $message;
-            }
-
-            if (!is_null($membership)) {
-                if (is_null($response->response->bungieNetUser)) {
-                    $response->response->bungieNetUser = $membership->bungieNetUser;
+                foreach ($endpointCalls as $endpointCall) {
+                    $response->endpointCalls[] = $endpointCall;
                 }
 
-                if (!is_null($membership->destinyAccounts)) {
-                    foreach ($membership->destinyAccounts as $newMembership) {
-                        $found = false;
+                if ($code != 1) {
+                    $response->code = $code;
+                    $response->message = $message;
+                }
 
-                        if (!is_null($response->response->destinyAccounts)) {
-                            foreach ($response->response->destinyAccounts as $existingMembership) {
-                                if ($existingMembership->membershipId == $newMembership->membershipId && $existingMembership->gameVersion == $newMembership->gameVersion) {
-                                    $found = true;
+                if (!is_null($membership)) {
+                    if (is_null($response->response->bungieNetUser)) {
+                        $response->response->bungieNetUser = $membership->bungieNetUser;
+                    }
+
+                    if (!is_null($membership->destinyAccounts)) {
+                        foreach ($membership->destinyAccounts as $newMembership) {
+                            $found = false;
+
+                            if (!is_null($response->response->destinyAccounts)) {
+                                foreach ($response->response->destinyAccounts as $existingMembership) {
+                                    if ($existingMembership->membershipId == $newMembership->membershipId && $existingMembership->gameVersion == $newMembership->gameVersion) {
+                                        $found = true;
+                                    }
                                 }
                             }
-                        }
 
-                        if (!$found) {
-                            $response->response->destinyAccounts[] = $newMembership;
+                            if (!$found) {
+                                $response->response->destinyAccounts[] = $newMembership;
+                            }
                         }
                     }
                 }
             }
+        }
+
+        if (!isset($params['debug'])) {
+            unset($response->endpointCalls);
         }
 
         $response->executionMilliseconds = (microtime(true) - $start) * 1000;
@@ -375,11 +406,15 @@ class BungieController extends Controller {
 
         switch (intval($params['gameVersion'])) {
             case DestinyGameVersion::Destiny:
-                list($response->response, $response->code, $response->message) = $this->getDestinyAccountCharacters($params['membershipType'], $params['membershipId']);
+                list($response->response, $response->code, $response->message, $response->endpointCalls) = $this->getDestinyAccountCharacters($params['membershipType'], $params['membershipId']);
                 break;
             case DestinyGameVersion::Destiny2:
-                list($response->response, $response->code, $response->message) = $this->getDestiny2AccountCharacters($params['membershipType'], $params['membershipId']);
+                list($response->response, $response->code, $response->message, $response->endpointCalls) = $this->getDestiny2AccountCharacters($params['membershipType'], $params['membershipId']);
                 break;
+        }
+
+        if (!isset($params['debug'])) {
+            unset($response->endpointCalls);
         }
 
         $response->executionMilliseconds = (microtime(true) - $start) * 1000;

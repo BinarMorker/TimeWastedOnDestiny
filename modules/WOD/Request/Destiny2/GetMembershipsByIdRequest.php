@@ -20,19 +20,19 @@ class GetMembershipsByIdRequest extends BungieNetPlatformRequest {
     public function __construct($membershipType, $membershipId) {
         $this->membershipType = $membershipType;
         $this->membershipId = $membershipId;
+        $this->cacheTime = 14400; // 4 hours
     }
 
     /**
      * @return GetMembershipsByIdResponse
      */
     public function getResponse() {
-        $response = parent::makeRequest("GetMembershipsById/%s/%s", "GET", "User", [
+        list($this->code, $body) = parent::makeRequest("GetMembershipsById/%s/%s", "GET", "User", [
             $this->membershipId,
             $this->membershipType
         ]);
 
-        $this->code = $response->getStatusCode();
-        $json = json_decode($response->getBody()->getContents());
+        $json = json_decode($body);
         $mapper = new JsonMapper();
         $object = $mapper->map($json, new GetMembershipsByIdResponse());
         /** @var GetMembershipsByIdResponse $object */

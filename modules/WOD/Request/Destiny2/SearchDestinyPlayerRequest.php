@@ -20,19 +20,19 @@ class SearchDestinyPlayerRequest extends BungieNetPlatformRequest {
     public function __construct($membershipType, $displayName) {
         $this->membershipType = $membershipType;
         $this->displayName = $displayName;
+        $this->cacheTime = 14400; // 4 hours
     }
 
     /**
      * @return SearchDestinyPlayerResponse
      */
     public function getResponse() {
-        $response = parent::makeRequest("SearchDestinyPlayer/%s/%s", "GET", "Destiny2", [
+        list($this->code, $body) = parent::makeRequest("SearchDestinyPlayer/%s/%s", "GET", "Destiny2", [
             $this->membershipType,
             $this->displayName
         ]);
 
-        $this->code = $response->getStatusCode();
-        $json = json_decode($response->getBody()->getContents());
+        $json = json_decode($body);
         $mapper = new JsonMapper();
         $object = $mapper->map($json, new SearchDestinyPlayerResponse());
         /** @var SearchDestinyPlayerResponse $object */

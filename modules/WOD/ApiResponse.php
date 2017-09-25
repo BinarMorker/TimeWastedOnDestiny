@@ -14,4 +14,6 @@ class ApiResponse {
 
     public $executionMilliseconds;
 
+    public $endpointCalls;
+
 }

@@ -5,11 +5,10 @@ namespace Apine\Modules\WOD\Request\Destiny2;
 use Apine\Application\Config;
 use Apine\Modules\BungieNetPlatform\Destiny2\BungieNetPlatformResponse;
 use Apine\Modules\WOD\BungieUrlHelper;
-use GuzzleHttp\Client;
-use GuzzleHttp\Psr7\Request;
+use Apine\Modules\WOD\Request\GuzzleHttpCacher;
 use InvalidArgumentException;
 
-class BungieNetPlatformRequest {
+class BungieNetPlatformRequest extends GuzzleHttpCacher {
 
     /**
      * @var int
@@ -68,10 +67,7 @@ class BungieNetPlatformRequest {
             $url = join('?', [$url, $urlQueryString]);
         }
 
-        $client = new Client();
-        $request = new Request($method, $url, $headers);
-
-        return $client->send($request);
+        return $this->cachedRequest($method, $url, $headers);
     }
 
 }

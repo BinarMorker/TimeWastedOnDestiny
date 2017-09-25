@@ -27,13 +27,14 @@ class GetHistoricalStatsRequest extends BungieNetPlatformRequest {
         $this->membershipType = $membershipType;
         $this->membershipId = $membershipId;
         $this->characterId = $characterId;
+        $this->cacheTime = 14400; // 4 hours
     }
 
     /**
      * @return GetHistoricalStatsResponse
      */
     public function getResponse() {
-        $response = parent::makeRequest("%s/Account/%s/Character/%s/Stats", "GET", "Destiny2", [
+        list($this->code, $body) = parent::makeRequest("%s/Account/%s/Character/%s/Stats", "GET", "Destiny2", [
             $this->membershipType,
             $this->membershipId,
             $this->characterId
@@ -41,8 +42,7 @@ class GetHistoricalStatsRequest extends BungieNetPlatformRequest {
             "modes" => DestinyActivityModeType::AllPvP.",".DestinyActivityModeType::AllPvE
         ]);
 
-        $this->code = $response->getStatusCode();
-        $json = json_decode($response->getBody()->getContents());
+        $json = json_decode($body);
         $mapper = new JsonMapper();
         $object = $mapper->map($json, new GetHistoricalStatsResponse());
         /** @var GetHistoricalStatsResponse $object */

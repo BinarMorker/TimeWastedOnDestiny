@@ -13,7 +13,7 @@ define([
     var Application = function(searchTerm) {
         var self = this;
 
-
+        self.loading = ko.observable(false);
         self.currentAccountNames = [];
 
         self.grid = $('#grid');
@@ -40,7 +40,7 @@ define([
                 if (account.constructor.name === "Account") {
                     var displayName = "";
 
-                    if (account.bungieNetDisplayName() !== '') {
+                    if (account.bungieNetDisplayName()) {
                         displayName = account.bungieNetDisplayName();
                     } else {
                         displayName = account.displayName;
@@ -118,23 +118,26 @@ define([
         self.statsVisible(searchTerm !== '');
 
         self.fetchAccount = function (membershipType, membershipId) {
-            self.statsVisible(true);
-
+            self.loading(true);
             Request('/bungie/getMembership', {
                 membershipType: membershipType,
                 membershipId: membershipId
             }, function(response) {
                 self.populateAccounts(response);
+            }, function() {
+
+            }, function() {
+                self.loading(false);
             });
         };
 
         self.fetchAccounts = function () {
-            self.statsVisible(true);
-
             if (self.input().trim() !== "") {
                 var inputs = self.input().trim().split(',');
 
                 inputs.forEach(function(input) {
+                    self.loading(true);
+
                     Request('/bungie/fetchAccounts', {
                         membershipType: -1,
                         displayName: input.trim()
@@ -148,6 +151,8 @@ define([
                     }, function (response) {
                         self.input("");
                         UIkit.notification((response.message || 'No account found.'), {status: 'danger'});
+                    }, function() {
+                        self.loading(false);
                     });
                 });
             }
@@ -160,7 +165,7 @@ define([
                 response.response.destinyAccounts.forEach(function (item) {
                     var account = new Account(item);
 
-                    if (response.response.hasOwnProperty('bungieNetUser')) {
+                    if (response.response.hasOwnProperty('bungieNetUser') && response.response.bungieNetUser) {
                         account.bungieNetDisplayName(response.response.bungieNetUser.displayName);
                         account.bungieNetMembershipId(response.response.bungieNetUser.membershipId);
                     }
@@ -174,6 +179,7 @@ define([
                     if (exisitingAccount.length === 0) {
                         self.accounts.push(account);
                         self.accounts.valueHasMutated();
+                        self.statsVisible(true);
                         $('html, body').animate({
                             scrollTop: $('#stats').offset().top
                         }, 500, "swing", function () {
@@ -228,42 +234,6 @@ define([
                     }
 
                     account.timePlayed(account.timePlayed() + character.timePlayed());
-
-                    /*var characterData = {};
-                    var genderType = "";
-
-                    if (account.gameVersion === 1) {
-                        characterData = data.characters.filter(function (item) {
-                            return item.characterBase.characterId === character.characterId;
-                        });
-
-                        if (characterData.length === 1) {
-                            genderType = Manifest.Genders[characterData[0].characterBase.genderHash].genderType;
-                            character.gender = Manifest.Genders[characterData[0].characterBase.genderHash].genderName;
-                            character.charClass = Manifest.Classes[characterData[0].characterBase.classHash]['className' + (genderType ? 'Female' : 'Male')];
-                            character.race = Manifest.Races[characterData[0].characterBase.raceHash]['raceName' + (genderType ? 'Female' : 'Male')];
-                            character.level = characterData[0].characterBase.powerLevel;
-                            character.emblemPath(characterData[0].emblemPath);
-                            character.backgroundPath(characterData[0].backgroundPath);
-                        }
-                    } else {
-                        var charactersObj = response.Response.characters.data;
-                        var charactersArray = Object.keys(charactersObj).map(function(key){ return charactersObj[key] });
-                        characterData = charactersArray.filter(function (item) {
-                            return item.characterId === character.characterId;
-                        });
-
-                        if (characterData.length === 1) {
-                            genderType = Manifest.Genders[characterData[0].genderHash].genderType;
-                            character.gender = Manifest.Genders[characterData[0].genderHash].displayProperties.name;
-                            character.charClass = Manifest.Classes[characterData[0].classHash].genderedClassNames[genderType ? 'Female' : 'Male'];
-                            character.race = Manifest.Races[characterData[0].raceHash].genderedRaceNames[genderType ? 'Female' : 'Male'];
-                            character.level = characterData[0].light;
-                            character.emblemPath(characterData[0].emblemPath);
-                            character.backgroundPath(characterData[0].emblemBackgroundPath);
-                        }
-                    }*/
-
                     account.characters.push(character);
                 });
 

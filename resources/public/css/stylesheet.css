@@ -119,68 +119,50 @@ body {
     top: -20px;
 }
 
-.deletedIcon {
+.emblemIcon {
     justify-content: center;
     align-items: center;
     display: flex;
     height: 50px;
-    width: 20%;
+    width: 50px;
+    margin: 5px;
 }
 
 .emblem {
-    background-position: center left;
-    background-size: cover;
-    color: #ededed;
     margin-bottom: 5px;
     display: flex;
-    align-items: flex-start;
-    position: relative;
-    text-shadow: 1px 1px 1px #111;
+    align-items: center;
+    background: #1a1a1a;
+    color: #b2b2b2;
 }
 
-.emblem:before {
-    content: "";
-    float: left;
-    padding-bottom: 20.2531645569203%;
+.emblem .characterName {
+    display: block;
 }
 
-.emblem:after {
-    content: "";
-    display: table;
-    clear: both;
+.emblem .timePlayed {
+    font-weight: bolder;
 }
 
-.emblem * {
-    margin-bottom: 0;
-}
-
-.emblem .imgHolder {
-    width: 20%;
-    padding: 2%;
+.emblem .timeWasted {
+    color: #f0506e;
 }
 
 .emblem .powerLevel {
     font-size: 1.75rem;
     font-style: normal;
-    display: block;
+    padding-right: 5px;
 }
 
 .emblem .characterName {
     font-size: 1.125rem;
     font-weight: 300;
     font-stretch: extra-condensed;
-    display: block;
 }
 
 .emblem .timePlayed {
     font-size: 1.25rem;
     font-stretch: extra-condensed;
-    display: block;
-}
-
-.emblem .infoRight {
-    text-align: right;
-    margin-right: 2%;
 }
 
 .powerLevel.d1 {
@@ -191,18 +173,28 @@ body {
     color: #0fd4cf;
 }
 
-.deletedChar {
-    margin-bottom: 5px;
-    display: flex;
+.uk-loading {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 9999;
     align-items: center;
+    background: rgba(0, 0, 0, 0.25);
 }
 
-.deletedChar .characterName {
-    display: block;
+.uk-loading .uk-spinner {
+    margin-bottom: 0;
 }
 
-.deletedChar .timePlayed {
-    color: #f0506e;
+.uk-loading svg {
+    height: 150px;
+    width: 150px;
+}
+
+.uk-search-input {
+    color: #b2b2b2;
 }
 
 .uk-fab-button {

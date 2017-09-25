@@ -27,21 +27,21 @@ class GetProfileRequest extends BungieNetPlatformRequest {
         $this->membershipType = $membershipType;
         $this->membershipId = $membershipId;
         $this->components = $components;
+        $this->cacheTime = 14400; // 4 hours
     }
 
     /**
      * @return GetProfileResponse
      */
     public function getResponse() {
-        $response = parent::makeRequest("%s/Profile/%s", "GET", "Destiny2", [
+        list($this->code, $body) = parent::makeRequest("%s/Profile/%s", "GET", "Destiny2", [
             $this->membershipType,
             $this->membershipId
         ], [
             'components' => join(',', $this->components)
         ]);
 
-        $this->code = $response->getStatusCode();
-        $json = json_decode($response->getBody()->getContents());
+        $json = json_decode($body);
         $mapper = new JsonMapper();
         $object = $mapper->map($json, new GetProfileResponse());
         /** @var GetProfileResponse $object */

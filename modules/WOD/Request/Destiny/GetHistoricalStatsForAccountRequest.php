@@ -20,19 +20,19 @@ class GetHistoricalStatsForAccountRequest extends BungieNetPlatformRequest {
     public function __construct($membershipType, $membershipId) {
         $this->membershipType = $membershipType;
         $this->membershipId = $membershipId;
+        $this->cacheTime = 14400; // 4 hours
     }
 
     /**
      * @return GetHistoricalStatsForAccountResponse
      */
     public function getResponse() {
-        $response = parent::makeRequest("Stats/Account/%s/%s", "GET", "Destiny", [
+        list($this->code, $body) = parent::makeRequest("Stats/Account/%s/%s", "GET", "Destiny", [
             $this->membershipType,
             $this->membershipId
         ]);
 
-        $this->code = $response->getStatusCode();
-        $json = json_decode($response->getBody()->getContents());
+        $json = json_decode($body);
         $mapper = new JsonMapper();
         $object = $mapper->map($json, new GetHistoricalStatsForAccountResponse());
         /** @var GetHistoricalStatsForAccountResponse $object */
