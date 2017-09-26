@@ -3,3 +3,5 @@ composer.phar
 /bower_components/
 config.ini
 .idea
+/cache/
+/views/_cache/
