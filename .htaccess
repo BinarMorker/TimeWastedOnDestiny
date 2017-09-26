@@ -5,7 +5,7 @@ Options -Indexes
 	RewriteEngine On
 	
 	RewriteCond %{REQUEST_FILENAME} -f
-	RewriteRule ^(/vendor/youmy001/apine-framework/|controllers/|modules/|views/|config\.ini|config_sample\.ini|\.xml|composer\.*|VERSION) - [F,L,NC]
+	RewriteRule ^(/vendor/youmy001/apine-framework/|controllers/|modules/|views/|cache/|config\.ini|config_sample\.ini|\.xml|composer\.*|VERSION) - [F,L,NC]
 
 	# APIne Rules
 	RewriteCond %{REQUEST_FILENAME} !-f
