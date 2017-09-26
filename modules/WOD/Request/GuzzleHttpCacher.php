@@ -3,10 +3,12 @@
 namespace Apine\Modules\WOD\Request;
 
 use Apine\Application\Application;
+use Apine\Modules\BungieNetPlatform\Destiny\BungieNetPlatformResponse;
 use DateTime;
 use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
+use JsonMapper;
 
 class GuzzleHttpCacher {
 
@@ -61,8 +63,14 @@ class GuzzleHttpCacher {
         }
 
         $body = $response->getBody()->getContents();
+        $json = json_decode($body);
+        $mapper = new JsonMapper();
+        /** @var BungieNetPlatformResponse $object */
+        $object = $mapper->map($json, new BungieNetPlatformResponse());
 
-        file_put_contents($cacheFilePath, $body);
+        if ($object->errorCode != 1) {
+            file_put_contents($cacheFilePath, $body);
+        }
 
         return [ $code, $body, $now ];
     }

@@ -38,13 +38,7 @@ define([
             self.currentAccountNames = [];
             self.accounts().forEach(function(account) {
                 if (account.constructor.name === "Account") {
-                    var displayName = "";
-
-                    if (account.bungieNetDisplayName()) {
-                        displayName = account.bungieNetDisplayName();
-                    } else {
-                        displayName = account.displayName;
-                    }
+                    var displayName = account.displayName;
 
                     var filter = self.currentAccountNames.filter(function (item) {
                         return item === displayName.toLowerCase();
@@ -161,7 +155,7 @@ define([
         self.populateAccounts = function (response) {
             self.input("");
 
-            if (response.hasOwnProperty('response') && response.response.hasOwnProperty('destinyAccounts')) {
+            if (response.hasOwnProperty('response') && response.response.hasOwnProperty('destinyAccounts') && response.response.destinyAccounts) {
                 response.response.destinyAccounts.forEach(function (item) {
                     var account = new Account(item);
 
