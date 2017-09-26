@@ -42,8 +42,11 @@ class GuzzleHttpCacher {
         if (is_file($cacheFilePath)) {
             $this->modifiedDate->setTimestamp(filemtime($cacheFilePath));
             $this->expiration->setTimestamp(filemtime($cacheFilePath) + $this->cacheTime);
-            $this->inCache = true;
-            return [ 200, file_get_contents($cacheFilePath), $this->modifiedDate ];
+
+            if ($this->expiration > $now) {
+                $this->inCache = true;
+                return [200, file_get_contents($cacheFilePath), $this->modifiedDate];
+            }
         }
 
         $this->inCache = false;

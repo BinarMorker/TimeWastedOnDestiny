@@ -1,6 +1,16 @@
 <!DOCTYPE html>
-<html lang="{{ apine.language_short }}">
+<html lang="en">
 <head>
+    <!-- Global Site Tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-52347626-4"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments)};
+        gtag('js', new Date());
+
+        gtag('config', 'UA-52347626-4');
+    </script>
+
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
@@ -13,6 +23,14 @@
     <title>{{ translate('application', 'title') }}</title>
     <link rel="stylesheet" href="{{ 'bower_components/uikit/dist/css/uikit.min.css'|resource }}">
     <link rel="stylesheet" href="{{ 'resources/public/css/stylesheet.css'|resource }}">
+
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({
+            google_ad_client: "ca-pub-6332373031553935",
+            enable_page_level_ads: true
+        });
+    </script>
 </head>
 <body>
     <div class="uk-height-viewport uk-section-media" id="background" data-bind="visible: mainVisible">
@@ -64,9 +82,6 @@
                 <span> | </span>
                 <a href="#about-modal" uk-toggle>About</a>
             </div>
-        </div>
-
-        <div id="adBottomMobile" style="height: 90px">
         </div>
     </div>
     <div class="uk-height-viewport uk-section-secondary uk-preserve-color" data-bind="visible: statsVisible" id="stats">
@@ -326,21 +341,6 @@
         ], function(ko, Application) {
             ko.applyBindings(new Application('{{ search|default() }}'));
         });
-    </script>
-    <script>
-        (function (i, s, o, g, r, a, m) {
-            i['GoogleAnalyticsObject'] = r;
-            i[r] = i[r] || function () {
-                    (i[r].q = i[r].q || []).push(arguments)
-                }, i[r].l = 1 * new Date();
-            a = s.createElement(o),
-                m = s.getElementsByTagName(o)[0];
-            a.async = 1;
-            a.src = g;
-            m.parentNode.insertBefore(a, m)
-        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
-        ga('create', 'UA-52347626-4', 'auto');
-        ga('send', 'pageview');
     </script>
 </body>
 </html>

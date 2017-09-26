@@ -22,42 +22,60 @@ class __TwigTemplate_e75cbbf5d7c0e926d30bcc1e293f4e4d294ddf116685eabc7731ddb9fb6
         echo twig_escape_filter($this->env, $this->getAttribute(($context["apine"] ?? null), "language_short", array()), "html", null, true);
         echo "\">
 <head>
+    <!-- Global Site Tag (gtag.js) - Google Analytics -->
+    <script async src=\"https://www.googletagmanager.com/gtag/js?id=UA-52347626-4\"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments)};
+        gtag('js', new Date());
+
+        gtag('config', 'UA-52347626-4');
+    </script>
+
     <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>
     <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">
     <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1.0\"/>
     <meta name=\"description\" content=\"";
-        // line 7
+        // line 17
         echo twig_escape_filter($this->env, call_user_func_array($this->env->getFunction('translate')->getCallable(), array("application", "description")), "html", null, true);
         echo "\">
     <meta property=\"og:title\" content=\"";
-        // line 8
+        // line 18
         echo twig_escape_filter($this->env, call_user_func_array($this->env->getFunction('translate')->getCallable(), array("application", "title")), "html", null, true);
         echo "\"/>
     <meta property=\"og:description\" content=\"";
-        // line 9
+        // line 19
         echo twig_escape_filter($this->env, call_user_func_array($this->env->getFunction('translate')->getCallable(), array("application", "description")), "html", null, true);
         echo "\"/>
     <meta property=\"og:type\" content=\"website\"/>
     <meta property=\"og:url\" content=\"";
-        // line 11
+        // line 21
         echo twig_escape_filter($this->env, call_user_func_array($this->env->getFilter('resource')->getCallable(), array("")), "html", null, true);
         echo "\"/>
     <meta property=\"og:image\" content=\"";
-        // line 12
+        // line 22
         echo twig_escape_filter($this->env, call_user_func_array($this->env->getFilter('path')->getCallable(), array("resources/public/assets/opengraph.jpg")), "html", null, true);
         echo "\"/>
     <title>";
-        // line 13
+        // line 23
         echo twig_escape_filter($this->env, call_user_func_array($this->env->getFunction('translate')->getCallable(), array("application", "title")), "html", null, true);
         echo "</title>
     <link rel=\"stylesheet\" href=\"";
-        // line 14
+        // line 24
         echo twig_escape_filter($this->env, call_user_func_array($this->env->getFilter('resource')->getCallable(), array("bower_components/uikit/dist/css/uikit.min.css")), "html", null, true);
         echo "\">
     <link rel=\"stylesheet\" href=\"";
-        // line 15
+        // line 25
         echo twig_escape_filter($this->env, call_user_func_array($this->env->getFilter('resource')->getCallable(), array("resources/public/css/stylesheet.css")), "html", null, true);
         echo "\">
+
+    <script async src=\"//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js\"></script>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({
+            google_ad_client: \"ca-pub-6332373031553935\",
+            enable_page_level_ads: true
+        });
+    </script>
 </head>
 <body>
     <div class=\"uk-height-viewport uk-section-media\" id=\"background\" data-bind=\"visible: mainVisible\">
@@ -69,7 +87,7 @@ class __TwigTemplate_e75cbbf5d7c0e926d30bcc1e293f4e4d294ddf116685eabc7731ddb9fb6
         </div>
         <div class=\"uk-position-center uk-position-medium\">
             <img src=\"";
-        // line 26
+        // line 44
         echo twig_escape_filter($this->env, call_user_func_array($this->env->getFilter('resource')->getCallable(), array("resources/public/assets/logo.svg")), "html", null, true);
         echo "\">
             <nav class=\"nav-overlay uk-navbar-container uk-navbar-transparent uk-margin uk-position-relative\" uk-navbar>
@@ -84,7 +102,7 @@ class __TwigTemplate_e75cbbf5d7c0e926d30bcc1e293f4e4d294ddf116685eabc7731ddb9fb6
             </nav>
 
             ";
-        // line 48
+        // line 66
         echo "
             <div id=\"adBottom\">
                 <br/>
@@ -101,15 +119,12 @@ class __TwigTemplate_e75cbbf5d7c0e926d30bcc1e293f4e4d294ddf116685eabc7731ddb9fb6
 
             <div class=\"uk-container uk-container-large uk-margin-small-bottom uk-text-center\">
                 <span>Made with <i uk-icon=\"icon: heart\"></i> by <a href=\"#\" data-bind=\"click: function() { fetchAccount(-1, 664856) }\">";
-        // line 63
+        // line 81
         echo twig_escape_filter($this->env, call_user_func_array($this->env->getFunction('config')->getCallable(), array("application", "author")), "html", null, true);
         echo "</a></span>
                 <span> | </span>
                 <a href=\"#about-modal\" uk-toggle>About</a>
             </div>
-        </div>
-
-        <div id=\"adBottomMobile\" style=\"height: 90px\">
         </div>
     </div>
     <div class=\"uk-height-viewport uk-section-secondary uk-preserve-color\" data-bind=\"visible: statsVisible\" id=\"stats\">
@@ -137,7 +152,7 @@ class __TwigTemplate_e75cbbf5d7c0e926d30bcc1e293f4e4d294ddf116685eabc7731ddb9fb6
                         </ul>
                     </div>
                     <a href=\"";
-        // line 96
+        // line 111
         echo twig_escape_filter($this->env, call_user_func_array($this->env->getFilter('path')->getCallable(), array("")), "html", null, true);
         echo "\" class=\"uk-navbar-item uk-logo\"><img src=\"";
         echo twig_escape_filter($this->env, call_user_func_array($this->env->getFilter('resource')->getCallable(), array("resources/public/assets/logo.svg")), "html", null, true);
@@ -152,7 +167,7 @@ class __TwigTemplate_e75cbbf5d7c0e926d30bcc1e293f4e4d294ddf116685eabc7731ddb9fb6
                         </div>
                         <a class=\"uk-navbar-toggle\" uk-icon=\"icon: plus-circle\" data-bind=\"click: fetchAccounts, attr: { 'uk-icon': accounts().length > 0 ? 'icon: plus-circle' : 'icon: search' }\" href=\"#\"></a>
                         ";
-        // line 107
+        // line 122
         echo "                    </ul>
                 </div>
             </nav>
@@ -162,7 +177,7 @@ class __TwigTemplate_e75cbbf5d7c0e926d30bcc1e293f4e4d294ddf116685eabc7731ddb9fb6
             <div class=\"uk-child-width-1-1@s uk-child-width-1-3@m uk-margin-large-bottom\" uk-grid id=\"grid\">
                 <!-- ko foreach: accounts -->
                 ";
-        // line 164
+        // line 179
         echo "                <!-- ko if: \$data.constructor.name == \"Account\" -->
                 <div class=\"uk-grid-selector\" data-bind=\"fadeVisible: visible, css: { 'smallCard': !\$root.detailedView() }\">
                     <div class=\"uk-card uk-box-shadow-small\">
@@ -196,7 +211,7 @@ class __TwigTemplate_e75cbbf5d7c0e926d30bcc1e293f4e4d294ddf116685eabc7731ddb9fb6
                                 <!-- ko if: bungieNetMembershipId -->
                                 <a href=\"#\" class=\"bungieAccountPill\" data-bind=\"click: function() { \$root.fetchAccount(-1, bungieNetMembershipId()) }\">
                                     <img src=\"";
-        // line 196
+        // line 211
         echo twig_escape_filter($this->env, call_user_func_array($this->env->getFilter('resource')->getCallable(), array("resources/public/assets/BungieLogo.png")), "html", null, true);
         echo "\"><span data-bind=\"text: bungieNetDisplayName\"></span>
                                 </a>
@@ -212,7 +227,7 @@ class __TwigTemplate_e75cbbf5d7c0e926d30bcc1e293f4e4d294ddf116685eabc7731ddb9fb6
                                     <strong class=\"characterName\" data-bind=\"text: race + ' ' + charClass\"></strong>
                                     <span class=\"timePlayed\" data-bind=\"formatTime: timePlayed\"></span>
                                     ";
-        // line 210
+        // line 225
         echo "                                </div>
                                 <div class=\"uk-width-auto infoRight\">
                                     <i class=\"powerLevel\" data-bind=\"text: level, css: { 'd1': \$parent.gameVersion == 1, 'd2': \$parent.gameVersion == 2 }\"></i>
@@ -252,7 +267,7 @@ class __TwigTemplate_e75cbbf5d7c0e926d30bcc1e293f4e4d294ddf116685eabc7731ddb9fb6
 
         <div class=\"uk-container uk-container-large uk-margin-small-bottom\">
             <span>Made with <i uk-icon=\"icon: heart\"></i> by <a href=\"#\" data-bind=\"click: function() { fetchAccount(-1, 664856) }\">";
-        // line 248
+        // line 263
         echo twig_escape_filter($this->env, call_user_func_array($this->env->getFunction('config')->getCallable(), array("application", "author")), "html", null, true);
         echo "</a></span>
             <span> | </span>
@@ -300,19 +315,19 @@ class __TwigTemplate_e75cbbf5d7c0e926d30bcc1e293f4e4d294ddf116685eabc7731ddb9fb6
     </div>
 
     <script src=\"";
-        // line 293
+        // line 308
         echo twig_escape_filter($this->env, call_user_func_array($this->env->getFilter('resource')->getCallable(), array("bower_components/jquery/dist/jquery.js")), "html", null, true);
         echo "\"></script>
     <script src=\"";
-        // line 294
+        // line 309
         echo twig_escape_filter($this->env, call_user_func_array($this->env->getFilter('resource')->getCallable(), array("bower_components/uikit/dist/js/uikit.js")), "html", null, true);
         echo "\"></script>
     <script src=\"";
-        // line 295
+        // line 310
         echo twig_escape_filter($this->env, call_user_func_array($this->env->getFilter('resource')->getCallable(), array("bower_components/uikit/dist/js/uikit-icons.js")), "html", null, true);
         echo "\"></script>
     <script src=\"";
-        // line 296
+        // line 311
         echo twig_escape_filter($this->env, call_user_func_array($this->env->getFilter('resource')->getCallable(), array("bower_components/requirejs/require.js")), "html", null, true);
         echo "\" data-main=\"";
         echo twig_escape_filter($this->env, call_user_func_array($this->env->getFilter('resource')->getCallable(), array("resources/public/scripts/application.js")), "html", null, true);
@@ -348,25 +363,10 @@ class __TwigTemplate_e75cbbf5d7c0e926d30bcc1e293f4e4d294ddf116685eabc7731ddb9fb6
             'ko.fadevisible'
         ], function(ko, Application) {
             ko.applyBindings(new Application('";
-        // line 327
+        // line 342
         echo twig_escape_filter($this->env, ((array_key_exists("search", $context)) ? (_twig_default_filter(($context["search"] ?? null))) : ("")), "html", null, true);
         echo "'));
         });
-    </script>
-    <script>
-        (function (i, s, o, g, r, a, m) {
-            i['GoogleAnalyticsObject'] = r;
-            i[r] = i[r] || function () {
-                    (i[r].q = i[r].q || []).push(arguments)
-                }, i[r].l = 1 * new Date();
-            a = s.createElement(o),
-                m = s.getElementsByTagName(o)[0];
-            a.async = 1;
-            a.src = g;
-            m.parentNode.insertBefore(a, m)
-        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
-        ga('create', 'UA-52347626-4', 'auto');
-        ga('send', 'pageview');
     </script>
 </body>
 </html>";
@@ -384,7 +384,7 @@ class __TwigTemplate_e75cbbf5d7c0e926d30bcc1e293f4e4d294ddf116685eabc7731ddb9fb6
 
     public function getDebugInfo()
     {
-        return array (  352 => 327,  316 => 296,  312 => 295,  308 => 294,  304 => 293,  256 => 248,  216 => 210,  200 => 196,  166 => 164,  156 => 107,  141 => 96,  105 => 63,  88 => 48,  73 => 26,  59 => 15,  55 => 14,  51 => 13,  47 => 12,  43 => 11,  38 => 9,  34 => 8,  30 => 7,  22 => 2,  19 => 1,);
+        return array (  367 => 342,  331 => 311,  327 => 310,  323 => 309,  319 => 308,  271 => 263,  231 => 225,  215 => 211,  181 => 179,  171 => 122,  156 => 111,  123 => 81,  106 => 66,  91 => 44,  69 => 25,  65 => 24,  61 => 23,  57 => 22,  53 => 21,  48 => 19,  44 => 18,  40 => 17,  22 => 2,  19 => 1,);
     }
 
     /** @deprecated since 1.27 (to be removed in 2.0). Use getSourceContext() instead */
@@ -400,6 +400,16 @@ class __TwigTemplate_e75cbbf5d7c0e926d30bcc1e293f4e4d294ddf116685eabc7731ddb9fb6
         return new Twig_Source("<!DOCTYPE html>
 <html lang=\"{{ apine.language_short }}\">
 <head>
+    <!-- Global Site Tag (gtag.js) - Google Analytics -->
+    <script async src=\"https://www.googletagmanager.com/gtag/js?id=UA-52347626-4\"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments)};
+        gtag('js', new Date());
+
+        gtag('config', 'UA-52347626-4');
+    </script>
+
     <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>
     <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">
     <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1.0\"/>
@@ -412,6 +422,14 @@ class __TwigTemplate_e75cbbf5d7c0e926d30bcc1e293f4e4d294ddf116685eabc7731ddb9fb6
     <title>{{ translate('application', 'title') }}</title>
     <link rel=\"stylesheet\" href=\"{{ 'bower_components/uikit/dist/css/uikit.min.css'|resource }}\">
     <link rel=\"stylesheet\" href=\"{{ 'resources/public/css/stylesheet.css'|resource }}\">
+
+    <script async src=\"//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js\"></script>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({
+            google_ad_client: \"ca-pub-6332373031553935\",
+            enable_page_level_ads: true
+        });
+    </script>
 </head>
 <body>
     <div class=\"uk-height-viewport uk-section-media\" id=\"background\" data-bind=\"visible: mainVisible\">
@@ -463,9 +481,6 @@ class __TwigTemplate_e75cbbf5d7c0e926d30bcc1e293f4e4d294ddf116685eabc7731ddb9fb6
                 <span> | </span>
                 <a href=\"#about-modal\" uk-toggle>About</a>
             </div>
-        </div>
-
-        <div id=\"adBottomMobile\" style=\"height: 90px\">
         </div>
     </div>
     <div class=\"uk-height-viewport uk-section-secondary uk-preserve-color\" data-bind=\"visible: statsVisible\" id=\"stats\">
@@ -725,21 +740,6 @@ class __TwigTemplate_e75cbbf5d7c0e926d30bcc1e293f4e4d294ddf116685eabc7731ddb9fb6
         ], function(ko, Application) {
             ko.applyBindings(new Application('{{ search|default() }}'));
         });
-    </script>
-    <script>
-        (function (i, s, o, g, r, a, m) {
-            i['GoogleAnalyticsObject'] = r;
-            i[r] = i[r] || function () {
-                    (i[r].q = i[r].q || []).push(arguments)
-                }, i[r].l = 1 * new Date();
-            a = s.createElement(o),
-                m = s.getElementsByTagName(o)[0];
-            a.async = 1;
-            a.src = g;
-            m.parentNode.insertBefore(a, m)
-        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
-        ga('create', 'UA-52347626-4', 'auto');
-        ga('send', 'pageview');
     </script>
 </body>
 </html>", "index.twig", "C:\\wamp64\\www\\wod2\\views\\index.twig");

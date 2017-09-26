@@ -16,5 +16,11 @@ $loader = new Apine\Autoloader();
 $loader->register();
 
 $apine = new Apine\Application\Application();
-$apine->set_mode(APINE_MODE_DEVELOPMENT);
+
+// PRODUCTION
+$apine->set_use_https(true);
+
+// DEVELOPMENT
+//$apine->set_mode(APINE_MODE_DEVELOPMENT);
+
 $apine->run(APINE_RUNTIME_HYBRID);

@@ -296,7 +296,8 @@ class BungieController extends Controller {
     }
 
     /**
-     * /bungie/fetchAccount?membershipType=[]&membershipId=[]
+     * Get a specific membership and all associated valid Destiny accounts
+     * @link /bungie/fetchAccount?membershipType=[]&membershipId=[]
      *
      * @param $params
      * @return JSONView
@@ -319,7 +320,8 @@ class BungieController extends Controller {
     }
 
     /**
-     * /bungie/fetchAccounts?membershipType=[]&displayName=[]
+     * Search Destiny accounts by name and find all associated valid Destiny accounts
+     * @link /bungie/fetchAccounts?membershipType=[]&displayName=[]
      *
      * @param $params
      * @return JSONView
@@ -387,7 +389,8 @@ class BungieController extends Controller {
     }
 
     /**
-     * /bungie/fetchCharacters?membershipType=[]&membershipId=[]&gameVersion=[]
+     * Fetch Destiny character data for the Destiny account
+     * @link /bungie/fetchCharacters?membershipType=[]&membershipId=[]&gameVersion=[]
      *
      * @param $params
      * @return JSONView
