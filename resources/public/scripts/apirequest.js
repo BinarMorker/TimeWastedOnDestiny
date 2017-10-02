@@ -1,5 +1,5 @@
 define(function() {
-    var APIRequest = function (url, data, success, error, always) {
+    return function (url, data, success, error, always) {
         try {
             var request = new XMLHttpRequest();
             var method = 'POST';
@@ -37,6 +37,4 @@ define(function() {
             throw e;
         }
     };
-
-    return APIRequest;
 });

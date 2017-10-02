@@ -10,7 +10,7 @@ class DestinyProfileComponent {
     public $userInfo;
 
     /**
-     * @var \DateTIme
+     * @var \DateTime
      */
     public $dateLastPlayed;
 

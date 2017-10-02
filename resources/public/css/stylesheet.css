@@ -29,7 +29,19 @@ body {
 }
 
 .uk-logo img {
-    height: 75%;
+    height: 70%;
+}
+
+.uk-tab > * > a {
+    border-width: 3px;
+}
+
+.uk-tab > .uk-disabled.uk-active > a {
+    border-color: #999;
+}
+
+.leaderboard {
+    padding-top: 15px;
 }
 
 .uk-navbar-inverse {

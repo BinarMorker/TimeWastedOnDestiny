@@ -5,42 +5,91 @@ namespace Apine\Controllers\User;
 
 use Apine\Core\Database;
 use Apine\Exception\GenericException;
+use Apine\Modules\WOD\LeaderboardEntry;
 use Apine\Modules\WOD\Player;
 use Apine\MVC\APIActionsInterface;
 use Apine\MVC\JSONView;
+use InvalidArgumentException;
 
 class LeaderboardController implements APIActionsInterface {
 
-    private static function GetPlayers($count, $page) {
+    private static function getPlayers($gameVersion, $membershipType, $count, $page) {
         $database = new Database();
         $offset = ($page - 1) * $count;
-        $results = $database->select("SELECT * FROM `wod_leaderboard` ORDER BY `seconds` DESC LIMIT $count OFFSET $offset");
+        $results = $database->select("SELECT * FROM `wod_leaderboard` WHERE `gameVersion` = $gameVersion AND `membershipType` = $membershipType ORDER BY `timePlayed` DESC LIMIT $count OFFSET $offset");
         $players = [];
 
         /*foreach ($results as $result) {
-            $player = new Player();
-            $player->setId($result['id']);
-            $player->setConsole(intval($result['console']) == 0 ? 1 : 2);
-            $player->setUsername($result['username']);
-            $player->setSeconds($result['seconds']);
+            $player = new LeaderboardEntry();
+            $player->membershipId = $result['membershipId'];
+            $player->membershipType = $result['membershipType'];
+            $player->displayName = $result['displayName'];
+            $player->timePlayed = $result['timePlayed'];
+            $player->gameVersion = $result['gameVersion'];
             $players[] = $player;
         }*/
 
         return $players;
     }
 
-    private static function GetPlayerCount() {
+    private static function getPlayerCount() {
         $database = new Database();
         $result = $database->select("SELECT COUNT(*) AS `count` FROM `wod_leaderboard`");
 
-        return intval($result[0]['count']);
+        return 0;//intval($result[0]['count']);
+    }
+
+    public static function playerExists(LeaderboardEntry $player) {
+        if (is_null($player->membershipId) ||
+            is_null($player->gameVersion)) {
+            throw new InvalidArgumentException("Missing required parameters");
+        }
+
+        $database = new Database();
+        $result = $database->select("SELECT `membershipId` AS `count` FROM `wod_leaderboard` 
+                                    WHERE `membershipId` = {$player->membershipId} AND `gameVersion` = {$player->gameVersion}");
+
+        return count($result) > 0;
+    }
+
+    public static function updatePlayer(LeaderboardEntry $player) {
+        if (is_null($player->membershipId) ||
+            is_null($player->gameVersion) ||
+            is_null($player->timePlayed) ||
+            is_null($player->displayName)) {
+            throw new InvalidArgumentException("Missing required parameters");
+        }
+
+        $database = new Database();
+        $database->exec("UPDATE `wod_leaderboard` 
+                        SET `timePlayed` = {$player->timePlayed}, `displayName` = '{$player->displayName}'
+                        WHERE `membershipId` = {$player->membershipId} AND `gameVersion` = {$player->gameVersion}");
+    }
+
+    public static function newPlayer(LeaderboardEntry $player) {
+        if (is_null($player->membershipId) ||
+            is_null($player->gameVersion) ||
+            is_null($player->timePlayed) ||
+            is_null($player->displayName) ||
+            is_null($player->membershipType)) {
+            throw new InvalidArgumentException("Missing required parameters");
+        }
+
+        $database = new Database();
+        $database->insert("wod_leaderboard", [
+            "membershipId" => $player->membershipId,
+            "membershipType" => $player->membershipType,
+            "displayName" => $player->displayName,
+            "timePlayed" => $player->timePlayed,
+            "gameVersion" => $player->gameVersion
+        ]);
     }
 
     public function get($params) {
         $view = new JSONView();
 
-        $players = self::GetPlayers($params['count'], $params['page']);
-        $count = self::GetPlayerCount();
+        $players = self::getPlayers($params['gameVersion'], $params['membershipType'], $params['count'], $params['page']);
+        $count = self::getPlayerCount();
 
         $view->set_json_file([
             "Players" => $players,

@@ -1,5 +1,5 @@
 define(['knockout'], function(ko) {
-    var Account = function (data) {
+    return function Account(data) {
         var self = this;
 
         self.membershipId = data.membershipId;
@@ -32,6 +32,4 @@ define(['knockout'], function(ko) {
         self.message = ko.observable(null);
         self.visible = ko.observable(false);
     };
-
-    return Account;
 });

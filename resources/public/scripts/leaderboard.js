@@ -1,36 +1,52 @@
 define(['knockout', 'player', 'leaderboardmanager'], function(ko, Player, LeaderboardManager) {
-    var Leaderboard = function () {
+    return function Leaderboard(masonry) {
         var self = this;
 
         var manager = new LeaderboardManager();
 
+        self.masonry = masonry;
         self.entries = ko.observableArray([]);
         self.loading = ko.observable(true);
         self.message = ko.observable(null);
         self.page = ko.observable(1);
-        self.page.subscribe(function(value) {
-            self.loading(true);
-            manager.GetPage(value, self.count, self.populateEntries);
-        });
         self.count = 10;
         self.totalPlayers = ko.observable(0);
         self.visible = ko.observable(false);
+        self.gameVersion = ko.observable(2);
+        self.platform = ko.observable(2);
+
+        self.selectVersion = function(version) {
+            if (self.gameVersion() !== version) {
+                self.gameVersion(version);
+                self.page(1);
+                self.load();
+            }
+        };
+
+        self.selectPlatform = function(platform) {
+            if (self.platform() !== platform) {
+                self.platform(platform);
+                self.page(1);
+                self.load();
+            }
+        };
 
         self.previous = function() {
             if (self.page() > 1) {
                 self.page(self.page() - 1);
+                self.load();
             }
         };
 
         self.next = function() {
             if (self.page() * self.count < self.totalPlayers()) {
                 self.page(self.page() + 1);
+                self.load();
             }
         };
 
-        self.load = function (page) {
-            self.loading(true);
-            manager.GetPage(page, self.count, self.populateEntries);
+        self.load = function () {
+            //manager.GetPage(self.gameVersion(), self.platform(), self.page(), self.count, self.populateEntries);
         };
 
         self.populateEntries = function (data) {
@@ -44,10 +60,11 @@ define(['knockout', 'player', 'leaderboardmanager'], function(ko, Player, Leader
 
             self.totalPlayers(data.TotalCount);
             self.loading(false);
+            self.masonry.reloadItems();
+            self.masonry.layout();
         };
 
-        self.load(1);
+        self.loading(true);
+        self.load();
     };
-
-    return Leaderboard;
 });

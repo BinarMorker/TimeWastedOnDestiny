@@ -1,11 +1,12 @@
 define(['knockout'], function(ko) {
-    var Player = function (data) {
+    return function (data) {
         var self = this;
 
-        self.membershipId = data.id;
-        self.membershipType = data.console;
-        self.displayName = data.username;
-        self.timePlayed = ko.observable(data.seconds).extend({deferred: true});
+        self.membershipId = data.membershipId;
+        self.membershipType = data.membershipType;
+        self.displayName = data.displayName;
+        self.timePlayed = ko.observable(data.timePlayed).extend({deferred: true});
+        self.gameVersion = data.gameVersion;
         self.iconPath = null;
 
         switch (self.membershipType) {
@@ -20,6 +21,4 @@ define(['knockout'], function(ko) {
                 break;
         }
     };
-
-    return Player;
 });

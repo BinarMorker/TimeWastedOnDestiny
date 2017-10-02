@@ -6,11 +6,9 @@ define([
     'leaderboard',
     'uikit',
     'apirequest',
-    'request',
-    'json!/manifests/manifest_D1.json',
-    'json!/manifests/manifest_D2.json'
-], function(ko, Masonry, Account, Character, Leaderboard, UIkit, APIRequest, Request, ManifestD1, ManifestD2) {
-    var Application = function(searchTerm) {
+    'request'
+], function(ko, Masonry, Account, Character, Leaderboard, UIkit, APIRequest, Request) {
+    return function(searchTerm) {
         var self = this;
 
         self.loading = ko.observable(false);
@@ -31,7 +29,7 @@ define([
             self.accounts.valueHasMutated();
         };
 
-        self.leaderboard = new Leaderboard();
+        self.leaderboard = new Leaderboard(self.masonry);
         self.isLeaderboardShown = ko.observable(false);
         self.accounts = ko.observableArray([]);
         self.accounts.subscribe(function () {
@@ -91,6 +89,8 @@ define([
                     self.accounts.push(self.leaderboard);
                     setTimeout(function() {
                         self.isLeaderboardShown(true);
+                        self.masonry.reloadItems();
+                        self.masonry.layout();
                     }, 500);
                 } else {
                     self.statsVisible(true);
@@ -241,6 +241,4 @@ define([
             self.fetchAccounts();
         }
     };
-
-    return Application;
 });

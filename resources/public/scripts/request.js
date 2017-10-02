@@ -1,5 +1,5 @@
 define(function() {
-    var Request = function (url, data, success, error, always) {
+    return function (url, data, success, error, always) {
         try {
             var request = new XMLHttpRequest();
             var method = 'GET';
@@ -46,6 +46,4 @@ define(function() {
             throw e;
         }
     };
-
-    return Request;
 });

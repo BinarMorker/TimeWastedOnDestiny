@@ -26,6 +26,8 @@ class GuzzleHttpCacher {
 
     private $expiration;
 
+    private $contents;
+
     protected function cachedRequest($method, $url, $headers) {
         $this->method = $method;
         $this->url = $url;
@@ -47,7 +49,9 @@ class GuzzleHttpCacher {
 
             if ($this->expiration > $now) {
                 $this->inCache = true;
-                return [200, file_get_contents($cacheFilePath), $this->modifiedDate];
+                $body = file_get_contents($cacheFilePath);
+                $this->contents = json_decode($body);
+                return [200, $body, $this->modifiedDate];
             }
         }
 
@@ -63,12 +67,12 @@ class GuzzleHttpCacher {
         }
 
         $body = $response->getBody()->getContents();
-        $json = json_decode($body);
+        $this->contents = json_decode($body);
         $mapper = new JsonMapper();
         /** @var BungieNetPlatformResponse $object */
-        $object = $mapper->map($json, new BungieNetPlatformResponse());
+        $object = $mapper->map($this->contents, new BungieNetPlatformResponse());
 
-        if ($object->errorCode != 1) {
+        if ($object->errorCode == 1) {
             file_put_contents($cacheFilePath, $body);
         }
 
@@ -82,6 +86,7 @@ class GuzzleHttpCacher {
             "method" => $this->method,
             "inCache" => $this->inCache,
             "cacheTime" => $this->modifiedDate,
+            "contents" => $this->contents,
             "expiration" => $this->expiration
         ];
     }

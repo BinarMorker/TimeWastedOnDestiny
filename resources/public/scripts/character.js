@@ -1,5 +1,5 @@
 define(['knockout'], function(ko) {
-    var Character = function (data) {
+    return function (data) {
         var self = this;
 
         self.characterId = data.characterId;
@@ -12,6 +12,4 @@ define(['knockout'], function(ko) {
         self.emblemPath = data.emblemPath;
         self.backgroundPath = data.backgroundPath;
     };
-
-    return Character;
 });

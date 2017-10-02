@@ -2,6 +2,7 @@
 
 namespace Apine\Controllers\User;
 
+use Apine\Application\Application;
 use Apine\Exception\GenericException;
 use Apine\Modules\BungieNetPlatform\Destiny2\BungieMembershipType;
 use Apine\Modules\BungieNetPlatform\Destiny2\DestinyComponentType;
@@ -13,6 +14,7 @@ use Apine\Modules\WOD\DestinyClassType;
 use Apine\Modules\WOD\DestinyGameVersion;
 use Apine\Modules\WOD\DestinyGenderType;
 use Apine\Modules\WOD\DestinyRaceType;
+use Apine\Modules\WOD\LeaderboardEntry;
 use Apine\Modules\WOD\Membership;
 use Apine\Modules\WOD\Request\Destiny;
 use Apine\Modules\WOD\Request\Destiny2;
@@ -160,6 +162,7 @@ class BungieController extends Controller {
                 $character->characterId = $characterStats->characterId;
                 $character->deleted = $characterStats->deleted;
                 $character->timePlayed = $characterStats->merged->allTime['secondsPlayed']->basic->value;
+
                 foreach ($getProfileResponse->response->data->characters as $characterData) {
                     if ($characterData->characterBase->characterId == $character->characterId) {
                         $character->backgroundPath = $characterData->backgroundPath;
@@ -199,6 +202,7 @@ class BungieController extends Controller {
                         }
 
                         $character->level = $characterData->characterBase->powerLevel;
+                        break;
                     }
                 }
 
@@ -223,76 +227,86 @@ class BungieController extends Controller {
         $message = $getProfileResponse->message;
         $response = [];
 
-        /*$getHistoricalStatsForAccountRequest = new Destiny2\GetHistoricalStatsForAccountRequest($membershipType, $membershipId);
+        $getHistoricalStatsForAccountRequest = new Destiny2\GetHistoricalStatsForAccountRequest($membershipType, $membershipId);
         $getHistoricalStatsForAccountResponse = $getHistoricalStatsForAccountRequest->getResponse();
         $endpointCalls[] = $getHistoricalStatsForAccountRequest->getInfo();
 
         if ($getHistoricalStatsForAccountResponse->errorCode != 1) {
             $code = $getHistoricalStatsForAccountResponse->errorCode;
             $message = $getHistoricalStatsForAccountResponse->message;
-        }*/
+        }
 
-        if (!is_null($getProfileResponse->response)) {
-            foreach ($getProfileResponse->response->characters->data as $characterData) {
+        if (!is_null($getHistoricalStatsForAccountResponse->response)) {
+            foreach ($getHistoricalStatsForAccountResponse->response->characters as $characterStats) {
                 $character = new Character();
-                $character->characterId = $characterData->characterId;
-                $character->backgroundPath = $characterData->emblemBackgroundPath;
-                $character->emblemPath = $characterData->emblemPath;
+                $character->characterId = $characterStats->characterId;
+                $character->deleted = $characterStats->deleted;
+                $character->timePlayed = $characterStats->merged->allTime['secondsPlayed']->basic->value;
 
-                switch ($characterData->classType) {
-                    case DestinyClassType::Titan:
-                        $character->charClass = "Titan";
+                foreach ($getProfileResponse->response->characters->data as $characterData) {
+                    if ($characterData->characterId == $character->characterId) {
+                        $character->backgroundPath = $characterData->emblemBackgroundPath;
+                        $character->emblemPath = $characterData->emblemPath;
+
+                        switch ($characterData->classType) {
+                            case DestinyClassType::Titan:
+                                $character->charClass = "Titan";
+                                break;
+                            case DestinyClassType::Hunter:
+                                $character->charClass = "Hunter";
+                                break;
+                            case DestinyClassType::Warlock:
+                                $character->charClass = "Warlock";
+                                break;
+                        }
+
+                        switch ($characterData->raceType) {
+                            case DestinyRaceType::Human:
+                                $character->race = "Human";
+                                break;
+                            case DestinyRaceType::Awoken:
+                                $character->race = "Awoken";
+                                break;
+                            case DestinyRaceType::Exo:
+                                $character->race = "Exo";
+                                break;
+                        }
+
+                        switch ($characterData->genderType) {
+                            case DestinyGenderType::Male:
+                                $character->gender = "Male";
+                                break;
+                            case DestinyGenderType::Female:
+                                $character->gender = "Female";
+                                break;
+                        }
+
+                        $character->level = $characterData->light;
                         break;
-                    case DestinyClassType::Hunter:
-                        $character->charClass = "Hunter";
-                        break;
-                    case DestinyClassType::Warlock:
-                        $character->charClass = "Warlock";
-                        break;
+                    }
                 }
-
-                switch ($characterData->raceType) {
-                    case DestinyRaceType::Human:
-                        $character->race = "Human";
-                        break;
-                    case DestinyRaceType::Awoken:
-                        $character->race = "Awoken";
-                        break;
-                    case DestinyRaceType::Exo:
-                        $character->race = "Exo";
-                        break;
-                }
-
-                switch ($characterData->genderType) {
-                    case DestinyGenderType::Male:
-                        $character->gender = "Male";
-                        break;
-                    case DestinyGenderType::Female:
-                        $character->gender = "Female";
-                        break;
-                }
-
-                $character->level = $characterData->light;
-
-                $getHistoricalStatsRequest = new Destiny2\GetHistoricalStatsRequest($membershipType, $membershipId, $character->characterId);
-                $getHistoricalStatsResponse = $getHistoricalStatsRequest->getResponse();
-                $endpointCalls[] = $getHistoricalStatsRequest->getInfo();
-
-                if ($getHistoricalStatsResponse->errorCode != 1) {
-                    $code = $getHistoricalStatsResponse->errorCode;
-                    $message = $getHistoricalStatsResponse->message;
-                }
-
-                $character->deleted = false; // Can't get this data anymore because GetHistoricalStatsForAccount is broken
-                $timePvE = !is_null($getHistoricalStatsResponse->response['allPvE']->allTime) ? $getHistoricalStatsResponse->response['allPvE']->allTime['secondsPlayed']->basic->value : 0;
-                $timePvP = !is_null($getHistoricalStatsResponse->response['allPvP']->allTime) ? $getHistoricalStatsResponse->response['allPvP']->allTime['secondsPlayed']->basic->value : 0;
-                $character->timePlayed = $timePvE + $timePvP;
 
                 $response[] = $character;
             }
         }
 
         return [$response, $code, $message, $endpointCalls];
+    }
+
+    /**
+     * @param $params
+     * @param $response
+     */
+    private function debug($params, &$response) {
+        if (!isset($params['debug']) || Application::get_instance()->get_mode() != APINE_MODE_DEVELOPMENT) {
+            unset($response->endpointCalls);
+        } else {
+            if (!isset($params['verbose'])) {
+                foreach ($response->endpointCalls as $index => $endpointCall) {
+                    unset($response->endpointCalls[$index]['contents']);
+                }
+            }
+        }
     }
 
     /**
@@ -309,11 +323,7 @@ class BungieController extends Controller {
         $response->queryTime = $now;
         $view = new JSONView();
         list($response->response, $response->code, $response->message, $response->endpointCalls) = $this->getMembershipsById($params['membershipType'], $params['membershipId']);
-
-        if (!isset($params['debug'])) {
-            unset($response->endpointCalls);
-        }
-
+        $this->debug($params, $response);
         $response->executionMilliseconds = (microtime(true) - $start) * 1000;
         $view->set_json_file($response);
         return $view;
@@ -379,10 +389,7 @@ class BungieController extends Controller {
             }
         }
 
-        if (!isset($params['debug'])) {
-            unset($response->endpointCalls);
-        }
-
+        $this->debug($params, $response);
         $response->executionMilliseconds = (microtime(true) - $start) * 1000;
         $view->set_json_file($response);
         return $view;
@@ -416,10 +423,32 @@ class BungieController extends Controller {
                 break;
         }
 
-        if (!isset($params['debug'])) {
-            unset($response->endpointCalls);
+        $player = new LeaderboardEntry();
+        $player->membershipId = $params['membershipId'];
+        $player->membershipType = $params['membershipType'];
+        $player->gameVersion = intval($params['gameVersion']);
+        $player->timePlayed = array_sum(array_map(function(Character $item) {
+            return $item->timePlayed;
+        }, $response->response));
+
+        $getMembershipsByIdRequest = new Destiny2\GetMembershipsByIdRequest($params['membershipType'], $params['membershipId']);
+        $getMembershipsByIdResponse = $getMembershipsByIdRequest->getResponse();
+        $response->endpointCalls[] = $getMembershipsByIdRequest->getInfo();
+
+        foreach ($getMembershipsByIdResponse->response->destinyMemberships as $membership) {
+            if ($membership->membershipId == $params['membershipId']) {
+                $player->displayName = $membership->displayName;
+                break;
+            }
         }
 
+        if (LeaderboardController::playerExists($player)) {
+            LeaderboardController::updatePlayer($player);
+        } else {
+            LeaderboardController::newPlayer($player);
+        }
+
+        $this->debug($params, $response);
         $response->executionMilliseconds = (microtime(true) - $start) * 1000;
         $view->set_json_file($response);
         return $view;

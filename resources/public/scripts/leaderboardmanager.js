@@ -1,14 +1,14 @@
 define(['request'], function(Request) {
-    var LeaderboardManager = function () {
+    return function () {
         var self = this;
 
-        self.GetPage = function (page, count, success, error, always) {
+        self.GetPage = function (gameVersion, membershipType, page, count, success, error, always) {
             /*Request('/api/leaderboard', {
+                gameVersion: gameVersion,
+                membershipType: membershipType,
                 count: count,
                 page: page
             }, success, error, always);*/
         };
     };
-
-    return LeaderboardManager;
 });
