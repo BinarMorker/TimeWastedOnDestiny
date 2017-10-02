@@ -5,8 +5,10 @@ namespace Apine\Controllers\User;
 
 use Apine\Core\Database;
 use Apine\Exception\GenericException;
+use Apine\Modules\WOD\ApiResponse;
 use Apine\Modules\WOD\LeaderboardEntry;
 use Apine\Modules\WOD\Player;
+use Apine\Modules\WOD\Request\DatabaseRequestCacher;
 use Apine\MVC\APIActionsInterface;
 use Apine\MVC\JSONView;
 use InvalidArgumentException;
@@ -14,12 +16,17 @@ use InvalidArgumentException;
 class LeaderboardController implements APIActionsInterface {
 
     private static function getPlayers($gameVersion, $membershipType, $count, $page) {
-        $database = new Database();
+        $response = new ApiResponse();
         $offset = ($page - 1) * $count;
-        $results = $database->select("SELECT * FROM `wod_leaderboard` WHERE `gameVersion` = $gameVersion AND `membershipType` = $membershipType ORDER BY `timePlayed` DESC LIMIT $count OFFSET $offset");
+        $request = new DatabaseRequestCacher();
+        $results = $request->cachedRequest("SELECT * FROM `wod_leaderboard` 
+                                           WHERE `gameVersion` = $gameVersion 
+                                           AND `membershipType` = $membershipType 
+                                           ORDER BY `timePlayed` DESC 
+                                           LIMIT $count OFFSET $offset");
         $players = [];
 
-        /*foreach ($results as $result) {
+        foreach ($results as $result) {
             $player = new LeaderboardEntry();
             $player->membershipId = $result['membershipId'];
             $player->membershipType = $result['membershipType'];
@@ -27,7 +34,7 @@ class LeaderboardController implements APIActionsInterface {
             $player->timePlayed = $result['timePlayed'];
             $player->gameVersion = $result['gameVersion'];
             $players[] = $player;
-        }*/
+        }
 
         return $players;
     }
@@ -36,7 +43,7 @@ class LeaderboardController implements APIActionsInterface {
         $database = new Database();
         $result = $database->select("SELECT COUNT(*) AS `count` FROM `wod_leaderboard`");
 
-        return 0;//intval($result[0]['count']);
+        return intval($result[0]['count']);
     }
 
     public static function playerExists(LeaderboardEntry $player) {
@@ -88,7 +95,7 @@ class LeaderboardController implements APIActionsInterface {
     public function get($params) {
         $view = new JSONView();
 
-        $players = self::getPlayers($params['gameVersion'], $params['membershipType'], $params['count'], $params['page']);
+        $players = self::getPlayers($params['gameVersion'], $params['membershipType'], 10, $params['page']);
         $count = self::getPlayerCount();
 
         $view->set_json_file([

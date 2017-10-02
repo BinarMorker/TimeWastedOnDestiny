@@ -53,17 +53,23 @@
                 </div>
             </nav>
 
-            {#<a href="#" data-bind="click: showLeaderboard" class="uk-animation-fade uk-text-center uk-link-reset">
+            <a href="#" data-bind="click: showLeaderboard" class="uk-animation-fade uk-text-center uk-link-reset">
                 <!-- ko with: leaderboard -->
                 <!-- ko with: entries -->
                 <!-- ko with: $data[0] -->
                 <h3 class="uk-text-muted uk-margin-remove">1st: <span data-bind="text: displayName"></span> - <small data-bind="formatTime: timePlayed"></small></h3>
                 <!-- /ko -->
+                <!-- ko with: $data[1] -->
+                <h5 class="uk-text-muted uk-margin-remove">2nd: <span data-bind="text: displayName"></span> - <small data-bind="formatTime: timePlayed"></small></h5>
+                <!-- /ko -->
+                <!-- ko with: $data[2] -->
+                <h6 class="uk-text-muted uk-margin-remove">3rd: <span data-bind="text: displayName"></span> - <small data-bind="formatTime: timePlayed"></small></h6>
+                <!-- /ko -->
                 <!-- /ko -->
                 <!-- /ko -->
                 <h4 class="uk-text-muted uk-margin-remove">See leaderboard</h4>
                 <br/>
-            </a>#}
+            </a>
 
             <div id="adBottom">
                 <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
@@ -97,11 +103,11 @@
                                     <span uk-icon="icon: question; ratio: 1"></span> About
                                 </a>
                             </li>
-                            {#<li>
+                            <li>
                                 <a href="#" data-bind="click: showLeaderboard">
                                     <span uk-icon="icon: world; ratio: 1"></span> Show leaderboard
                                 </a>
-                            </li>#}
+                            </li>
                             <li>
                                 <a href="#" data-bind="click: toggleDetailedView">
                                     <span uk-icon="icon: bolt; ratio: 1"></span> <span data-bind="text: detailedView() ? 'Detailed view [On]' : 'Detailed view [Off]'">Detailed view [On]</span>
@@ -132,7 +138,7 @@
         <div class="uk-container uk-container-large">
             <div class="uk-child-width-1-1@s uk-child-width-1-3@m uk-margin-large-bottom" uk-grid id="grid">
                 <!-- ko foreach: accounts -->
-                {#<!-- ko if: $data.constructor.name == "Leaderboard" -->
+                <!-- ko if: $data.constructor.name == "Leaderboard" -->
                 <div class="uk-grid-selector" data-bind="fadeVisible: visible, css: { 'smallCard': !$root.detailedView() }">
                     <div class="uk-card uk-box-shadow-small">
                         <button type="button" uk-close class="uk-icon-button" data-bind="click: $root.removeAccount"></button>
@@ -169,7 +175,7 @@
                             </ul>
                             <!-- ko foreach: entries -->
                             <a href="#" data-bind="click: function() { $root.fetchAccount(membershipType, membershipId) }" class="uk-grid-collapse uk-link-reset deletedChar" uk-grid>
-                                <span data-bind="text: $index() + 1 + (($root.leaderboard.page() - 1) * $root.leaderboard.count)" class="uk-width-1-6"></span>
+                                <span data-bind="text: $index() + 1 + (($root.leaderboard.page() - 1) * 10)" class="uk-width-1-6"></span>
                                 <img data-bind="attr: { src: iconPath }" class="uk-width-auto" style="height: 16px">
                                 <div class="uk-width-expand" style="margin-left: 5px">
                                     <strong class="characterName" data-bind="text: displayName"></strong>
@@ -197,7 +203,7 @@
                         <!-- /ko -->
                     </div>
                 </div>
-                <!-- /ko -->#}
+                <!-- /ko -->
                 <!-- ko if: $data.constructor.name == "Account" -->
                 <div class="uk-grid-selector" data-bind="fadeVisible: visible, css: { 'smallCard': !$root.detailedView() }">
                     <div class="uk-card uk-box-shadow-small">

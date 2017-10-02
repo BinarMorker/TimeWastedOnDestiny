@@ -9,7 +9,6 @@ define(['knockout', 'player', 'leaderboardmanager'], function(ko, Player, Leader
         self.loading = ko.observable(true);
         self.message = ko.observable(null);
         self.page = ko.observable(1);
-        self.count = 10;
         self.totalPlayers = ko.observable(0);
         self.visible = ko.observable(false);
         self.gameVersion = ko.observable(2);
@@ -39,14 +38,14 @@ define(['knockout', 'player', 'leaderboardmanager'], function(ko, Player, Leader
         };
 
         self.next = function() {
-            if (self.page() * self.count < self.totalPlayers()) {
+            if (self.page() * 10 < self.totalPlayers()) {
                 self.page(self.page() + 1);
                 self.load();
             }
         };
 
         self.load = function () {
-            //manager.GetPage(self.gameVersion(), self.platform(), self.page(), self.count, self.populateEntries);
+            manager.GetPage(self.gameVersion(), self.platform(), self.page(), self.populateEntries);
         };
 
         self.populateEntries = function (data) {
