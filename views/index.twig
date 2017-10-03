@@ -53,17 +53,36 @@
                 </div>
             </nav>
 
-            {#<a href="#" data-bind="click: showLeaderboard" class="uk-animation-fade uk-text-center uk-link-reset">
-                <!-- ko with: leaderboard -->
-                <!-- ko with: entries -->
-                <!-- ko with: $data[0] -->
-                <h3 class="uk-text-muted uk-margin-remove">1st: <span data-bind="text: displayName"></span> - <small data-bind="formatTime: timePlayed"></small></h3>
-                <!-- /ko -->
-                <!-- /ko -->
-                <!-- /ko -->
-                <h4 class="uk-text-muted uk-margin-remove">See leaderboard</h4>
+            <div class="uk-visible@s">
+                <div class="uk-child-width-expand@s uk-grid-small uk-grid-match" uk-grid>
+                    <div>
+                        <div class="uk-animation-fade uk-card uk-card-default uk-card-small uk-card-body">
+                            <span class="uk-text-uppercase uk-text-primary">Top times for Destiny 2 on PS4</span>
+                            <!-- ko foreach: leaderboard.players -->
+                            <!-- ko if: $index() < 3 -->
+                            <a href="#" data-bind="click: function() { $root.fetchAccount(membershipType, membershipId) }" class="uk-button uk-button-small uk-display-block uk-text-left">
+                                <span data-bind="text: displayName"></span>
+                                <small class="uk-float-right" data-bind="formatTime: timePlayed"></small>
+                            </a>
+                            <!-- /ko -->
+                            <!-- /ko -->
+                            <a href="#" class="uk-button uk-button-text" data-bind="click: showLeaderboard">See leaderboard</a>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="uk-card uk-card-default uk-card-small uk-card-body">
+                            <a href="{{ hdceAdLink }}">
+                                <div>
+                                    <span class="uk-text-uppercase uk-text-primary">Our Sponsor</span>
+                                    <img class="uk-float-right" src="{{ 'resources/public/assets/hdce.png'|resource }}">
+                                </div>
+                                <p class="uk-margin-remove-bottom">{{ hdceAdText }}</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
                 <br/>
-            </a>#}
+            </div>
 
             <div id="adBottom">
                 <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
@@ -97,11 +116,11 @@
                                     <span uk-icon="icon: question; ratio: 1"></span> About
                                 </a>
                             </li>
-                            {#<li>
+                            <li>
                                 <a href="#" data-bind="click: showLeaderboard">
                                     <span uk-icon="icon: world; ratio: 1"></span> Show leaderboard
                                 </a>
-                            </li>#}
+                            </li>
                             <li>
                                 <a href="#" data-bind="click: toggleDetailedView">
                                     <span uk-icon="icon: bolt; ratio: 1"></span> <span data-bind="text: detailedView() ? 'Detailed view [On]' : 'Detailed view [Off]'">Detailed view [On]</span>
@@ -118,12 +137,14 @@
                 </div>
                 <div class="uk-navbar-right">
                     <ul class="uk-navbar-nav">
-                        <div class="uk-navbar-item">
+                        <li class="uk-navbar-item">
                             <form class="uk-search uk-search-navbar uk-width-1-1" data-bind="submit: fetchAccounts">
                                 <input class="uk-search-input" type="search" data-bind="textInput: input" placeholder="Search..." autofocus>
                             </form>
-                        </div>
-                        <a class="uk-navbar-toggle" uk-icon="icon: plus-circle" data-bind="click: fetchAccounts, attr: { 'uk-icon': accounts().length > 0 ? 'icon: plus-circle' : 'icon: search' }" href="#"></a>
+                        </li>
+                        <li>
+                            <a class="uk-navbar-toggle" uk-icon="icon: plus-circle" data-bind="click: fetchAccounts, attr: { 'uk-icon': accounts().length > 0 ? 'icon: plus-circle' : 'icon: search' }" href="#"></a>
+                        </li>
                     </ul>
                 </div>
             </nav>
@@ -132,7 +153,7 @@
         <div class="uk-container uk-container-large">
             <div class="uk-child-width-1-1@s uk-child-width-1-3@m uk-margin-large-bottom" uk-grid id="grid">
                 <!-- ko foreach: accounts -->
-                {#<!-- ko if: $data.constructor.name == "Leaderboard" -->
+                <!-- ko if: $data.constructor.name == "Leaderboard" -->
                 <div class="uk-grid-selector" data-bind="fadeVisible: visible, css: { 'smallCard': !$root.detailedView() }">
                     <div class="uk-card uk-box-shadow-small">
                         <button type="button" uk-close class="uk-icon-button" data-bind="click: $root.removeAccount"></button>
@@ -167,10 +188,10 @@
                                     </ul>
                                 </li>
                             </ul>
-                            <!-- ko foreach: entries -->
+                            <!-- ko foreach: players -->
                             <a href="#" data-bind="click: function() { $root.fetchAccount(membershipType, membershipId) }" class="uk-grid-collapse uk-link-reset deletedChar" uk-grid>
-                                <span data-bind="text: $index() + 1 + (($root.leaderboard.page() - 1) * $root.leaderboard.count)" class="uk-width-1-6"></span>
-                                <img data-bind="attr: { src: iconPath }" class="uk-width-auto" style="height: 16px">
+                                <span data-bind="text: $index() + 1 + (($root.leaderboard.page() - 1) * 10)" class="uk-width-1-6"></span>
+                                <img src="" data-bind="attr: { src: iconPath }" class="uk-width-auto" style="height: 16px">
                                 <div class="uk-width-expand" style="margin-left: 5px">
                                     <strong class="characterName" data-bind="text: displayName"></strong>
                                 </div>
@@ -197,7 +218,7 @@
                         <!-- /ko -->
                     </div>
                 </div>
-                <!-- /ko -->#}
+                <!-- /ko -->
                 <!-- ko if: $data.constructor.name == "Account" -->
                 <div class="uk-grid-selector" data-bind="fadeVisible: visible, css: { 'smallCard': !$root.detailedView() }">
                     <div class="uk-card uk-box-shadow-small">
@@ -285,36 +306,10 @@
         <div class="uk-clearfix"></div>
     </div>
 
-    <div id="about-modal" uk-modal>
+    <div id="about-modal" class="uk-modal-full" uk-modal>
         <div class="uk-modal-dialog uk-modal-body">
             <button class="uk-modal-close-default" type="button" uk-close></button>
-            <h2 class="uk-modal-title">About</h2>
-            <p>Time Wasted on Destiny is a website that tells you how much time you've poured into the Destiny series.
-                On top of this, it is the only website that tells you just how much time you've spent on deleted characters, which you could consider wasted time.</p>
-            <h2 class="uk-modal-title">How to use</h2>
-            <p>Using Time Wasted on Destiny is very simple. First, enter your Playstation Network ID, Xbox Live Gamertag, Blizzard ID or Bungie.net Username into the search box.
-                You can add more than one username by separating them with a comma (,). You can then share that page with your friends and brag!</p>
-            <h2 class="uk-modal-title">FAQ</h2>
-            <dl class="uk-description-list uk-description-list-divider">
-                <dt>What activities count in the time played?</dt>
-                <dd>Only the time you spend shooting at stuff (not in orbit, loading or in social spaces) is counted towards your time played (and wasted).</dd>
-                <dt>Why is my username not working?</dt>
-                <dd>Make sure you typed your Playstation Network ID, Xbox Live Gamertag or Blizzard ID correctly. If you still experience problems, please submit an issue <a href="https://github.com/BinarMorker/TimeWastedOnDestiny/issues">here</a>.</dd>
-                <dt>Why is another player showing up when I'm searching for my username?</dt>
-                <dd>It is possible that another player uses the same name as you on another platform. If you simply don't see your account there, make sure you typed your username correctly.</dd>
-            </dl>
-            <h2 class="uk-modal-title">Disclaimer</h2>
-            <p>Time Wasted on Destiny is not affiliated with <a href="https://bungie.net">Bungie</a>.
-                Destiny is a registered trademark of Bungie and Activision.</p>
-            <h2 class="uk-modal-title">Bottom line</h2>
-            <p>Thank you very much for using my website. If you like it, please help me by <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=5YLYAY74SZP6W">donating</a>!
-                Here are some of the people without whom this website would not exist:</p>
-            <ul>
-                <li><a href="#" data-bind="click: function() { fetchAccount(-1, 9341839) }">Tommy Teasdale for helping me find ideas and crush bugs</a></li>
-                <li><a href="https://bungie-net.github.io/">Bungie who made their API accessible</a></li>
-                <li><a href="https://www.reddit.com/r/DestinyTheGame/">/r/DestinyTheGame for supporting and sharing my project</a></li>
-                <li><a href="http://destinydevs.github.io/BungieNetPlatform/">lowlines for his awesome documentation</a></li>
-            </ul>
+            {% include 'aboutContent.twig' %}
         </div>
     </div>
 

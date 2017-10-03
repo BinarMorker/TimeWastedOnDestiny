@@ -1,0 +1,14 @@
+<h1>Error {{ code }}</h1>
+<h2>{{ message }}</h2>
+
+
+{% if trace %}
+<pre>
+{{ message }} on {{ file }} ({{ line }})
+{{ trace }}
+</pre>
+{% endif %}
+
+<hr/>
+
+Please copy the content of this page and put it in an issue here: <a href="https://github.com/BinarMorker/TimeWastedOnDestiny/issues">https://github.com/BinarMorker/TimeWastedOnDestiny/issues</a>

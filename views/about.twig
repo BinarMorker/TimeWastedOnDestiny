@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Global Site Tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-52347626-4"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments)};
+        gtag('js', new Date());
+
+        gtag('config', 'UA-52347626-4');
+    </script>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+    <meta name="description" content="{{ translate("application", "description") }}">
+    <meta property="og:title" content="{{ translate("application", "title") }}"/>
+    <meta property="og:description" content="{{ translate("application", "description") }}"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:url" content="{{ ''|resource }}"/>
+    <meta property="og:image" content="{{ 'resources/public/assets/opengraph.jpg'|path }}"/>
+    <title>{{ translate('application', 'title') }} - About</title>
+    <link rel="stylesheet" href="{{ 'bower_components/uikit/dist/css/uikit.min.css'|resource }}">
+    <link rel="stylesheet" href="{{ 'resources/public/css/stylesheet.css'|resource }}">
+
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({
+            google_ad_client: "ca-pub-6332373031553935",
+            enable_page_level_ads: true
+        });
+    </script>
+</head>
+<body>
+    <div class="uk-tile uk-tile-secondary">
+        <img src="{{ 'resources/public/assets/logo.svg' }}">
+        <a href="{{ ''|path }}" class="uk-modal-close-default" type="button">Return to Time Wasted on Destiny</a>
+    </div>
+    <div class="uk-section uk-section-default">
+        <div class="uk-container uk-container-expand">
+            {% include 'aboutContent.twig' %}
+        </div>
+    </div>
+    <script src="{{ 'bower_components/jquery/dist/jquery.js'|resource }}"></script>
+    <script src="{{ 'bower_components/uikit/dist/js/uikit.js'|resource }}"></script>
+    <script src="{{ 'bower_components/uikit/dist/js/uikit-icons.js'|resource }}"></script>
+</body>
+</html>

@@ -26,5 +26,12 @@
 			"controller": "index",
 			"action": "index"
 		}
+	},
+	"/about": {
+		"GET": {
+			"args": false,
+			"controller": "index",
+			"action": "about"
+		}
 	}
 }

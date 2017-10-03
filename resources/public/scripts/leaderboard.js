@@ -5,11 +5,10 @@ define(['knockout', 'player', 'leaderboardmanager'], function(ko, Player, Leader
         var manager = new LeaderboardManager();
 
         self.masonry = masonry;
-        self.entries = ko.observableArray([]);
+        self.players = ko.observableArray([]);
         self.loading = ko.observable(true);
         self.message = ko.observable(null);
         self.page = ko.observable(1);
-        self.count = 10;
         self.totalPlayers = ko.observable(0);
         self.visible = ko.observable(false);
         self.gameVersion = ko.observable(2);
@@ -39,26 +38,29 @@ define(['knockout', 'player', 'leaderboardmanager'], function(ko, Player, Leader
         };
 
         self.next = function() {
-            if (self.page() * self.count < self.totalPlayers()) {
+            if (self.page() * 10 < self.totalPlayers()) {
                 self.page(self.page() + 1);
                 self.load();
             }
         };
 
         self.load = function () {
-            //manager.GetPage(self.gameVersion(), self.platform(), self.page(), self.count, self.populateEntries);
+            manager.GetPage(self.gameVersion(), self.platform(), self.page(), self.populateEntries);
         };
 
         self.populateEntries = function (data) {
-            self.entries([]);
+            self.players([]);
 
-            if (data.Players && data.Players.length > 0) {
-                data.Players.forEach(function (item) {
-                    self.entries.push(new Player(item));
-                });
+            if (data.response) {
+                if (data.response.players && data.response.players.length > 0) {
+                    data.response.players.forEach(function (item) {
+                        self.players.push(new Player(item));
+                    });
+                }
+
+                self.totalPlayers(data.response.totalPlayers);
             }
 
-            self.totalPlayers(data.TotalCount);
             self.loading(false);
             self.masonry.reloadItems();
             self.masonry.layout();
