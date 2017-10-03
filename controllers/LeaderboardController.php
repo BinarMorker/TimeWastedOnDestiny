@@ -3,23 +3,31 @@
 namespace Apine\Controllers\User;
 
 
-use Apine\Core\Database;
+use Apine\Application\Application;
 use Apine\Exception\GenericException;
 use Apine\Modules\WOD\ApiResponse;
 use Apine\Modules\WOD\LeaderboardEntry;
-use Apine\Modules\WOD\Player;
+use Apine\Modules\WOD\LeaderboardResponse;
 use Apine\Modules\WOD\Request\DatabaseRequestCacher;
 use Apine\MVC\APIActionsInterface;
 use Apine\MVC\JSONView;
-use InvalidArgumentException;
+use DateTime;
+use Exception;
 
 class LeaderboardController implements APIActionsInterface {
 
+    /**
+     * @param $gameVersion
+     * @param $membershipType
+     * @param $count
+     * @param $page
+     * @return array
+     */
     private static function getPlayers($gameVersion, $membershipType, $count, $page) {
-        $response = new ApiResponse();
         $offset = ($page - 1) * $count;
         $request = new DatabaseRequestCacher();
-        $results = $request->cachedRequest("SELECT * FROM `wod_leaderboard` 
+        $request->cacheTime = 14400;
+        list($results) = $request->cachedRequest("SELECT * FROM `wod_leaderboard` 
                                            WHERE `gameVersion` = $gameVersion 
                                            AND `membershipType` = $membershipType 
                                            ORDER BY `timePlayed` DESC 
@@ -36,72 +44,68 @@ class LeaderboardController implements APIActionsInterface {
             $players[] = $player;
         }
 
-        return $players;
+        return [ $players, $request->getInfo() ];
     }
 
+    /**
+     * @return array
+     */
     private static function getPlayerCount() {
-        $database = new Database();
-        $result = $database->select("SELECT COUNT(*) AS `count` FROM `wod_leaderboard`");
+        $request = new DatabaseRequestCacher();
+        $request->cacheTime = 14400;
+        list($results) = $request->cachedRequest("SELECT COUNT(*) AS `count` FROM `wod_leaderboard`");
 
-        return intval($result[0]['count']);
+        return [ intval($results[0]['count']), $request->getInfo() ];
     }
 
-    public static function playerExists(LeaderboardEntry $player) {
-        if (is_null($player->membershipId) ||
-            is_null($player->gameVersion)) {
-            throw new InvalidArgumentException("Missing required parameters");
+    /**
+     * @param $params
+     * @param $response
+     */
+    private function debug($params, &$response) {
+        if (!isset($params['debug']) || Application::get_instance()->get_mode() != APINE_MODE_DEVELOPMENT) {
+            unset($response->endpointCalls);
+        } else {
+            if (!isset($params['verbose'])) {
+                foreach ($response->endpointCalls as $index => $endpointCall) {
+                    unset($response->endpointCalls[$index]['contents']);
+                }
+            }
         }
-
-        $database = new Database();
-        $result = $database->select("SELECT `membershipId` AS `count` FROM `wod_leaderboard` 
-                                    WHERE `membershipId` = {$player->membershipId} AND `gameVersion` = {$player->gameVersion}");
-
-        return count($result) > 0;
     }
 
-    public static function updatePlayer(LeaderboardEntry $player) {
-        if (is_null($player->membershipId) ||
-            is_null($player->gameVersion) ||
-            is_null($player->timePlayed) ||
-            is_null($player->displayName)) {
-            throw new InvalidArgumentException("Missing required parameters");
-        }
-
-        $database = new Database();
-        $database->exec("UPDATE `wod_leaderboard` 
-                        SET `timePlayed` = {$player->timePlayed}, `displayName` = '{$player->displayName}'
-                        WHERE `membershipId` = {$player->membershipId} AND `gameVersion` = {$player->gameVersion}");
-    }
-
-    public static function newPlayer(LeaderboardEntry $player) {
-        if (is_null($player->membershipId) ||
-            is_null($player->gameVersion) ||
-            is_null($player->timePlayed) ||
-            is_null($player->displayName) ||
-            is_null($player->membershipType)) {
-            throw new InvalidArgumentException("Missing required parameters");
-        }
-
-        $database = new Database();
-        $database->insert("wod_leaderboard", [
-            "membershipId" => $player->membershipId,
-            "membershipType" => $player->membershipType,
-            "displayName" => $player->displayName,
-            "timePlayed" => $player->timePlayed,
-            "gameVersion" => $player->gameVersion
-        ]);
-    }
-
+    /**
+     * Fetch leaderboard pages
+     * @link /api/leaderboard?membershipType=[]&gameVersion=[]&page=[]
+     *
+     * @param $params
+     * @return JSONView
+     */
     public function get($params) {
+        $start = microtime(true);
+        $now = new DateTime();
+        $response = new ApiResponse();
+        $response->queryTime = $now;
+        $response->endpointCalls = [];
         $view = new JSONView();
+        $response->code = 1;
+        $response->response = new LeaderboardResponse();
+        $response->response->count = 10;
+        $response->response->page = intval($params['page']);
 
-        $players = self::getPlayers($params['gameVersion'], $params['membershipType'], 10, $params['page']);
-        $count = self::getPlayerCount();
+        try {
+            list($response->response->players, $endpoint) = self::getPlayers($params['gameVersion'], $params['membershipType'], 10, intval($params['page']));
+            $response->endpointCalls[] = $endpoint;
+            list($response->response->totalPlayers, $endpoint) = self::getPlayerCount();
+            $response->endpointCalls[] = $endpoint;
+        } catch (Exception $e) {
+            $response->code = $e->getCode();
+            $response->message = $e->getMessage();
+        }
 
-        $view->set_json_file([
-            "Players" => $players,
-            "TotalCount" => $count
-        ]);
+        $this->debug($params, $response);
+        $response->executionMilliseconds = (microtime(true) - $start) * 1000;
+        $view->set_json_file($response);
         return $view;
     }
 

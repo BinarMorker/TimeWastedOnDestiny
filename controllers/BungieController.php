@@ -15,6 +15,7 @@ use Apine\Modules\WOD\DestinyGameVersion;
 use Apine\Modules\WOD\DestinyGenderType;
 use Apine\Modules\WOD\DestinyRaceType;
 use Apine\Modules\WOD\LeaderboardEntry;
+use Apine\Modules\WOD\LeaderboardManager;
 use Apine\Modules\WOD\Membership;
 use Apine\Modules\WOD\Request\Destiny;
 use Apine\Modules\WOD\Request\Destiny2;
@@ -311,7 +312,7 @@ class BungieController extends Controller {
 
     /**
      * Get a specific membership and all associated valid Destiny accounts
-     * @link /bungie/fetchAccount?membershipType=[]&membershipId=[]
+     * @link /bungie/getMembership?membershipType=[]&membershipId=[]
      *
      * @param $params
      * @return JSONView
@@ -442,10 +443,10 @@ class BungieController extends Controller {
             }
         }
 
-        if (LeaderboardController::playerExists($player)) {
-            LeaderboardController::updatePlayer($player);
+        if (LeaderboardManager::playerExists($player)) {
+            LeaderboardManager::updatePlayer($player);
         } else {
-            LeaderboardController::newPlayer($player);
+            LeaderboardManager::newPlayer($player);
         }
 
         $this->debug($params, $response);

@@ -13,7 +13,7 @@ use JsonMapper;
 
 class DatabaseRequestCacher {
 
-    protected $cacheTime;
+    public $cacheTime;
 
     private $cacheHash;
 
@@ -48,8 +48,8 @@ class DatabaseRequestCacher {
             if ($this->expiration > $now) {
                 $this->inCache = true;
                 $body = file_get_contents($cacheFilePath);
-                $this->contents = json_decode($body);
-                return [ $body, $this->modifiedDate ];
+                $this->contents = json_decode($body, true);
+                return [ $this->contents, $this->modifiedDate ];
             }
         }
 
