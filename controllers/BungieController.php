@@ -163,6 +163,8 @@ class BungieController extends Controller {
                 $character->characterId = $characterStats->characterId;
                 $character->deleted = $characterStats->deleted;
                 $character->timePlayed = $characterStats->merged->allTime['secondsPlayed']->basic->value;
+                $character->pvpKda = isset($characterStats->results['allPvP']->allTime['killsDeathsAssists']) ? $characterStats->results['allPvP']->allTime['killsDeathsAssists']->basic->value : 0;
+                $character->pveKda = isset($characterStats->results['allPvE']->allTime['killsDeathsAssists']) ? $characterStats->results['allPvE']->allTime['killsDeathsAssists']->basic->value : 0;
 
                 foreach ($getProfileResponse->response->data->characters as $characterData) {
                     if ($characterData->characterBase->characterId == $character->characterId) {
@@ -243,6 +245,8 @@ class BungieController extends Controller {
                 $character->characterId = $characterStats->characterId;
                 $character->deleted = $characterStats->deleted;
                 $character->timePlayed = $characterStats->merged->allTime['secondsPlayed']->basic->value;
+                $character->pvpKda = isset($characterStats->results['allPvP']->allTime['killsDeathsAssists']) ? $characterStats->results['allPvP']->allTime['killsDeathsAssists']->basic->value : 0;
+                $character->pveKda = isset($characterStats->results['allPvE']->allTime['killsDeathsAssists']) ? $characterStats->results['allPvE']->allTime['killsDeathsAssists']->basic->value : 0;
 
                 foreach ($getProfileResponse->response->characters->data as $characterData) {
                     if ($characterData->characterId == $character->characterId) {

@@ -4,6 +4,8 @@ namespace Apine\Modules\WOD;
 
 class ApiResponse {
 
+    public $version = "1.5";
+
     public $code;
 
     public $response;

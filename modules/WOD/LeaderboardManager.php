@@ -19,7 +19,9 @@ class LeaderboardManager {
 
         $database = new Database();
         $result = $database->select("SELECT `membershipId` AS `count` FROM `wod_leaderboard` 
-                                    WHERE `membershipId` = {$player->membershipId} AND `gameVersion` = {$player->gameVersion}");
+                                    WHERE `membershipId` = '{$player->membershipId}' 
+                                    AND `membershipType` = {$player->membershipType} 
+                                    AND `gameVersion` = {$player->gameVersion}");
 
         return count($result) > 0;
     }
@@ -38,7 +40,9 @@ class LeaderboardManager {
         $database = new Database();
         $database->exec("UPDATE `wod_leaderboard` 
                         SET `timePlayed` = {$player->timePlayed}, `displayName` = '{$player->displayName}'
-                        WHERE `membershipId` = {$player->membershipId} AND `gameVersion` = {$player->gameVersion}");
+                        WHERE `membershipId` = '{$player->membershipId}' 
+                        AND `membershipType` = {$player->membershipType} 
+                        AND `gameVersion` = {$player->gameVersion}");
     }
 
     /**

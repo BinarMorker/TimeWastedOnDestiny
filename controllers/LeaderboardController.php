@@ -26,7 +26,7 @@ class LeaderboardController implements APIActionsInterface {
     private static function getPlayers($gameVersion, $membershipType, $count, $page) {
         $offset = ($page - 1) * $count;
         $request = new DatabaseRequestCacher();
-        $request->cacheTime = 14400;
+        $request->cacheTime = 300;
         list($results) = $request->cachedRequest("SELECT * FROM `wod_leaderboard` 
                                            WHERE `gameVersion` = $gameVersion 
                                            AND `membershipType` = $membershipType 
@@ -52,7 +52,7 @@ class LeaderboardController implements APIActionsInterface {
      */
     private static function getPlayerCount() {
         $request = new DatabaseRequestCacher();
-        $request->cacheTime = 14400;
+        $request->cacheTime = 900;
         list($results) = $request->cachedRequest("SELECT COUNT(*) AS `count` FROM `wod_leaderboard`");
 
         return [ intval($results[0]['count']), $request->getInfo() ];
