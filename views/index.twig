@@ -58,7 +58,7 @@
                     <div>
                         <div class="uk-animation-fade uk-card uk-card-default uk-card-small uk-card-body">
                             <span class="uk-text-uppercase uk-text-primary">Top times for Destiny 2 on PS4</span>
-                            <!-- ko foreach: leaderboard.players -->
+                            <!-- ko foreach: leaderboard.currentList().players -->
                             <!-- ko if: $index() < 3 -->
                             <a href="#" data-bind="click: function() { $root.fetchAccount(membershipType, membershipId) }" class="uk-button uk-button-small uk-display-block uk-text-left">
                                 <span data-bind="text: displayName"></span>
@@ -84,8 +84,9 @@
                 <br/>
             </div>
 
-            <div id="adBottom">
+            <div class="uk-cover-container">
                 <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+                <!-- Wasted on Destiny -->
                 <ins class="adsbygoogle"
                      style="display:block"
                      data-ad-client="ca-pub-6332373031553935"
@@ -94,10 +95,9 @@
                 <script>
                     (adsbygoogle = window.adsbygoogle || []).push({});
                 </script>
-                <br/>
             </div>
 
-            <div class="uk-container uk-container-large uk-margin-small-bottom uk-text-center">
+            <div class="uk-container uk-container-large uk-margin-small-top uk-text-center">
                 <span>Made with <i uk-icon="icon: heart"></i> by <a href="#" data-bind="click: function() { fetchAccount(-1, 664856) }">{{ config('application', 'author') }}</a></span>
                 <span> | </span>
                 <a href="#about-modal" uk-toggle>About</a>
@@ -107,9 +107,9 @@
     <div class="uk-height-viewport uk-section-secondary uk-preserve-color" data-bind="visible: statsVisible" id="stats">
         <div class="sticky">
             <nav id="sticky-navbar" class="uk-navbar-container uk-navbar-inverse" uk-navbar style="position: relative; z-index: 980;">
-                <div class="uk-navbar-left">
-                    <a class="uk-navbar-toggle" uk-navbar-toggle-icon href="#"></a>
-                    <div uk-dropdown="mode: click" class="uk-navbar-dropdown">
+                <div class="uk-navbar-left uk-flex-nowrap">
+                    <a class="uk-navbar-toggle uk-visible@s" uk-navbar-toggle-icon href="#"></a>
+                    <div class="uk-navbar-dropdown" uk-dropdown="mode: click">
                         <ul class="uk-nav uk-navbar-dropdown-nav">
                             <li>
                                 <a href="#about-modal" uk-toggle>
@@ -136,7 +136,44 @@
                     <a href="{{ ''|path }}" class="uk-navbar-item uk-logo"><img src="{{ 'resources/public/assets/logo.svg'|resource }}"></a>
                 </div>
                 <div class="uk-navbar-right">
-                    <ul class="uk-navbar-nav">
+                    <a class="uk-navbar-toggle uk-hidden@s" uk-navbar-toggle-icon href="#"></a>
+                    <div class="uk-navbar-dropdown uk-width-large" uk-dropdown="mode: click">
+                        <ul class="uk-nav uk-navbar-dropdown-nav uk-width-large">
+                            <li>
+                                <ul class="uk-navbar-nav">
+                                    <li class="uk-navbar-item uk-width-expand">
+                                        <form class="uk-search uk-search-navbar uk-width-1-1" data-bind="submit: fetchAccounts">
+                                            <input class="uk-search-input" type="search" data-bind="textInput: input" placeholder="Search..." autofocus>
+                                        </form>
+                                    </li>
+                                    <li>
+                                        <a class="uk-navbar-toggle" uk-icon="icon: plus-circle" data-bind="click: fetchAccounts, attr: { 'uk-icon': accounts().length > 0 ? 'icon: plus-circle' : 'icon: search' }" href="#"></a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#about-modal" uk-toggle>
+                                    <span uk-icon="icon: question; ratio: 1"></span> About
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" data-bind="click: showLeaderboard">
+                                    <span uk-icon="icon: world; ratio: 1"></span> Show leaderboard
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" data-bind="click: toggleDetailedView">
+                                    <span uk-icon="icon: bolt; ratio: 1"></span> <span data-bind="text: detailedView() ? 'Detailed view [On]' : 'Detailed view [Off]'">Detailed view [On]</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" data-bind="click: toggleTimeFormat">
+                                    <span uk-icon="icon: clock; ratio: 1"></span> <span data-bind="text: hoursMode() ? 'Time format [Hours]' : 'Time format [Full]'">Time format [Hours]</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <ul class="uk-navbar-nav uk-visible@s">
                         <li class="uk-navbar-item">
                             <form class="uk-search uk-search-navbar uk-width-1-1" data-bind="submit: fetchAccounts">
                                 <input class="uk-search-input" type="search" data-bind="textInput: input" placeholder="Search..." autofocus>
@@ -152,6 +189,20 @@
 
         <div class="uk-container uk-container-large">
             <div class="uk-child-width-1-1@s uk-child-width-1-3@m uk-margin-large-bottom" uk-grid id="grid">
+                <div class="uk-grid-selector">
+                    <div class="uk-cover-container">
+                        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+                        <!-- Wasted on Destiny -->
+                        <ins class="adsbygoogle"
+                             style="display:block"
+                             data-ad-client="ca-pub-6332373031553935"
+                             data-ad-slot="7124654099"
+                             data-ad-format="auto"></ins>
+                        <script>
+                            (adsbygoogle = window.adsbygoogle || []).push({});
+                        </script>
+                    </div>
+                </div>
                 <!-- ko foreach: accounts -->
                 <!-- ko if: $data.constructor.name == "Leaderboard" -->
                 <div class="uk-grid-selector" data-bind="fadeVisible: visible, css: { 'smallCard': !$root.detailedView() }">
@@ -165,32 +216,31 @@
                                 </div>
                                 <div class="uk-width-expand">
                                     <h3 class="uk-card-title uk-margin-remove-bottom">Leaderboard</h3>
-                                    <p class="uk-text-meta uk-margin-remove-top">Total players: <span data-bind="text: totalPlayers"></span></p>
+                                    <p class="uk-text-meta uk-margin-remove-top">Total players: <span data-bind="text: currentList().totalPlayers"></span></p>
                                 </div>
                             </div>
                         </div>
                         <!-- ko ifnot: message -->
+                        <!-- ko with: currentList -->
                         <div class="uk-card-body uk-card-default leaderboard">
-                            <ul class="uk-flex-center" uk-tab>
-                                <li class="uk-width-2-5" data-bind="click: function() { selectVersion(1) }">
-                                    <a href="#">Destiny</a>
-                                    <ul class="uk-flex-center" uk-tab>
-                                        <li class="uk-width-1-2" data-bind="css: { 'uk-disabled': gameVersion() == 2 }"><a href="#" data-bind="click: function() { selectPlatform(2) }">PS4</a></li>
-                                        <li class="uk-width-1-2" data-bind="css: { 'uk-disabled': gameVersion() == 2 }"><a href="#" data-bind="click: function() { selectPlatform(1) }">XB1</a></li>
-                                    </ul>
+                            <ul class="uk-flex-center uk-margin-remove-bottom" uk-tab>
+                                <li class="uk-width-2-5" data-bind="css: { 'uk-active': gameVersion == 1 }, click: function() { $parent.select(1, 2) }">
+                                    <a href="#">Destiny 1</a>
                                 </li>
-                                <li class="uk-width-3-5 uk-active" data-bind="click: function() { selectVersion(2) }">
+                                <li class="uk-width-3-5" data-bind="css: { 'uk-active': gameVersion == 2 }, click: function() { $parent.select(2, 2) }">
                                     <a href="#">Destiny 2</a>
-                                    <ul class="uk-flex-center" uk-tab>
-                                        <li class="uk-width-1-3 uk-active" data-bind="css: { 'uk-disabled': gameVersion() == 1 }"><a href="#" data-bind="click: function() { selectPlatform(2) }">PS4</a></li>
-                                        <li class="uk-width-1-3" data-bind="css: { 'uk-disabled': gameVersion() == 1 }"><a href="#" data-bind="click: function() { selectPlatform(1) }">XB1</a></li>
-                                        <li class="uk-width-1-3" data-bind="css: { 'uk-disabled': gameVersion() == 1 }"><a href="#" data-bind="click: function() { selectPlatform(4) }">Bnet</a></li>
-                                    </ul>
                                 </li>
+                            </ul>
+                            <ul class="uk-flex-center uk-tab-bottom uk-margin-remove-top" uk-tab>
+                                <li class="uk-width-1-5" data-bind="css: { 'uk-active': platform == 2 && gameVersion == 1 }, click: function() { $parent.select(1, 2) }"><a href="#">PS4</a></li>
+                                <li class="uk-width-1-5" data-bind="css: { 'uk-active': platform == 1 && gameVersion == 1 }, click: function() { $parent.select(1, 1) }"><a href="#">XB1</a></li>
+                                <li class="uk-width-1-5" data-bind="css: { 'uk-active': platform == 2 && gameVersion == 2 }, click: function() { $parent.select(2, 2) }"><a href="#">PS4</a></li>
+                                <li class="uk-width-1-5" data-bind="css: { 'uk-active': platform == 1 && gameVersion == 2 }, click: function() { $parent.select(2, 1) }"><a href="#">XB1</a></li>
+                                <li class="uk-width-1-5" data-bind="css: { 'uk-active': platform == 4 && gameVersion == 2 }, click: function() { $parent.select(2, 4) }"><a href="#">Bnet</a></li>
                             </ul>
                             <!-- ko foreach: players -->
                             <a href="#" data-bind="click: function() { $root.fetchAccount(membershipType, membershipId) }" class="uk-grid-collapse uk-link-reset deletedChar" uk-grid>
-                                <span data-bind="text: $index() + 1 + (($root.leaderboard.page() - 1) * 10)" class="uk-width-1-6"></span>
+                                <span data-bind="text: $index() + 1 + (($parent.page() - 1) * 10)" class="uk-width-1-6"></span>
                                 <img src="" data-bind="attr: { src: iconPath }" class="uk-width-auto" style="height: 16px">
                                 <div class="uk-width-expand" style="margin-left: 5px">
                                     <strong class="characterName" data-bind="text: displayName"></strong>
@@ -205,11 +255,17 @@
                             </ul>
                         </div>
                         <!-- /ko -->
+                        <!-- /ko -->
                         <!-- ko if: message -->
                         <div class="uk-card-body uk-card-default">
                             <p class="uk-text-danger" data-bind="text: message"></p>
                         </div>
                         <!-- /ko -->
+                        <!-- /ko -->
+                        <!-- ko if: currentList().loading -->
+                        <div class="uk-position-cover uk-flex uk-loading">
+                            <div class="uk-align-center uk-medium" uk-spinner></div>
+                        </div>
                         <!-- /ko -->
                         <!-- ko if: loading -->
                         <div class="uk-card-body uk-card-primary uk-flex">
@@ -237,6 +293,9 @@
                             </div>
                         </div>
                         <!-- ko ifnot: message -->
+                        <!-- ko if: gameVersion == 2 -->
+                        <div class="uk-card-body uk-card-primary uk-padding-small"><p>Due to an issue introduced during last Friday's update, Bungie does not return the right times for Destiny 2. They are expecting to fix this issue by Monday.</p></div>
+                        <!-- /ko -->
                         <div class="uk-card-body uk-card-default">
                             <!-- ko ifnot: $root.detailedView -->
                             <h3 class="uk-margin-remove-vertical">Played: <strong data-bind="formatTime: timePlayed"></strong></h3>
@@ -313,8 +372,8 @@
         </div>
     </div>
 
-    <div data-bind="visible: loading" class="uk-loading uk-flex">
-        <div class="uk-align-center" uk-spinner></div>
+    <div data-bind="visible: loading" class="uk-loading uk-flex uk-position-fixed">
+        <div class="uk-align-center uk-large" uk-spinner></div>
     </div>
 
     <script src="{{ 'bower_components/jquery/dist/jquery.js'|resource }}"></script>

@@ -20,6 +20,16 @@ class Character {
     public $timePlayed;
 
     /**
+     * @var float
+     */
+    public $pvpKda;
+
+    /**
+     * @var float
+     */
+    public $pveKda;
+
+    /**
      * @var string
      */
     public $race;

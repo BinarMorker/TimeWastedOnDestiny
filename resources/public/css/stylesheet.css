@@ -24,10 +24,6 @@ body {
     margin-top: 40px;
 }
 
-.uk-logo {
-    margin: 0 auto;
-}
-
 .uk-logo img {
     height: 70%;
 }
@@ -52,12 +48,6 @@ body {
     flex: none;
     -webkit-flex: none;
     -ms-flex: none;
-}
-
-@media screen and (max-width: 400px) {
-    .uk-navbar-inverse {
-        flex-direction: column;
-    }
 }
 
 [class*=uk-dropdown-bottom] {
@@ -186,7 +176,6 @@ body {
 }
 
 .uk-loading {
-    position: fixed;
     top: 0;
     bottom: 0;
     left: 0;
@@ -200,9 +189,14 @@ body {
     margin-bottom: 0;
 }
 
-.uk-loading svg {
-    height: 150px;
-    width: 150px;
+.uk-loading .uk-medium svg {
+    height: 80px;
+    width: 80px;
+}
+
+.uk-loading .uk-large svg {
+    height: 120px;
+    width: 120px;
 }
 
 .uk-search-input {
