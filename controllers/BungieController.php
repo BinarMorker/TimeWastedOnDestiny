@@ -447,10 +447,13 @@ class BungieController extends Controller {
             }
         }
 
-        if (LeaderboardManager::playerExists($player)) {
-            LeaderboardManager::updatePlayer($player);
-        } else {
-            LeaderboardManager::newPlayer($player);
+        // Temporaty fix while Bungie returns bad times for Destiny 2
+        if (intval($params['gameVersion']) != DestinyGameVersion::Destiny2) {
+            if (LeaderboardManager::playerExists($player)) {
+                LeaderboardManager::updatePlayer($player);
+            } else {
+                LeaderboardManager::newPlayer($player);
+            }
         }
 
         $this->debug($params, $response);
