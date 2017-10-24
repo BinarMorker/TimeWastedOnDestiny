@@ -21,6 +21,7 @@ use Apine\Modules\WOD\Request\Destiny;
 use Apine\Modules\WOD\Request\Destiny2;
 use Apine\MVC\Controller;
 use Apine\MVC\JSONView;
+use DateInterval;
 use DateTime;
 
 class BungieController extends Controller {
@@ -452,6 +453,60 @@ class BungieController extends Controller {
         } else {
             LeaderboardManager::newPlayer($player);
         }
+
+        $this->debug($params, $response);
+        $response->executionMilliseconds = (microtime(true) - $start) * 1000;
+        $view->set_json_file($response);
+        return $view;
+    }
+
+    /**
+     * Fetch Destiny character data for a given period of time
+     * @link /bungie/fetchCharacterPeriod?membershipType=[]&membershipId=[]&characterId=[]&gameVersion=[]
+     *
+     * @param $params
+     * @return JSONView
+     * @throws GenericException
+     */
+    public function fetchCharacterPeriod($params) {
+        if (Application::get_instance()->get_mode() == APINE_MODE_PRODUCTION) {
+            throw new GenericException("Not found", 404);
+        }
+
+        $start = microtime(true);
+        $now = new DateTime();
+        $response = new ApiResponse();
+        $response->queryTime = $now;
+        $view = new JSONView();
+
+        if (!isset($params['gameVersion'])) {
+            throw new GenericException("Missing parameter: gameVersion", 400);
+        }
+
+        $page = 0;
+        $totalTime = 0;
+        $lastReset = new DateTime("2016-09-20");
+        $nextReset = (new DateTime("2016-09-20"))->add(DateInterval::createFromDateString("+1 week"));
+
+        while ($page >= 0) {
+            $getActivityHistoryRequest = new Destiny\GetActivityHistoryForCharacterRequest($params['membershipType'], $params['membershipId'], $params['characterId'], $page);
+            $getActivityHistoryResponse = $getActivityHistoryRequest->getResponse();
+            $response->endpointCalls[] = $getActivityHistoryRequest->getInfo();
+
+            if (!is_null($getActivityHistoryResponse->response) && !is_null($getActivityHistoryResponse->response->data) && !is_null($getActivityHistoryResponse->response->data->activities)) {
+                foreach ($getActivityHistoryResponse->response->data->activities as $activity) {
+                    if ($activity->period->getTimestamp() > $lastReset->getTimestamp() && $activity->period->getTimestamp() < $nextReset->getTimestamp()) {
+                        $totalTime += $activity->values['activityDurationSeconds']->basic->value;
+                    }
+                }
+
+                $page++;
+            } else {
+                $page = -1;
+            }
+        }
+
+        $response->response = $totalTime;
 
         $this->debug($params, $response);
         $response->executionMilliseconds = (microtime(true) - $start) * 1000;
