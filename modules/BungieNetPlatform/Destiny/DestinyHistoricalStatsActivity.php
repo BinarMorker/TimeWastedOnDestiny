@@ -9,4 +9,24 @@ class DestinyHistoricalStatsActivity {
      */
     public $referenceId;
 
+    /**
+     * @var string
+     */
+    public $instanceId;
+
+    /**
+     * @var int
+     */
+    public $mode;
+
+    /**
+     * @var string
+     */
+    public $activityTypeHashOverride;
+
+    /**
+     * @var bool
+     */
+    public $isPrivate;
+
 }
