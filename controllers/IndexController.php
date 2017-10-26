@@ -44,7 +44,7 @@ class IndexController {
         $view->set_param('hdceAdLink', $hdceAds[$index]['link']);
 
         if (isset($params[0])) {
-            $view->set_param('search', $params[0]);
+            $view->set_param('search', str_replace('$', '#', $params[0]));
         }
 
         return $view;

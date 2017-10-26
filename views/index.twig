@@ -318,6 +318,12 @@
                                 <div class="uk-width-expand">
                                     <strong class="characterName" data-bind="text: race + ' ' + charClass"></strong>
                                     <span class="timePlayed" data-bind="formatTime: timePlayed"></span>
+                                    {#<!-- ko if: timePlayedThisWeek() == null && !loading() -->
+                                    <a href="#" data-bind="click: function() { $root.fetchCharacterWeekly($parent, $data) }">This week</a>
+                                    <!-- /ko -->
+                                    <!-- ko if: timePlayedThisWeek() != null -->
+                                    <span class="timePlayedWeekly" data-bind="formatTime: timePlayedThisWeek"></span>
+                                    <!-- /ko -->#}
                                     {#<small class="topRank" data-bind="text: 'Top 5%'"></small>#}
                                 </div>
                                 <div class="uk-width-auto infoRight">

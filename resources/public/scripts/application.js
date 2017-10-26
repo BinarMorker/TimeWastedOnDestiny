@@ -43,7 +43,7 @@ define([
                     });
 
                     if (filter.length === 0) {
-                        self.currentAccountNames.push(displayName.toLowerCase());
+                        self.currentAccountNames.push(displayName.toLowerCase().replace('#', '$'));
                     }
                 }
             });
@@ -134,7 +134,7 @@ define([
 
                     Request('/bungie/fetchAccounts', {
                         membershipType: -1,
-                        displayName: input.trim()
+                        displayName: encodeURIComponent(input.trim())
                     }, function (response) {
                         if (response.code === 1 && !Array.isArray(response.response)) {
                             self.populateAccounts(response);
@@ -233,6 +233,32 @@ define([
 
                 account.loading(false);
                 self.accounts.valueHasMutated();
+            }
+        };
+
+        self.fetchCharacterWeekly = function (account, character) {
+            Request('/bungie/fetchCharacterPeriod', {
+                membershipType: account.membershipType,
+                membershipId: account.membershipId,
+                characterId: character.characterId,
+                gameVersion: account.gameVersion
+            }, function (response) {
+                if (response.code === 1) {
+                    self.populateCharacterWeekly(response, account, character);
+                } else {
+                    character.message(response.message);
+                    character.loading(false);
+                }
+            }, function(response) {
+                character.message(response.message);
+                character.loading(false);
+            });
+        };
+
+        self.populateCharacterWeekly = function (response, account, character) {
+            if (response.hasOwnProperty('response')) {
+                character.timePlayedThisWeek(response.response);
+                character.loading(false);
             }
         };
 

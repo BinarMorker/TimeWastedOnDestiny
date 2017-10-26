@@ -349,7 +349,7 @@ class BungieController extends Controller {
         $response->queryTime = $now;
         $view = new JSONView();
 
-        $searchDestinyPlayerRequest = new Destiny2\SearchDestinyPlayerRequest($params['membershipType'], $params['displayName']);
+        $searchDestinyPlayerRequest = new Destiny2\SearchDestinyPlayerRequest($params['membershipType'], urlencode($params['displayName']));
         $searchDestinyPlayerResponse = $searchDestinyPlayerRequest->getResponse();
         $response->endpointCalls[] = $searchDestinyPlayerRequest->getInfo();
         $response->code = $searchDestinyPlayerResponse->errorCode;
@@ -485,21 +485,61 @@ class BungieController extends Controller {
 
         $page = 0;
         $totalTime = 0;
-        $lastReset = new DateTime("2016-09-20");
-        $nextReset = (new DateTime("2016-09-20"))->add(DateInterval::createFromDateString("+1 week"));
+        $lastReset = new DateTime("last tuesday");
+        $nextReset = (new DateTime("last tuesday"))->add(DateInterval::createFromDateString("+1 week"));
+
+        $code = 1;
+        $message = "Ok";
 
         while ($page >= 0) {
-            $getActivityHistoryRequest = new Destiny\GetActivityHistoryForCharacterRequest($params['membershipType'], $params['membershipId'], $params['characterId'], $page);
-            $getActivityHistoryResponse = $getActivityHistoryRequest->getResponse();
-            $response->endpointCalls[] = $getActivityHistoryRequest->getInfo();
+            $activities = null;
 
-            if (!is_null($getActivityHistoryResponse->response) && !is_null($getActivityHistoryResponse->response->data) && !is_null($getActivityHistoryResponse->response->data->activities)) {
-                foreach ($getActivityHistoryResponse->response->data->activities as $activity) {
-                    if ($activity->period->getTimestamp() > $lastReset->getTimestamp() && $activity->period->getTimestamp() < $nextReset->getTimestamp()) {
-                        $totalTime += $activity->values['activityDurationSeconds']->basic->value;
+            switch (intval($params['gameVersion'])) {
+                case DestinyGameVersion::Destiny:
+                    $getActivityHistoryRequest = new Destiny\GetActivityHistoryForCharacterRequest($params['membershipType'], $params['membershipId'], $params['characterId'], $page);
+                    $getActivityHistoryResponse = $getActivityHistoryRequest->getResponse();
+                    $response->endpointCalls[] = $getActivityHistoryRequest->getInfo();
+
+                    if ($getActivityHistoryResponse->errorCode != 1) {
+                        $code = $getActivityHistoryResponse->errorCode;
+                        $message = $getActivityHistoryResponse->message;
                     }
-                }
 
+                    if (!is_null($getActivityHistoryResponse->response) && !is_null($getActivityHistoryResponse->response->data) && !is_null($getActivityHistoryResponse->response->data->activities)) {
+                        foreach ($getActivityHistoryResponse->response->data->activities as $activity) {
+                            if ($activity->period->getTimestamp() > $lastReset->getTimestamp() && $activity->period->getTimestamp() < $nextReset->getTimestamp()) {
+                                $totalTime += $activity->values['activityDurationSeconds']->basic->value;
+
+                                if (isset($activity->values['leaveRemainingSeconds'])) {
+                                    $totalTime -= $activity->values['leaveRemainingSeconds']->basic->value;
+                                }
+                            }
+                        }
+                    }
+
+                    break;
+                case DestinyGameVersion::Destiny2:
+                    $getActivityHistoryRequest = new Destiny2\GetActivityHistoryRequest($params['membershipType'], $params['membershipId'], $params['characterId'], $page);
+                    $getActivityHistoryResponse = $getActivityHistoryRequest->getResponse();
+                    $response->endpointCalls[] = $getActivityHistoryRequest->getInfo();
+
+                    if ($getActivityHistoryResponse->errorCode != 1) {
+                        $code = $getActivityHistoryResponse->errorCode;
+                        $message = $getActivityHistoryResponse->message;
+                    }
+
+                    if (!is_null($getActivityHistoryResponse->response) && !is_null($getActivityHistoryResponse->response->activities)) {
+                        foreach ($getActivityHistoryResponse->response->activities as $activity) {
+                            if ($activity->period->getTimestamp() > $lastReset->getTimestamp() && $activity->period->getTimestamp() < $nextReset->getTimestamp()) {
+                                $totalTime += $activity->values['timePlayedSeconds']->basic->value;
+                            }
+                        }
+                    }
+
+                    break;
+            }
+
+            if (!is_null($activities)) {
                 $page++;
             } else {
                 $page = -1;
@@ -507,6 +547,8 @@ class BungieController extends Controller {
         }
 
         $response->response = $totalTime;
+        $response->code = $code;
+        $response->message = $message;
 
         $this->debug($params, $response);
         $response->executionMilliseconds = (microtime(true) - $start) * 1000;
