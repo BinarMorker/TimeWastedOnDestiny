@@ -20,7 +20,7 @@
 			"action": "redirect"
 		}
 	},
-	"/search/([a-zA-Z0-9-_,]+)": {
+	"/search/([a-zA-Z0-9$-_,]+)": {
 		"GET": {
 			"args": true,
 			"controller": "index",

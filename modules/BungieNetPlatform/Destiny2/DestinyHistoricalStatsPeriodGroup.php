@@ -15,7 +15,7 @@ class DestinyHistoricalStatsPeriodGroup {
     public $activityDetails;
 
     /**
-     * @var DestinyHistoricalStatsValue
+     * @var DestinyHistoricalStatsValue[]
      */
     public $values;
 

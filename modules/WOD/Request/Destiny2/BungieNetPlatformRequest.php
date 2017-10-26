@@ -56,7 +56,7 @@ class BungieNetPlatformRequest extends GuzzleHttpCacher {
 
         if (isset($queryString) && !empty($queryString) && is_array($queryString)) {
             foreach ($queryString as $key => $value) {
-                if ($value) {
+                if (!is_null($value)) {
                     $processedQueryString[] = join('=', [$key, $value]);
                 } else {
                     $processedQueryString[] = $key;

@@ -5,11 +5,13 @@ define(['knockout'], function(ko) {
         self.characterId = data.characterId;
         self.deleted = data.deleted;
         self.timePlayed = ko.observable(data.timePlayed);
+        self.timePlayedThisWeek = ko.observable(null);
         self.race = data.race;
         self.gender = data.gender;
         self.charClass = data.charClass;
         self.level = data.level;
         self.emblemPath = data.emblemPath;
         self.backgroundPath = data.backgroundPath;
+        self.loading = ko.observable(false);
     };
 });

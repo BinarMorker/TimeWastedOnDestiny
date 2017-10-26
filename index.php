@@ -18,9 +18,9 @@ $loader->register();
 $apine = new Apine\Application\Application();
 
 // PRODUCTION
-//$apine->set_use_https(true);
+$apine->set_use_https(true);
 
 // DEVELOPMENT
-$apine->set_mode(APINE_MODE_DEVELOPMENT);
+//$apine->set_mode(APINE_MODE_DEVELOPMENT);
 
 $apine->run(APINE_RUNTIME_HYBRID);
