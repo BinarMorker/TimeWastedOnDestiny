@@ -349,7 +349,7 @@ class BungieController extends Controller {
         $response->queryTime = $now;
         $view = new JSONView();
 
-        $searchDestinyPlayerRequest = new Destiny2\SearchDestinyPlayerRequest($params['membershipType'], urlencode($params['displayName']));
+        $searchDestinyPlayerRequest = new Destiny2\SearchDestinyPlayerRequest($params['membershipType'], rawurlencode($params['displayName']));
         $searchDestinyPlayerResponse = $searchDestinyPlayerRequest->getResponse();
         $response->endpointCalls[] = $searchDestinyPlayerRequest->getInfo();
         $response->code = $searchDestinyPlayerResponse->errorCode;
@@ -428,6 +428,14 @@ class BungieController extends Controller {
                 list($response->response, $response->code, $response->message, $response->endpointCalls) = $this->getDestiny2AccountCharacters($params['membershipType'], $params['membershipId']);
                 break;
         }
+
+        usort($response->response, function (Character $characterA, Character $characterB) {
+            return $characterA->timePlayed < $characterB->timePlayed;
+        });
+
+        usort($response->response, function (Character $characterA, Character $characterB) {
+            return (int)$characterA->deleted > (int)$characterB->deleted;
+        });
 
         $player = new LeaderboardEntry();
         $player->membershipId = $params['membershipId'];
