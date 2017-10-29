@@ -43,7 +43,7 @@ define([
                     });
 
                     if (filter.length === 0) {
-                        self.currentAccountNames.push(displayName.toLowerCase().replace('#', '$'));
+                        self.currentAccountNames.push(encodeURIComponent(displayName.toLowerCase().replace('#', '$')));
                     }
                 }
             });

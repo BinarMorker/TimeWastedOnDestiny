@@ -203,99 +203,6 @@ body {
     color: #b2b2b2;
 }
 
-.uk-fab-button {
-    bottom: 0;
-    position: fixed;
-    margin: 1em;
-    right: 0;
-    z-index: 9999;
-}
-
-.uk-fab-button .uk-fab-item {
-    box-shadow: 0 0 4px rgba(0,0,0,.44),
-                0 4px 8px rgba(0,0,0,.58);
-    width: 56px;
-    height: 56px;
-    margin: 20px auto 0;
-    position: relative;
-    -webkit-transition: all .1s ease-out;
-    transition: all .1s ease-out;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    background-color: #1e87f0;
-    color: #fff;
-}
-
-.uk-fab-button .uk-fab-item:active,
-.uk-fab-button .uk-fab-item:focus,
-.uk-fab-button .uk-fab-item:hover {
-    box-shadow: 0 0 4px rgba(0,0,0,.44),
-                0 4px 8px rgba(0,0,0,.58);
-}
-
-.uk-fab-button .uk-fab-item:not(:last-child) {
-    width: 40px;
-    height: 40px;
-    margin: 20px auto 0;
-    opacity: 0;
-    -webkit-transform: translateY(50px);
-    -ms-transform: translateY(50px);
-    transform: translateY(50px);
-}
-
-.uk-fab-button:hover .uk-fab-item:not(:last-child) {
-    opacity: 1;
-    -webkit-transform: none;
-    -ms-transform: none;
-    transform: none;
-    margin: 15px auto 0;
-}
-
-.uk-fab-button .uk-fab-item:nth-last-child(1) {
-    -webkit-transition-delay: 25ms;
-    transition-delay: 25ms;
-}
-
-.uk-fab-button .uk-fab-item:not(:last-child):nth-last-child(2) {
-    -webkit-transition-delay: 50ms;
-    transition-delay: 20ms;
-}
-
-.uk-fab-button .uk-fab-item:not(:last-child):nth-last-child(3) {
-    -webkit-transition-delay: 75ms;
-    transition-delay: 40ms;
-}
-
-.uk-fab-button .uk-fab-item:not(:last-child):nth-last-child(4) {
-    -webkit-transition-delay: 100ms;
-    transition-delay: 60ms;
-}
-
-.uk-fab-button .uk-fab-item[data-tooltip]:before {
-    bottom: 25%;
-    font-weight: 600;
-    border-radius: 2px;
-    background: #585858;
-    color: #fff;
-    content: attr(data-tooltip);
-    font-size: 12px;
-    visibility: hidden;
-    opacity: 0;
-    padding: 10px 7px;
-    margin-right: 12px;
-    position: absolute;
-    right: 100%;
-    white-space: nowrap;
-}
-
-.uk-fab-button .uk-fab-item[data-tooltip]:before,
-.uk-fab-button .uk-fab-item[data-tooltip]:after {
-    visibility: visible;
-    opacity: 1;
-}
-
 @-webkit-keyframes rotate {
     from {
         -webkit-transform: rotate(0deg);
@@ -447,6 +354,40 @@ body {
 .bungieAccountPill img {
     vertical-align: unset;
     height: 20px;
+}
+
+.collapsible-popup {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+}
+
+.collapsible-popup .popup {
+    position: fixed;
+    bottom: 0.5rem;
+    left: 0.5rem;
+    right: 0.5rem;
+    background: #fff;
+    padding: 1rem;
+}
+
+.collapsible-popup .popup-button {
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #1e87f0;
+    color: #3a3a3a;
+    border-radius: 50%;
+}
+
+.collapsible-popup .popup-button:hover {
+    color: #fff;
+}
+
+.collapsible-popup.active .popup-button {
+    display: none;
 }
 
 #adBottomMobile {

@@ -382,6 +382,19 @@
         <div class="uk-align-center uk-large" uk-spinner></div>
     </div>
 
+    <div class="collapsible-popup">
+        <a href="#" class="popup-button" uk-toggle="target: #alert-popup">
+            <span uk-icon="icon: warning; ratio: 2"></span>
+        </a>
+        <div id="alert-popup" class="popup">
+            <button class="uk-alert-close" type="button" uk-icon="icon: close; ratio: 1" uk-toggle="target: #alert-popup"></button>
+            <div class="uk-flex">
+                <span uk-icon="icon: warning; ratio: 4" class="uk-margin-small-right"></span>
+                <p>There has been reports of Battle.net usernames not working right now. Please allow some time for Bungie to fix the problem. Thank you for your patience. <a href="https://github.com/Bungie-net/api/issues/266">View the issue progress on Github</a></p>
+            </div>
+        </div>
+    </div>
+
     <script src="{{ 'bower_components/jquery/dist/jquery.js'|resource }}"></script>
     <script src="{{ 'bower_components/uikit/dist/js/uikit.js'|resource }}"></script>
     <script src="{{ 'bower_components/uikit/dist/js/uikit-icons.js'|resource }}"></script>
