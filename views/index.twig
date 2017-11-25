@@ -382,18 +382,18 @@
         <div class="uk-align-center uk-large" uk-spinner></div>
     </div>
 
-    <div class="collapsible-popup">
+    {#<div class="collapsible-popup">
         <a href="#" class="popup-button" uk-toggle="target: #alert-popup">
             <span uk-icon="icon: warning; ratio: 2"></span>
         </a>
-        <div id="alert-popup" class="popup">
+        <div id="alert-popup" {% if alertSeen %}hidden="hidden" aria-hidden="true" {% endif %}class="popup">
             <button class="uk-alert-close" type="button" uk-icon="icon: close; ratio: 1" uk-toggle="target: #alert-popup"></button>
             <div class="uk-flex">
                 <span uk-icon="icon: warning; ratio: 4" class="uk-margin-small-right"></span>
                 <p>There has been reports of Battle.net usernames not working right now. Please allow some time for Bungie to fix the problem. Thank you for your patience. <a href="https://github.com/Bungie-net/api/issues/266">View the issue progress on Github</a></p>
             </div>
         </div>
-    </div>
+    </div>#}
 
     <script src="{{ 'bower_components/jquery/dist/jquery.js'|resource }}"></script>
     <script src="{{ 'bower_components/uikit/dist/js/uikit.js'|resource }}"></script>
@@ -403,16 +403,6 @@
         requirejs.config({
             baseUrl: '/resources/public/scripts',
             paths: {
-                text: '/bower_components/requirejs-plugins/lib/text',
-                async: '/bower_components/requirejs-plugins/src/async',
-                font: '/bower_components/requirejs-plugins/src/font',
-                goog: '/bower_components/requirejs-plugins/src/goog',
-                image: '/bower_components/requirejs-plugins/src/image',
-                json: '/bower_components/requirejs-plugins/src/json',
-                noext: '/bower_components/requirejs-plugins/src/noext',
-                mdown: '/bower_components/requirejs-plugins/src/mdown',
-                propertyParser : '/bower_components/requirejs-plugins/src/propertyParser',
-                markdownConverter : '/bower_components/requirejs-plugins/lib/Markdown.Converter',
                 jquery: '/bower_components/jquery/dist/jquery',
                 uikit: '/bower_components/uikit/dist/js/uikit',
                 'uikit-icons': '/bower_components/uikit/dist/js/uikit-icons',

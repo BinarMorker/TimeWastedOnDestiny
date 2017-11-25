@@ -54,6 +54,10 @@ body {
     margin-top: 0;
 }
 
+ins {
+    background: rgba(0, 0, 0, 0.8);
+}
+
 .uk-close {
     position: absolute;
     right: 1rem;

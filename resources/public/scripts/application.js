@@ -47,9 +47,11 @@ define([
                     }
                 }
             });
+
             if (!window.location.origin) {
                 window.location.origin = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port: '');
             }
+
             if (self.currentAccountNames.length > 0) {
                 if (window.location.pathname === "/" || window.location.pathname !== "/search/" + self.currentAccountNames.join(',')) {
                     window.history.pushState(self.currentAccountNames, document.title, window.location.origin + '/search/' + self.currentAccountNames.join(','));

@@ -324,16 +324,16 @@
         },
         {
             "name": "phpmailer/phpmailer",
-            "version": "v5.2.24",
+            "version": "v5.2.26",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPMailer/PHPMailer.git",
-                "reference": "22d04c6a58145a244696f3f254c1875aa653b26a"
+                "reference": "70362997bda4376378be7d92d81e2200550923f7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/22d04c6a58145a244696f3f254c1875aa653b26a",
-                "reference": "22d04c6a58145a244696f3f254c1875aa653b26a",
+                "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/70362997bda4376378be7d92d81e2200550923f7",
+                "reference": "70362997bda4376378be7d92d81e2200550923f7",
                 "shasum": ""
             },
             "require": {
@@ -397,7 +397,7 @@
                 }
             ],
             "description": "PHPMailer is a full-featured email creation and transfer class for PHP",
-            "time": "2017-07-26T21:00:20+00:00"
+            "time": "2017-11-04T09:26:05+00:00"
         },
         {
             "name": "psr/http-message",
@@ -451,16 +451,16 @@
         },
         {
             "name": "twig/twig",
-            "version": "v1.34.4",
+            "version": "v1.35.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "f878bab48edb66ad9c6ed626bf817f60c6c096ee"
+                "reference": "daa657073e55b0a78cce8fdd22682fddecc6385f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/f878bab48edb66ad9c6ed626bf817f60c6c096ee",
-                "reference": "f878bab48edb66ad9c6ed626bf817f60c6c096ee",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/daa657073e55b0a78cce8fdd22682fddecc6385f",
+                "reference": "daa657073e55b0a78cce8fdd22682fddecc6385f",
                 "shasum": ""
             },
             "require": {
@@ -474,7 +474,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.34-dev"
+                    "dev-master": "1.35-dev"
                 }
             },
             "autoload": {
@@ -512,7 +512,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2017-07-04T13:19:31+00:00"
+            "time": "2017-09-27T18:06:46+00:00"
         },
         {
             "name": "youmy001/apine-framework",
@@ -520,12 +520,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Youmy001/apine-framework.git",
-                "reference": "73b2efe0e7844794079d36aac0f389bec6e07447"
+                "reference": "99fe5b7a70abbeaf3eff4416888b042831c0c7b0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Youmy001/apine-framework/zipball/73b2efe0e7844794079d36aac0f389bec6e07447",
-                "reference": "73b2efe0e7844794079d36aac0f389bec6e07447",
+                "url": "https://api.github.com/repos/Youmy001/apine-framework/zipball/99fe5b7a70abbeaf3eff4416888b042831c0c7b0",
+                "reference": "99fe5b7a70abbeaf3eff4416888b042831c0c7b0",
                 "shasum": ""
             },
             "require": {
@@ -557,7 +557,7 @@
                 }
             ],
             "description": "APIne is a simple to use modular MVC Framework ready for the IoT (Internet of Things).",
-            "time": "2017-08-19 03:55:59"
+            "time": "2017-09-28T06:07:19+00:00"
         }
     ],
     "packages-dev": [],

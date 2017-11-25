@@ -2,6 +2,7 @@
 
 namespace Apine\Controllers\User;
 
+use Apine\Core\Cookie;
 use Apine\MVC\TwigView;
 use Apine\Utility\Routes;
 
@@ -42,6 +43,9 @@ class IndexController {
 
         $view->set_param('hdceAdText', $hdceAds[$index]['text']);
         $view->set_param('hdceAdLink', $hdceAds[$index]['link']);
+
+        $view->set_param('alertSeen', !!Cookie::get("alertSeen"));
+        Cookie::set('alertSeen', 1, time() + 6048007); // 7 days
 
         if (isset($params[0])) {
             $view->set_param('search', str_replace('$', '#', $params[0]));
