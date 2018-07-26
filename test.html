@@ -1,0 +1,403 @@
+<!--<style>
+html, body {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  margin: 0;
+  padding: 0;
+  align-items: center;
+  justify-content: center;
+}
+
+.hexagon {
+  position: relative;
+  width: 64px; 
+  height: 36.95px;
+  background-color: #64C7CC;
+  margin: 18.48px 0;
+  box-shadow: 0 0 10px rgba(0,0,0,0.6);
+}
+
+.hexagon:before,
+.hexagon:after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  width: 45.25px;
+  height: 45.25px;
+  -webkit-transform: scaleY(0.5774) rotate(-45deg);
+  -ms-transform: scaleY(0.5774) rotate(-45deg);
+  transform: scaleY(0.5774) rotate(-45deg);
+  background-color: inherit;
+  left: 9.3726px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.6);
+}
+
+.hexagon:before {
+  top: -22.6274px;
+}
+
+.hexagon:after {
+  bottom: -22.6274px;
+}
+
+.hexagon span {
+  display: block;
+  position: absolute;
+  top:0px;
+  left: 0;
+  width:64px;
+  height:36.9504px;
+  z-index: 2;
+  background: inherit;
+}
+
+.hexagon span::after {
+  content: '';
+  position: absolute;
+  background-position: center;
+  background-size: 48px;
+  background-repeat: no-repeat;
+  width: 64px;
+  height: 64px;
+  display: block;
+  bottom: -12.6274px;
+}
+
+.hexagon.human {
+  background-color: #fce8c9;
+}
+
+.hexagon.awoken {
+  background-color: #7297bf;
+}
+
+.hexagon.exo {
+  background-color: #a6a6a6;
+}
+
+.hexagon.titan span::after {
+  background-image: url('./titan_emblem.svg');
+}
+
+.hexagon.warlock span::after {
+  background-image: url('./warlock_emblem.svg');
+}
+
+.hexagon.hunter span::after {
+  background-image: url('./hunter_emblem.svg');
+}
+</style>
+
+<div class="hexagon human titan"><span></span></div>
+&nbsp;&nbsp;
+<div class="hexagon human warlock"><span></span></div>
+&nbsp;&nbsp;
+<div class="hexagon human hunter"><span></span></div>
+&nbsp;&nbsp;
+<div class="hexagon awoken titan"><span></span></div>
+&nbsp;&nbsp;
+<div class="hexagon awoken warlock"><span></span></div>
+&nbsp;&nbsp;
+<div class="hexagon awoken hunter"><span></span></div>
+&nbsp;&nbsp;
+<div class="hexagon exo titan"><span></span></div>
+&nbsp;&nbsp;
+<div class="hexagon exo warlock"><span></span></div>
+&nbsp;&nbsp;
+<div class="hexagon exo hunter"><span></span></div>-->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+	<style>
+		.card {
+			position: relative;
+			margin-bottom: 20px;
+			transform: scale(1.00001);
+			border: 0;
+			border-radius: 5px;
+			box-shadow: 0 1px 5px rgba(0, 0, 0, 0.35);
+		}
+
+		.card-body {
+			padding: 10px;
+		}
+	
+		.cardPlaystation {
+			border-left: 20px solid #1525dc;
+		}
+		
+		.cardBlizzard {
+			border-left: 20px solid #2e2c2f;
+		}
+		
+		.cardXbox {
+			border-left: 20px solid #107c10;
+		}
+
+		.destinyVersion {
+			position: absolute;
+			top: 0;
+			left: -20px;
+			width: 20px;
+			padding: 3px;
+			height: auto;
+			filter: brightness(100);
+		}
+
+		.destinyPlatform {
+			position: absolute;
+			bottom: 0;
+			left: -20px;
+			width: 20px;
+			padding: 3px;
+			height: auto;
+			filter: brightness(100);
+		}
+
+		.topRank {
+			position: absolute;
+			top: 0;
+			right: 0;
+			padding: 5px;
+			font-size: 10px;
+		}
+
+		.btn-more {
+			width: 70px;
+			line-height: 10px;
+			font-size: 10px;
+			text-align: right;
+			white-space: normal;
+			padding-right: 30px;
+			padding-left: 5px;
+			position: relative;
+			border-radius: 100px;
+		}
+		
+		.btn-more::after {
+			content: '+';
+			font-size: 30px;
+			position: absolute;
+			top: 8px;
+			right: 5px;
+		}
+		
+		.small-caps {
+			font-size: 10px;
+			text-transform: uppercase;
+			margin-bottom: -5px;
+			display: block;
+		}
+		
+		.mini {
+			text-transform: uppercase;
+			font-size: 10px;
+		}
+
+        .imageRow img {
+            width: auto;
+            height: 40px;
+            padding: 2px;
+            filter: brightness(0);
+        }
+
+		.greenCommendation {
+			border-top-color: #12ab23;
+			border-right-color: #12ab23;
+			border-bottom-color: #12ab23;
+			box-shadow: 0 0 10px #12ab23;
+		}
+		
+		.blueCommendation {
+			border-top-color: #3175e3;
+			border-right-color: #3175e3;
+			border-bottom-color: #3175e3;
+			box-shadow: 0 0 20px #3175e3;
+		}
+		
+		.purpleCommendation {
+			border-top-color: #a125e3;
+			border-right-color: #a125e3;
+			border-bottom-color: #a125e3;
+			box-shadow: 0 0 25px #a125e3,
+						0 0 10px #000000;
+		}
+		
+		.goldCommendation {
+			border-top-color: #cfdf00;
+			border-right-color: #cfdf00;
+			border-bottom-color: #cfdf00;
+			box-shadow: 0 0 40px #cfdf00,
+						0 0 20px #ffffff;
+		}
+
+        .burst-12 {
+            background: red;
+            width: 80px;
+            height: 80px;
+            position: relative;
+            text-align: center;
+        }
+
+        .burst-12:before, .burst-12:after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 80px;
+            width: 80px;
+            background: red;
+        }
+
+        .burst-12:before {
+            -webkit-transform: rotate(30deg);
+            -moz-transform: rotate(30deg);
+            -ms-transform: rotate(30deg);
+            -o-transform: rotate(30deg);
+        }
+
+        .burst-12:after {
+            -webkit-transform: rotate(60deg);
+            -moz-transform: rotate(60deg);
+            -ms-transform: rotate(60deg);
+            -o-transform: rotate(60deg);
+        }
+
+        .burst-8 {
+            background: red;
+            width: 80px;
+            height: 80px;
+            position: relative;
+            text-align: center;
+            -webkit-transform: rotate(20deg);
+            -moz-transform: rotate(20deg);
+            -ms-transform: rotate(20deg);
+            -o-transform: rotate(20eg);
+        }
+        .burst-8:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 80px;
+            width: 80px;
+            background: red;
+            -webkit-transform: rotate(135deg);
+            -moz-transform: rotate(135deg);
+            -ms-transform: rotate(135deg);
+            -o-transform: rotate(135deg);
+        }
+	</style>
+</head>
+<body>
+	<div class="jumbotron container">
+		<div class="row">
+			<div class="col-xl-4 col-md-6">
+				<div class="card cardBlizzard">
+					<div class="card-body">
+						<h3>Youmy001</h3>
+						<small class="small-caps">Time played</small>
+						<small class="lead text-muted">487h 23m 15s</small>
+						<button type="button" class="btn btn-more float-right" data-toggle="modal" data-target="#exampleModal">VIEW MORE</button>
+						<img class="destinyVersion" src="dist/assets/two.svg">
+						<img class="destinyPlatform" src="dist/assets/pc.svg">
+                        <div class="topRank">Top 5%
+                            <img src="dist/assets/rank1.svg">
+                        </div>
+					</div>
+				</div>
+			</div>
+			<div class="col-xl-4 col-md-6">
+				<div class="card cardPlaystation">
+					<div class="card-body">
+						<h3>BinarMorker</h3>
+						<small class="small-caps">Time played</small>
+						<small class="lead text-muted">487h 23m 15s</small>
+						<button type="button" class="btn btn-more float-right" data-toggle="modal" data-target="#exampleModal">VIEW MORE</button>
+						<img class="destinyVersion" src="dist/assets/two.svg">
+						<img class="destinyPlatform" src="dist/assets/ps.svg">
+						<div class="topRank">Top 5%
+                            <img src="dist/assets/rank2.svg">
+                        </div>
+					</div>
+				</div>
+			</div>
+			<div class="col-xl-4 col-md-6">
+				<div class="card cardBlizzard">
+					<div class="card-body">
+						<h3>binarmorker#1157</h3>
+						<small class="small-caps">Time played</small>
+						<small class="lead text-muted">487h 23m 15s</small>
+						<button type="button" class="btn btn-more float-right" data-toggle="modal" data-target="#exampleModal">VIEW MORE</button>
+						<img class="destinyVersion" src="dist/assets/two.svg">
+						<img class="destinyPlatform" src="dist/assets/pc.svg">
+                        <div class="topRank">Top 5%
+                            <img src="dist/assets/rank3.svg">
+                        </div>
+					</div>
+				</div>
+			</div>
+			<div class="col-xl-4 col-md-6">
+				<div class="card cardPlaystation">
+					<div class="card-body">
+						<h3>BinarMorker</h3>
+						<small class="small-caps">Time played</small>
+						<small class="lead text-muted">487h 23m 15s</small>
+						<button type="button" class="btn btn-more float-right" data-toggle="modal" data-target="#exampleModal">VIEW MORE</button>
+						<img class="destinyVersion" src="dist/assets/one.svg">
+						<img class="destinyPlatform" src="dist/assets/ps.svg">
+                        <div class="topRank">Top 5%
+                            <img src="dist/assets/rank4.svg">
+                        </div>
+					</div>
+				</div>
+			</div>
+			<div class="col-xl-4 col-md-6">
+				<div class="card cardXbox">
+					<div class="card-body">
+						<h3>BinarMorker</h3>
+						<small class="small-caps">Time played</small>
+						<small class="lead text-muted">487h 23m 15s</small>
+						<button type="button" class="btn btn-more float-right" data-toggle="modal" data-target="#exampleModal">VIEW MORE</button>
+						<img class="destinyVersion" src="dist/assets/one.svg">
+						<img class="destinyPlatform" src="dist/assets/xb.svg">
+                        <div class="topRank d">Top 5%
+                            <img src="dist/assets/rank4.svg">
+                        </div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="modal" id="exampleModal" tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-body">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <div class="imageRow">
+                        <img src="dist/assets/two.svg">
+                        <img src="dist/assets/ps.svg">
+                    </div>
+                    <h3>binarmorker#1157</h3>
+                    <small class="small-caps">Time played</small>
+                    <small class="lead text-muted">487h 23m 15s</small>
+					<p class="mini">(2 months 3 weeks 1 day 4 hours 23 minutes and 15 seconds)</p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+</body>
+</html>
